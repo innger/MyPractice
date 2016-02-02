@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ryl.learn.mybatis.mapper.InvoiceMapper" >
+  <resultMap id="BaseResultMap" type="com.ryl.learn.mybatis.pojo.Invoice" >
+    <id column="invoice_id" property="invoiceId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="consignee_name" property="consigneeName" jdbcType="VARCHAR" />
+    <result column="consignee_tel" property="consigneeTel" jdbcType="VARCHAR" />
+    <result column="deliver_time_limit" property="deliverTimeLimit" jdbcType="SMALLINT" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="address_detai" property="addressDetai" jdbcType="VARCHAR" />
+    <result column="total_fee" property="totalFee" jdbcType="DECIMAL" />
+    <result column="invoice_type" property="invoiceType" jdbcType="SMALLINT" />
+    <result column="invoice_title" property="invoiceTitle" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="SMALLINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    invoice_id, user_id, consignee_name, consignee_tel, deliver_time_limit, province, 
+    city, district, address_detai, total_fee, invoice_type, invoice_title, state, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from invoice
+    where invoice_id = #{invoiceId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from invoice
+    where invoice_id = #{invoiceId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ryl.learn.mybatis.pojo.Invoice" >
+    <selectKey resultType="java.lang.String" keyProperty="invoiceId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into invoice (user_id, consignee_name, consignee_tel, 
+      deliver_time_limit, province, city, 
+      district, address_detai, total_fee, 
+      invoice_type, invoice_title, state, 
+      create_time, update_time)
+    values (#{userId,jdbcType=VARCHAR}, #{consigneeName,jdbcType=VARCHAR}, #{consigneeTel,jdbcType=VARCHAR}, 
+      #{deliverTimeLimit,jdbcType=SMALLINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{district,jdbcType=VARCHAR}, #{addressDetai,jdbcType=VARCHAR}, #{totalFee,jdbcType=DECIMAL}, 
+      #{invoiceType,jdbcType=SMALLINT}, #{invoiceTitle,jdbcType=VARCHAR}, #{state,jdbcType=SMALLINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ryl.learn.mybatis.pojo.Invoice" >
+    <selectKey resultType="java.lang.String" keyProperty="invoiceId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into invoice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="consigneeName != null" >
+        consignee_name,
+      </if>
+      <if test="consigneeTel != null" >
+        consignee_tel,
+      </if>
+      <if test="deliverTimeLimit != null" >
+        deliver_time_limit,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="district != null" >
+        district,
+      </if>
+      <if test="addressDetai != null" >
+        address_detai,
+      </if>
+      <if test="totalFee != null" >
+        total_fee,
+      </if>
+      <if test="invoiceType != null" >
+        invoice_type,
+      </if>
+      <if test="invoiceTitle != null" >
+        invoice_title,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeName != null" >
+        #{consigneeName,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeTel != null" >
+        #{consigneeTel,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverTimeLimit != null" >
+        #{deliverTimeLimit,jdbcType=SMALLINT},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetai != null" >
+        #{addressDetai,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null" >
+        #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceType != null" >
+        #{invoiceType,jdbcType=SMALLINT},
+      </if>
+      <if test="invoiceTitle != null" >
+        #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ryl.learn.mybatis.pojo.Invoice" >
+    update invoice
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeName != null" >
+        consignee_name = #{consigneeName,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeTel != null" >
+        consignee_tel = #{consigneeTel,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverTimeLimit != null" >
+        deliver_time_limit = #{deliverTimeLimit,jdbcType=SMALLINT},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        district = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetai != null" >
+        address_detai = #{addressDetai,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null" >
+        total_fee = #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceType != null" >
+        invoice_type = #{invoiceType,jdbcType=SMALLINT},
+      </if>
+      <if test="invoiceTitle != null" >
+        invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where invoice_id = #{invoiceId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ryl.learn.mybatis.pojo.Invoice" >
+    update invoice
+    set user_id = #{userId,jdbcType=VARCHAR},
+      consignee_name = #{consigneeName,jdbcType=VARCHAR},
+      consignee_tel = #{consigneeTel,jdbcType=VARCHAR},
+      deliver_time_limit = #{deliverTimeLimit,jdbcType=SMALLINT},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      address_detai = #{addressDetai,jdbcType=VARCHAR},
+      total_fee = #{totalFee,jdbcType=DECIMAL},
+      invoice_type = #{invoiceType,jdbcType=SMALLINT},
+      invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
+      state = #{state,jdbcType=SMALLINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where invoice_id = #{invoiceId,jdbcType=VARCHAR}
+  </update>
+</mapper>

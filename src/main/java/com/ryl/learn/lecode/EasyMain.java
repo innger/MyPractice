@@ -4,16 +4,59 @@ import java.util.*;
 
 /**
  * Created by renyulong on 16/1/25.
- * 练习锻炼思维,预防秀逗,并不是为了什么目的
+ * 练习思维,预防秀逗,并不是为了什么目的
  * 就跟跑步一样,不为愉悦别人,只为讨好自己
  */
 public class EasyMain {
 
     public static void main(String[] args) {
-        moveZeroes(new int[]{0, 0, 1});
+        EasyMain easy = new EasyMain();
+
+    }
+    
+    public int majorityElement(int[] nums) {
+        int m = nums[0];
+        int cnt = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == m) {
+                cnt++;
+            } else {
+                cnt--;
+            }
+
+            if (cnt <= 0) {
+                m = nums[i];
+                cnt = 1;
+            }
+        }
+        return m;
     }
 
-    public static void moveZeroes(int[] nums) {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int[] tmpArr = new int[m + n];
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while (i < m && j < n) {
+            if (nums1[i] < nums2[j]) {
+                tmpArr[k++] = nums1[i++];
+            } else {
+                tmpArr[k++] = nums2[j++];
+            }
+        }
+
+        while (i < m) {
+            tmpArr[k++] = nums1[i++];
+        }
+        while (j < n) {
+            tmpArr[k++] = nums2[j++];
+        }
+        System.arraycopy(tmpArr, 0, nums1, 0, m + n);
+
+    }
+
+
+    public void moveZeroes(int[] nums) {
         for (int i = 0; i < nums.length; i++) {
             while (nums[i] == 0) {
                 boolean flag = true;
@@ -36,14 +79,14 @@ public class EasyMain {
         System.out.println(Arrays.toString(nums));
     }
 
-    public static List<Integer> getRow(int rowIndex) {
+    public List<Integer> getRow(int rowIndex) {
         if (rowIndex < 0) return new ArrayList<Integer>();
         List<List<Integer>> list = generate(rowIndex + 1);
         return list.get(rowIndex);
     }
 
 
-    public static List<List<Integer>> generate(int numRows) {
+    public List<List<Integer>> generate(int numRows) {
         if (numRows <= 0) return new ArrayList<List<Integer>>();
         List<List<Integer>> list = new ArrayList<List<Integer>>(numRows);
         for (int i = 0; i < numRows; i++) {
@@ -72,7 +115,7 @@ public class EasyMain {
     }
 
 
-    public static int[] plusOne(int[] digits) {
+    public int[] plusOne(int[] digits) {
         int len = digits.length;
         int[] res;
         int flag = 1;
@@ -101,7 +144,7 @@ public class EasyMain {
     }
 
 
-    public static int removeDuplicates(int[] nums) {
+    public int removeDuplicates(int[] nums) {
         int len = nums.length;
         int i = 0;
         int j = 1;
@@ -118,7 +161,7 @@ public class EasyMain {
     }
 
 
-    public static int removeElement(int[] nums, int val) {
+    public int removeElement(int[] nums, int val) {
         int len = nums.length;
         int i = 0;
         int j = len - 1;
@@ -135,7 +178,7 @@ public class EasyMain {
     }
 
 
-    public static int myAtoi(String str) {
+    public int myAtoi(String str) {
         try {
             return Integer.parseInt(str);
         } catch (Exception e) {
@@ -143,7 +186,7 @@ public class EasyMain {
         }
     }
 
-    public static int reverse(int x) {
+    public int reverse(int x) {
         String tmp = String.valueOf(x);
         String prefix = null;
         String res = "";
@@ -166,7 +209,7 @@ public class EasyMain {
 
     }
 
-    public static void rotate(int[] nums, int k) {
+    public void rotate(int[] nums, int k) {
         k = k % nums.length;
         int[] arr = new int[k];
         for (int i = 0; i < k; i++) {
@@ -182,14 +225,14 @@ public class EasyMain {
 
     }
 
-    private static void printArray(int[] arr) {
+    private void printArray(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + " ");
         }
         System.out.println();
     }
 
-    public static List<String> summaryRanges(int[] nums) {
+    public List<String> summaryRanges(int[] nums) {
         List<String> res = new ArrayList<String>();
         if (nums == null || nums.length < 1) {
             return res;
@@ -217,7 +260,7 @@ public class EasyMain {
         return res;
     }
 
-    public static boolean containsNearbyDuplicate(int[] nums, int k) {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
         if (nums == null || nums.length < 1) {
             return false;
         }
@@ -236,7 +279,7 @@ public class EasyMain {
 
     }
 
-    public static boolean containsDuplicate(int[] nums) {
+    public boolean containsDuplicate(int[] nums) {
         if (nums == null || nums.length < 1) {
             return false;
         }
@@ -250,7 +293,7 @@ public class EasyMain {
         return false;
     }
 
-    public static int[] twoSum(int[] nums, int target) {
+    public int[] twoSum(int[] nums, int target) {
         int[] res = new int[2];
         Map<Integer, Integer> map = new HashMap<Integer, Integer>();
         for (int i = 0; i < nums.length; i++) {
@@ -265,7 +308,7 @@ public class EasyMain {
         return res;
     }
 
-    public static boolean isIsomorphic(String s, String t) {
+    public boolean isIsomorphic(String s, String t) {
         if (s == null || t == null || s.length() != t.length()) {
             return false;
         }
@@ -285,7 +328,7 @@ public class EasyMain {
         return true;
     }
 
-    public static boolean isPalindrome(String s) {
+    public boolean isPalindrome(String s) {
         if (s == null || s.length() <= 1) {
             return true;
         }
@@ -330,7 +373,7 @@ public class EasyMain {
         return true;
     }
 
-    public static boolean isValid(String s) {
+    public boolean isValid(String s) {
         Stack<Character> stack = new Stack<Character>();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -371,7 +414,7 @@ public class EasyMain {
      * @return
      */
 
-    public static String zigZag(String str, int n) {
+    public String zigZag(String str, int n) {
         if (n == 1) {
             return str;
         }

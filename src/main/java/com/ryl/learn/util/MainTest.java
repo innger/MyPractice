@@ -3,7 +3,7 @@ package com.ryl.learn.util;
 /**
  * Created by renyulong on 16/1/27.
  */
-public class Others {
+public class MainTest {
 
     public static void main(String[] args){
         System.out.println("".length());

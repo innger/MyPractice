@@ -1,11 +1,13 @@
-package com.ryl.learn.util;
+package com.ryl.learn.lecode;
 
 import java.util.*;
 
 /**
  * Created by renyulong on 16/1/25.
+ * 练习锻炼思维,预防秀逗,并不是为了什么目的
+ * 就跟跑步一样,不为愉悦别人,只为讨好自己
  */
-public class XXmain {
+public class EasyMain {
 
     public static void main(String[] args) {
         //random种子相同,重复执行产生的随机序列相同
@@ -14,8 +16,67 @@ public class XXmain {
 //            System.out.println(random.nextInt(10000));
         }
 
-        printArray(plusOne(new int[]{0}));
+        moveZeroes(new int[]{0,0,1});
     }
+
+    public static void moveZeroes(int[] nums) {
+        for(int i =0 ;i<nums.length;i++){
+            while(nums[i] == 0) {
+                boolean flag = true;
+                for (int j = i ; j < nums.length - 1; j++) {
+                    int tmp = nums[j];
+                    nums[j] = nums[j+1];
+                    nums[j+1] = tmp;
+                    if(nums[j] == 0 && nums[j+1] == 0){
+                        flag = flag && true;
+                    }else{
+                        flag = flag && false;
+                    }
+                }
+                if(flag){
+                    break;
+                }
+            }
+        }
+
+        System.out.println(Arrays.toString(nums));
+    }
+
+    public static List<Integer> getRow(int rowIndex) {
+        if (rowIndex < 0) return new ArrayList<Integer>();
+        List<List<Integer>> list = generate(rowIndex + 1);
+        return list.get(rowIndex);
+    }
+
+
+    public static List<List<Integer>> generate(int numRows) {
+        if (numRows <= 0) return new ArrayList<List<Integer>>();
+        List<List<Integer>> list = new ArrayList<List<Integer>>(numRows);
+        for (int i = 0; i < numRows; i++) {
+            List<Integer> subList = new ArrayList<Integer>(i + 1);
+            if (i - 1 >= 0) {
+                List<Integer> tmpList = list.get(i - 1);
+                for (int j = -1; j < tmpList.size(); j++) {
+                    int m = 0;
+                    int n = 0;
+                    if (j < 0)
+                        m = 0;
+                    else
+                        m = tmpList.get(j);
+                    if (j + 1 == tmpList.size())
+                        n = 0;
+                    else
+                        n = tmpList.get(j + 1);
+                    subList.add(m + n);
+                }
+            } else {
+                subList.add(1);
+            }
+            list.add(subList);
+        }
+        return list;
+    }
+
 
     public static int[] plusOne(int[] digits) {
         int len = digits.length;
@@ -29,7 +90,7 @@ public class XXmain {
                 digits[i] = tmp;
                 is = true;
                 break;
-            }else{
+            } else {
                 flag = 1;
                 digits[i] = tmp - 10;
             }
@@ -40,7 +101,7 @@ public class XXmain {
         } else {
             res = new int[len + 1];
             res[0] = 1;
-            System.arraycopy(digits,0,res,1,len);
+            System.arraycopy(digits, 0, res, 1, len);
         }
         return res;
     }

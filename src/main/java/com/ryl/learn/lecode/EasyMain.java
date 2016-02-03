@@ -10,30 +10,24 @@ import java.util.*;
 public class EasyMain {
 
     public static void main(String[] args) {
-        //random种子相同,重复执行产生的随机序列相同
-        Random random = new Random(10000);
-        for (int i = 0; i < 10; i++) {
-//            System.out.println(random.nextInt(10000));
-        }
-
-        moveZeroes(new int[]{0,0,1});
+        moveZeroes(new int[]{0, 0, 1});
     }
 
     public static void moveZeroes(int[] nums) {
-        for(int i =0 ;i<nums.length;i++){
-            while(nums[i] == 0) {
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] == 0) {
                 boolean flag = true;
-                for (int j = i ; j < nums.length - 1; j++) {
+                for (int j = i; j < nums.length - 1; j++) {
                     int tmp = nums[j];
-                    nums[j] = nums[j+1];
-                    nums[j+1] = tmp;
-                    if(nums[j] == 0 && nums[j+1] == 0){
+                    nums[j] = nums[j + 1];
+                    nums[j + 1] = tmp;
+                    if (nums[j] == 0 && nums[j + 1] == 0) {
                         flag = flag && true;
-                    }else{
+                    } else {
                         flag = flag && false;
                     }
                 }
-                if(flag){
+                if (flag) {
                     break;
                 }
             }

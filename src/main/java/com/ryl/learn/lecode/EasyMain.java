@@ -11,9 +11,22 @@ public class EasyMain {
 
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
+        System.out.println(easy.myAtoi("    10"));
 
     }
-    
+
+    public int myAtoi(String str) {
+        try {
+            for (int i = 0; i < str.length(); i++) {
+
+            }
+            return Integer.parseInt(str);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+
     public int majorityElement(int[] nums) {
         int m = nums[0];
         int cnt = 1;
@@ -177,14 +190,6 @@ public class EasyMain {
         return len;
     }
 
-
-    public int myAtoi(String str) {
-        try {
-            return Integer.parseInt(str);
-        } catch (Exception e) {
-            return 0;
-        }
-    }
 
     public int reverse(int x) {
         String tmp = String.valueOf(x);

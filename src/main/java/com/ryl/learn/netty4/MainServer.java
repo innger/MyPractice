@@ -26,25 +26,19 @@ public class MainServer {
     public static void main(String[] args) {
         int port = 8000;
 
-        EventLoopGroup boss = new NioEventLoopGroup(1);
-        EventLoopGroup work = new NioEventLoopGroup(128);
-
+        EventLoopGroup parentGroup = new NioEventLoopGroup(1);
+        EventLoopGroup childGroup = new NioEventLoopGroup(128);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
-            bootstrap.group(boss, work)
+            bootstrap.group(parentGroup, childGroup)
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline p = ch.pipeline();
-
-//                            p.addLast(new DelimiterBasedFrameDecoder(8*1024, Delimiters.lineDelimiter()));
-
+                            p.addLast(new DelimiterBasedFrameDecoder(8*1024, Delimiters.lineDelimiter()));
                             p.addLast(new MessageDecoder());
-
-
                             p.addLast(new ChatServerHandler());
-
                             p.addLast(new MessageEncoder());
                         }
                     })
@@ -58,8 +52,8 @@ public class MainServer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            boss.shutdownGracefully();
-            work.shutdownGracefully();
+            parentGroup.shutdownGracefully();
+            childGroup.shutdownGracefully();
         }
     }
 

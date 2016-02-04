@@ -1,4 +1,3 @@
-[TOC]
 #leetcode shell练习
 基本使用AWK，正则表达式，sort 排序，[在线地址](https://leetcode.com/problemset/shell/)
 

@@ -11,19 +11,140 @@ public class EasyMain {
 
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
-        System.out.println(easy.myAtoi("    10"));
+        System.out.println(easy.countAndSay(5));
+    }
 
+    public String countAndSay(int n) {
+        String res = "1";
+        for (int k = 0; k < n - 1; k++) {
+            String tmp = "";
+            int c = 1;
+            char ch = res.charAt(0);
+            for (int i = 1; i < res.length(); i++) {
+                if (ch == res.charAt(i)) {
+                    c++;
+                } else {
+                    tmp = tmp + c + ch;
+                    ch = res.charAt(i);
+                    c = 1;
+                }
+            }
+            tmp += "" + c + ch;
+            res = tmp;
+        }
+        return res;
+    }
+
+    public int compareVersion(String version1, String version2) {
+        String[] arr1 = version1.split("\\.");
+        String[] arr2 = version2.split("\\.");
+        int i = 0;
+        int j = 0;
+        while (i < arr1.length && j < arr2.length) {
+            int v1 = Integer.parseInt(arr1[i]);
+            int v2 = Integer.parseInt(arr2[j]);
+            if (v1 > v2) {
+                return 1;
+            }
+            if (v1 < v2) {
+                return -1;
+            }
+            i++;
+            j++;
+        }
+        while (i < arr1.length) {
+            if (Integer.parseInt(arr1[i]) == 0) {
+                i++;
+                continue;
+            } else {
+                return 1;
+            }
+        }
+        while (j < arr2.length) {
+            if (Integer.parseInt(arr2[j]) == 0) {
+                j++;
+                continue;
+            } else {
+                return -1;
+            }
+        }
+        return 0;
+    }
+
+
+    public String addBinary(String a, String b) {
+        int i = a.length() - 1;
+        int j = b.length() - 1;
+        String res = "";
+        int c = 0;
+        while (i >= 0 || j >= 0) {
+            int aa = 0;
+            if (i >= 0) {
+                aa = a.charAt(i) - '0';
+            }
+            int bb = 0;
+            if (j >= 0) {
+                bb = b.charAt(j) - '0';
+            }
+            int tmp = aa ^ bb ^ c;
+            res = tmp + res;
+            if ((aa + bb + c) >= 2) {
+                c = 1;
+            } else {
+                c = 0;
+            }
+
+            i--;
+            j--;
+        }
+        if (c > 0) {
+            res = c + res;
+        }
+        return res;
     }
 
     public int myAtoi(String str) {
-        try {
-            for (int i = 0; i < str.length(); i++) {
-
+        str = str.trim();
+        String newStr = "";
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (i == 0 && (ch == '-' || ch == '+')) {
+                newStr += ch;
+                continue;
             }
-            return Integer.parseInt(str);
-        } catch (Exception e) {
-            return 0;
+            if (ch >= '0' && ch <= '9') {
+                newStr += ch;
+            } else {
+                break;
+            }
         }
+        Long res = 0L;
+        boolean positive = true;
+        for (int i = 0; i < newStr.length(); i++) {
+            char ch = newStr.charAt(i);
+            if (i == 0) {
+                if (ch == '+') {
+                    continue;
+                }
+                if (ch == '-') {
+                    positive = false;
+                    continue;
+                }
+            }
+            int t = Character.digit(ch, 10);
+            if (positive) {
+                res = res * 10 + t;
+                if (res >= Integer.MAX_VALUE) {
+                    return Integer.MAX_VALUE;
+                }
+            } else {
+                res = res * 10 - t;
+                if (res <= Integer.MIN_VALUE) {
+                    return Integer.MIN_VALUE;
+                }
+            }
+        }
+        return res.intValue();
     }
 
 

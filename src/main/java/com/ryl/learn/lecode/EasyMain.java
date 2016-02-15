@@ -4,15 +4,93 @@ import java.util.*;
 
 /**
  * Created by renyulong on 16/1/25.
- * 练习思维,预防秀逗,并不是为了什么目的
- * 就跟跑步一样,不为愉悦别人,只为讨好自己
  */
 public class EasyMain {
 
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
-        System.out.println(easy.countAndSay(5));
+
     }
+
+    public int hammingWeight(int n) {
+        int cnt = 0;
+        while (n > 0) {
+            cnt++;
+            n = (n - 1) & n;
+        }
+        return cnt;
+    }
+
+    public boolean isPowerOfTwo(int n) {
+        //二进制表示中只有一个1
+        if (n < 2 && n != 1) return false;
+        int tmp = n;
+        int cnt = 0;
+        while (true) {
+            cnt += tmp & 1;
+            tmp = tmp >> 1;
+            if (tmp == 0) {
+                break;
+            }
+        }
+        return cnt == 1;
+    }
+
+    public boolean isPowerOfThree(int n) {
+        if (n < 3 && n != 1) return false;
+        int tmp = n;
+        while (tmp > 1) {
+            if (tmp % 3 == 0) {
+                tmp = tmp / 3;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            this.val = x;
+        }
+    }
+
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) return null;
+        ListNode pre = null;
+        ListNode tmp = head;
+        ListNode head2 = head.next;
+        ListNode next = tmp.next;
+        int i = 0;
+        while (next != null) {
+            tmp.next = next.next;
+            pre = tmp;
+            tmp = next;
+            next = tmp.next;
+            i++;
+        }
+        if (i % 2 != 0) {
+            if (pre != null) {
+                pre.next = head2;
+            }
+        } else {
+            tmp.next = head2;
+        }
+//        printListNode(head);
+        return head;
+    }
+
+    private void printListNode(ListNode head) {
+        ListNode tmp = head;
+        while (tmp != null) {
+            System.out.println(tmp.val);
+            tmp = tmp.next;
+        }
+    }
+
 
     public String countAndSay(int n) {
         String res = "1";

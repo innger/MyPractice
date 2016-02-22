@@ -13,7 +13,28 @@ import java.util.Random;
 public class MainTest {
 
     public static void main(String[] args) {
+        testint();
 
+    }
+
+
+    public static void testint() { //15712189
+        byte[] bytes = new byte[]{127, -17, -65, -67};
+        ByteBuffer buffer = ByteBuffer.allocate(4);
+        buffer.put(bytes, 0, 4);
+        buffer.flip();
+//        System.out.println(buffer.getInt());
+
+        for (int i = 0; i <= Integer.MAX_VALUE; i++) {
+            ByteBuffer b = ByteBuffer.allocate(4);
+            b.putInt(i);
+            if (!isValid(b.array())) {
+                System.out.println("invalid " + i);
+            }
+        }
+    }
+
+    public static void maintest1() {
 
         byte[] bytes = new byte[]{0, 0, 0, 0, 0, -17, -65, -67};
         ByteBuffer buffer = ByteBuffer.allocate(8);
@@ -28,7 +49,7 @@ public class MainTest {
         }
 
 
-        System.out.println("=================="+isValid(bytes));
+        System.out.println("==================" + isValid(bytes));
 
 
         System.out.println(0x00efbfbd);
@@ -61,9 +82,8 @@ public class MainTest {
     }
 
 
-
     public static long testDelimiter() {
-        for(;;){
+        for (; ; ) {
             //DA+项目中分包符号"\ufffd" 问题
             //对应的bytes数组 -17 -65 -67
             ByteBuffer buffer = ByteBuffer.allocate(8);
@@ -77,18 +97,19 @@ public class MainTest {
             long msgId = buffer.getLong();
 
             boolean valid = isValid(buffer.array());
-            if(!valid){
+            if (!valid) {
                 continue;
-            }else{
+            } else {
                 return msgId;
             }
         }
     }
 
-    public static boolean isValid(byte[] arr){
+    public static boolean isValid(byte[] arr) {
         for (int i = 0; i < arr.length; i++) {
             if (i + 1 < arr.length && i + 2 < arr.length) {
                 if (arr[i] == -17 && arr[i + 1] == -65 && arr[i + 2] == -67) {
+//                    System.out.println(arr);
                     return false;
                 }
             }

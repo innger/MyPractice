@@ -39,6 +39,35 @@
             <version>1.2.4</version>
         </dependency>
 
+        <!-- webservice -->
+        <dependency>
+            <groupId>com.sun.xml.wss</groupId>
+            <artifactId>xws-security</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jasperwireless</groupId>
+            <artifactId>api.ws.schema</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- webservice -->
+
+        <!-- mqtt -->
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.mqtt.utility</artifactId>
+            <version>1.0.2</version>
+        </dependency>-->
+        <!-- mqtt -->
+
+
+
     </dependencies>
 
     <build>

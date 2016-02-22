@@ -11,29 +11,34 @@ public class MediumMain {
         MediumMain main = new MediumMain();
 
         //-1, 0, 1, 2, -1, -4
-        System.out.println(main.threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
+        System.out.println(main.threeSum(new int[]{-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6}));
     }
 
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> res = new ArrayList<List<Integer>>();
-        Map<Integer, Integer> numMap = new HashMap<Integer, Integer>();
-
+        Set<Integer> set = new HashSet<Integer>();
         for (int i = 0; i < nums.length; i++) {
             for (int j = i + 1; j < nums.length; j++) {
-                int re = 0 - nums[i] - nums[j];
-                Integer index = numMap.get(re);
-                if (index != null && index != i && index != j) {
-                    int max = nums[i] > nums[j] ? re > nums[i] ? re : nums[i] : re > nums[j] ? re : nums[j];
-                    int min = nums[i] < nums[j] ? re < nums[i] ? re : nums[i] : re < nums[j] ? re : nums[j];
-                    int mid = 0 - max - min;
+                for (int k = j + 1; k < nums.length; k++) {
+                    if (nums[i] + nums[j] + nums[k] == 0) {
 
-                    List<Integer> subList = new ArrayList<Integer>(3);
-                    subList.add(min);
-                    subList.add(mid);
-                    subList.add(max);
-                    res.add(subList);
-                } else {
-                    numMap.put(nums[j]+nums[i], i+j);
+                        int max = nums[i] > nums[j] ? nums[k] > nums[i] ? nums[k] : nums[i] : nums[k] > nums[j] ? nums[k] : nums[j];
+                        int min = nums[i] < nums[j] ? nums[k] < nums[i] ? nums[k] : nums[i] : nums[k] < nums[j] ? nums[k] : nums[j];
+                        int mid = 0 - max - min;
+
+                        if(set.contains(min-mid-max)){
+                            break;
+                        }
+
+                        List<Integer> subList = new ArrayList<Integer>(3);
+                        subList.add(min);
+                        subList.add(mid);
+                        subList.add(max);
+                        res.add(subList);
+
+
+                        break;
+                    }
                 }
             }
         }

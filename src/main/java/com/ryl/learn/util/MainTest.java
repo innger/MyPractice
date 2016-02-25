@@ -5,6 +5,8 @@ import io.netty.buffer.ByteBufUtil;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -13,7 +15,11 @@ import java.util.Random;
 public class MainTest {
 
     public static void main(String[] args) {
-        testint();
+//        testint();
+        Map<String, Boolean> map = new HashMap<>();
+        Boolean b = (map != null ? map.get("get") : false);
+//        Boolean b = map.get("get");
+        System.out.println(b);
 
     }
 

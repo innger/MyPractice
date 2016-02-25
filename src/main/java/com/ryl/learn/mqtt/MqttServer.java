@@ -18,15 +18,14 @@ import java.util.concurrent.TimeUnit;
 public class MqttServer {
 
     private MqttClient mqttClient;
+//    private String host = "tcp://30.28.177.59:1883";
     private String host = "tcp://127.0.0.1:1883";
 
-    private String username = "testserverid1";
-    private String password = "";
+    private String username = "serveruser";
+    private String password = "testuser";
 
     private MqttTopic topic;
     private MqttMessage message;
-
-    private String myTopic = "test/topic";
 
     private ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
 
@@ -60,13 +59,30 @@ public class MqttServer {
                 }
 
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    System.out.println("messageArrived----------" + topic + message);
+                    if(topic.equals(CommonConst.LOGIN_TOPIC)){
+                        //验证登录
+                        try {
+                            LoginMessage login = new LoginMessage();
+                            login.readFromByteArr(message.getPayload());
+                            System.out.println(login.getUserId() + " login success.");
+
+                            MqttMessage mmsg = new MqttMessage();
+                            mmsg.setQos(2);
+                            mmsg.setRetained(true);
+                            mmsg.setPayload((new Date().toString() + " " + login.getUserId() + " login succes.").getBytes(CharsetUtil.UTF_8));
+                            String ctopic = CommonConst.COMMON_TOPIC+"/"+login.getUserId();
+                            mqttClient.getTopic(ctopic).publish(mmsg);
+                        }catch (Exception ex){
+                            System.err.println(ex);
+                        }
+                    }
 
                 }
             });
 
-            topic = mqttClient.getTopic(myTopic);
             mqttClient.connect(options);
+            mqttClient.subscribe(CommonConst.LOGIN_TOPIC);
+            topic = mqttClient.getTopic(CommonConst.COMMON_TOPIC);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +93,7 @@ public class MqttServer {
         service.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 try {
-                    System.out.println("sendMessage begin ...");
+                    System.out.println("sendMessage begin.");
                     message = new MqttMessage();
                     message.setQos(1);
                     message.setRetained(true);
@@ -88,8 +104,7 @@ public class MqttServer {
                     e.printStackTrace();
                 }
             }
-        }, 0, 5, TimeUnit.SECONDS);
-
+        }, 0, 15, TimeUnit.SECONDS);
     }
 
     public static void main(String[] args) {

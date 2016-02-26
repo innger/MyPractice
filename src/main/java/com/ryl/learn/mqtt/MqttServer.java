@@ -97,14 +97,14 @@ public class MqttServer {
                     message = new MqttMessage();
                     message.setQos(1);
                     message.setRetained(true);
-                    message.setPayload((new Date().toString() + " renyulong-test-message").getBytes(CharsetUtil.UTF_8));
+                    message.setPayload((new Date().toString() + " 测试消息,测试消息").getBytes(CharsetUtil.UTF_8));
                     topic.publish(message);
                     System.out.println("sendMessage finish.");
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
             }
-        }, 0, 15, TimeUnit.SECONDS);
+        }, 0, 60, TimeUnit.SECONDS);
     }
 
     public static void main(String[] args) {

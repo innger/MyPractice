@@ -9,7 +9,56 @@ public class EasyMain {
 
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
+        System.out.println(easy.romanToInt("II"));
 
+    }
+
+    //http://blog.csdn.net/ljiabin/article/details/39968583
+    public int romanToInt(String s) {
+        int res = romanChar2Number(s.charAt(0));
+        for (int i = 1; i < s.length(); i++) {
+            int i1 = romanChar2Number(s.charAt(i-1));
+            int i2 = romanChar2Number(s.charAt(i));
+            if(i1 < i2){
+                res += i2 - 2 * i1;
+            }else{
+                res += i2;
+            }
+        }
+        return res;
+    }
+
+    private int romanChar2Number(char ch) {
+        switch (ch) {
+            case 'I':
+                return 1;
+            case 'V':
+                return 5;
+            case 'X':
+                return 10;
+            case 'L':
+                return 50;
+            case 'C':
+                return 100;
+            case 'D':
+                return 500;
+            case 'M':
+                return 1000;
+            default:
+                return 1;
+        }
+    }
+
+    public boolean isPalindrome(int x) {
+        int origin = x;
+        if (x < 0) origin = -x;
+        int re = 0;
+        while (x > 0) {
+            int t = x % 10;
+            re = re * 10 + t;
+            x = x / 10;
+        }
+        return origin == re;
     }
 
     public int hammingWeight(int n) {

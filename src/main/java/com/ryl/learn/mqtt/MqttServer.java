@@ -19,7 +19,8 @@ public class MqttServer {
 
     private MqttClient mqttClient;
 //    private String host = "tcp://30.28.177.59:1883";
-    private String host = "tcp://127.0.0.1:1883";
+    private String host = "tcp://mqtt.ons.aliyun.com:1883";
+
 
     private String username = "serveruser";
     private String password = "testuser";

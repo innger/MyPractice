@@ -1,8 +1,13 @@
 package com.ryl.learn.lecode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
+ *
+ * 题目答案都能搜到
  * Created by renyulong on 16/2/3.
  */
 public class MediumMain {
@@ -12,8 +17,43 @@ public class MediumMain {
 
         //-1, 0, 1, 2, -1, -4
         System.out.println(main.threeSum(new int[]{-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6}));
+
+        System.out.println(main.intToRoman(123));
+        System.out.println(main.int2Roman(123));
     }
 
+    //http://blog.csdn.net/ljiabin/article/details/39968583
+    public String int2Roman(int num) {
+        String[][] roman = {{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"},
+                {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"},
+                {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"},
+                {"", "M", "MM", "MMM"}};
+        String res = "";
+        int digit = 0;
+        while (num != 0) {
+            int t = num % 10;
+            res = roman[digit][t] + res;
+            digit++;
+            num /= 10;
+        }
+        return res;
+    }
+
+    //http://blog.csdn.net/havenoidea/article/details/11848921
+    public String intToRoman(int num) {
+        String str = "";
+        String[] symbol = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        int[] value = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        for (int i = 0; num != 0; i++) {
+            while (num >= value[i]) {
+                num -= value[i];
+                str += symbol[i];
+            }
+        }
+        return str;
+    }
+
+    //http://blog.csdn.net/li4951/article/details/8693212
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> res = new ArrayList<List<Integer>>();
         Set<Integer> set = new HashSet<Integer>();
@@ -26,7 +66,7 @@ public class MediumMain {
                         int min = nums[i] < nums[j] ? nums[k] < nums[i] ? nums[k] : nums[i] : nums[k] < nums[j] ? nums[k] : nums[j];
                         int mid = 0 - max - min;
 
-                        if(set.contains(min-mid-max)){
+                        if (set.contains(min - mid - max)) {
                             break;
                         }
 

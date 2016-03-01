@@ -546,21 +546,6 @@ public class EasyMain {
         return false;
     }
 
-    public int[] twoSum(int[] nums, int target) {
-        int[] res = new int[2];
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-        for (int i = 0; i < nums.length; i++) {
-            int tmp = target - nums[i];
-            if (map.get(tmp) != null) {
-                res[0] = map.get(tmp) + 1;
-                res[1] = i + 1;
-            } else {
-                map.put(nums[i], i);
-            }
-        }
-        return res;
-    }
-
     public boolean isIsomorphic(String s, String t) {
         if (s == null || t == null || s.length() != t.length()) {
             return false;

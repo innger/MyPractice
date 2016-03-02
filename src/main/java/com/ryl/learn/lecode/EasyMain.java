@@ -22,18 +22,16 @@ public class EasyMain {
         ListNode newHead = easy.removeNthFromEnd(head, 2);
         easy.printListNode(newHead);*/
 
-        System.out.println(easy.firstBadVersion(2));
-
-
-        System.out.println(Integer.MAX_VALUE + Integer.MAX_VALUE);
+        System.out.println(easy.firstBadVersion(3));
     }
 
+    //二分查找 找mid值溢出问题考虑
     public int firstBadVersion(int n) {
         int i = 1;
         int j = n;
-        while (i < j) {
+        while (i <= j) {
             // m = (i+j) / 2 可能int溢出
-            int m = (i + j) / 2;
+            int m = i + (j - i) / 2;
             if (isBadVersion(m)) {
                 j = m - 1;
             } else {
@@ -45,6 +43,9 @@ public class EasyMain {
 
     boolean isBadVersion(int version) {
 //        return new Random().nextInt() % 2 == 0;
+        if( version >= 2){
+            return true;
+        }
         return false;
     }
 

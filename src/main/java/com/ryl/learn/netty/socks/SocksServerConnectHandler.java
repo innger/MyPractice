@@ -1,6 +1,5 @@
 package com.ryl.learn.netty.socks;
 
-import com.sun.tools.internal.ws.wsdl.document.Output;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;

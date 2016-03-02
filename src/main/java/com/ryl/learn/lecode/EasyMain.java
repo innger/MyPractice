@@ -9,19 +9,109 @@ public class EasyMain {
 
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
-        System.out.println(easy.romanToInt("II"));
+//        System.out.println(easy.romanToInt("II"));
 
+        /*ListNode head = new ListNode(1);
+        ListNode node = head;
+        for (int i = 2; i < 3; i++) {
+            ListNode tmp = new ListNode(i);
+            node.next = tmp;
+            node = tmp;
+        }
+
+        ListNode newHead = easy.removeNthFromEnd(head, 2);
+        easy.printListNode(newHead);*/
+
+        System.out.println(easy.firstBadVersion(2));
+
+
+        System.out.println(Integer.MAX_VALUE + Integer.MAX_VALUE);
+    }
+
+    public int firstBadVersion(int n) {
+        int i = 1;
+        int j = n;
+        while (i < j) {
+            // m = (i+j) / 2 可能int溢出
+            int m = (i + j) / 2;
+            if (isBadVersion(m)) {
+                j = m - 1;
+            } else {
+                i = m + 1;
+            }
+        }
+        return i;
+    }
+
+    boolean isBadVersion(int version) {
+//        return new Random().nextInt() % 2 == 0;
+        return false;
+    }
+
+    public int addDigits(int num) {
+        while (num >= 10) {
+            int sum = 0;
+            int tmp = num;
+            while (tmp > 0) {
+                int t = tmp % 10;
+                tmp = tmp / 10;
+                sum += t;
+            }
+            num = sum;
+        }
+        return num;
+    }
+
+    public boolean isUgly(int num) {
+        if (num <= 0) {
+            return false;
+        }
+        while (num % 2 == 0) {
+            num = num / 2;
+        }
+        while (num % 3 == 0) {
+            num = num / 3;
+        }
+        while (num % 5 == 0) {
+            num = num / 5;
+        }
+        return num == 1;
+    }
+
+    public boolean canWinNim(int n) {
+        return n % 4 != 0;
+    }
+
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode p = head;
+        ListNode q = head;
+        for (int i = 0; i < n; i++) {
+            q = q.next;
+        }
+        while (q != null && q.next != null) {
+            q = q.next;
+            p = p.next;
+        }
+        //删除头结点
+        if (q == null) {
+            return p.next;
+        }
+        //删除第n个节点
+        if (p.next != null) {
+            p.next = p.next.next;
+        }
+        return head;
     }
 
     //http://blog.csdn.net/ljiabin/article/details/39968583
     public int romanToInt(String s) {
         int res = romanChar2Number(s.charAt(0));
         for (int i = 1; i < s.length(); i++) {
-            int i1 = romanChar2Number(s.charAt(i-1));
+            int i1 = romanChar2Number(s.charAt(i - 1));
             int i2 = romanChar2Number(s.charAt(i));
-            if(i1 < i2){
+            if (i1 < i2) {
                 res += i2 - 2 * i1;
-            }else{
+            } else {
                 res += i2;
             }
         }
@@ -135,9 +225,10 @@ public class EasyMain {
     private void printListNode(ListNode head) {
         ListNode tmp = head;
         while (tmp != null) {
-            System.out.println(tmp.val);
+            System.out.print(tmp.val + " ");
             tmp = tmp.next;
         }
+        System.out.println();
     }
 
 

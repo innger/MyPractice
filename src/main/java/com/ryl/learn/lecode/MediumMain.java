@@ -10,7 +10,7 @@ public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
-        System.out.println(main.threeSum(new int[]{-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6}));
+        System.out.println(main.fourSum(new int[]{0, 0, 0, 0}, 0));
     }
 
     public List<List<Integer>> fourSum(int[] nums, int target) {
@@ -24,7 +24,7 @@ public class MediumMain {
             }
 
             for (int j = i + 1; j <= nums.length - 3; j++) {
-                if (nums[j] == nums[j - 1]) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
                     continue;
                 }
 

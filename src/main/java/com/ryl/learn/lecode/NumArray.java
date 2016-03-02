@@ -1,24 +1,38 @@
 package com.ryl.learn.lecode;
 
 /**
+ * https://leetcode.com/problems/range-sum-query-immutable/
+ * 参考 http://my.oschina.net/Tsybius2014/blog/528708
  * Created by renyulong on 16/2/18.
  */
 public class NumArray {
 
-    private int[] nums;
+    private int[] sums; //nums 从0-i的sum值 空间换时间
 
+    //在构造函数中提前计算好sum
     public NumArray(int[] nums) {
-        this.nums = nums;
+        if (nums == null) {
+            this.sums = nums;
+        } else if (nums.length == 0) {
+            this.sums = new int[0];
+        } else {
+            this.sums = new int[nums.length];
+            sums[0] = nums[0];
+            for (int i = 1; i < nums.length; i++) {
+                sums[i] = sums[i - 1] + nums[i];
+            }
+        }
     }
+
 
     public int sumRange(int i, int j) {
-        if(nums == null || i > nums.length -1 || j > nums.length - 1)
+        if (sums == null || i > sums.length - 1 || j > sums.length - 1 || i > j)
             return 0;
-        int sum = 0;
-        for(int k = i;k<=j;k++){
-            sum += nums[k];
+        if (i == 0) {
+            return sums[j];
         }
-        return sum;
+        return sums[j] - sums[i - 1];
     }
+
 
 }

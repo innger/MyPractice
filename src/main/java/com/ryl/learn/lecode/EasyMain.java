@@ -9,21 +9,180 @@ public class EasyMain {
 
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
-//        System.out.println(easy.romanToInt("II"));
 
-        /*ListNode head = new ListNode(1);
-        ListNode node = head;
-        for (int i = 2; i < 3; i++) {
-            ListNode tmp = new ListNode(i);
-            node.next = tmp;
-            node = tmp;
+//        ListNode head = new ListNode(1);
+//        ListNode node = head;
+//        for (int i = 2; i <= 10; i++) {
+//            ListNode tmp = new ListNode(i);
+//            node.next = tmp;
+//            node = tmp;
+//        }
+//        easy.printListNode(head);
+//        easy.printListNode(easy.reverseListLoop(head));
+//        ListNode newHead = easy.removeNthFromEnd(head, 2);
+//        easy.printListNode(newHead);
+
+//        System.out.println(easy.countPrimes(10000));
+
+        System.out.println(easy.titleToNumber("A"));
+
+    }
+
+    //http://www.cnblogs.com/ganganloveu/p/4193373.html
+    // n!尾部0的个数 5的幂次
+    public int trailingZeroes(int n) {
+        int ret = 0;
+        while(n > 0){
+            ret += n / 5;
+            n /= 5;
+        }
+        return ret;
+    }
+
+    //A-Z 1-26 进制转换
+    public String convertToTitle(int n) {
+        String res = "";
+        boolean init = false;
+        while (n > 0) {
+            int t = n % 26;
+            char c = (char) (t + 64);
+            if (t == 0) {
+                c = 'Z';
+                n = n - 26;
+            }
+            res = c + res;
+            n = n / 26;
+            init = true;
+        }
+        return res;
+    }
+
+    public int titleToNumber(String s) {
+        int res = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            int n = c - 64;
+            res = res * 26 + n;
+        }
+        return res;
+    }
+
+    public String getHint(String secret, String guess) {
+        Map<Character, Integer> map1 = new HashMap<Character, Integer>();
+        Map<Character, Integer> map2 = new HashMap<Character, Integer>();
+        String s2 = "";
+        int bull = 0;
+        int cows = 0;
+        for (int i = 0; i < secret.length(); i++) {
+            char c1 = secret.charAt(i);
+            char c2 = guess.charAt(i);
+            if (c1 == c2) {
+                bull++;
+            } else {
+                Integer tmp = map1.get(c1);
+                if (tmp == null) {
+                    map1.put(c1, 1);
+                } else {
+                    map1.put(c1, tmp + 1);
+                }
+
+                tmp = map2.get(c2);
+                if (tmp == null) {
+                    map2.put(c2, 1);
+                } else {
+                    map2.put(c2, tmp + 1);
+                }
+            }
+        }
+        for (Character c : map1.keySet()) {
+            Integer i1 = map1.get(c);
+            Integer i2 = map2.get(c);
+            if (i2 != null && i2 > 0) {
+                cows += i1 < i2 ? i1 : i2;
+            }
+        }
+        return bull + "A" + cows + "B";
+
+    }
+
+    //单链表反转
+    public ListNode reverseListLoop(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
         }
 
-        ListNode newHead = easy.removeNthFromEnd(head, 2);
-        easy.printListNode(newHead);*/
+        ListNode node = head;
+        ListNode pre = null;
+        ListNode reverseHead = null;
+        while (node != null) {
+            ListNode next = node.next;
+            if (next == null) {
+                reverseHead = node;
+            }
+            node.next = pre;
+            pre = node;
+            node = next;
+        }
 
-        System.out.println(easy.firstBadVersion(3));
+        return reverseHead;
     }
+
+    //递归方式
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode reversHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+
+        return reversHead;
+    }
+
+    //查找 <= n 的质数个数 The Sieve of Eratosthenes
+    public int countPrimes(int n) {
+        boolean[] isPrime = new boolean[n];
+        for (int i = 2; i < n; i++) {
+            isPrime[i] = true;
+        }
+        // Loop's ending condition is i * i < n instead of i < sqrt(n)
+        // to avoid repeatedly calling an expensive function sqrt().
+        for (int i = 2; i * i < n; i++) {
+            if (!isPrime[i]) continue;
+            for (int j = i * i; j < n; j += i) {
+                isPrime[j] = false;
+            }
+        }
+        int count = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime[i]) count++;
+        }
+        return count;
+    }
+
+
+    //出现无限循环,用set判断之前是否重复出现过
+    public boolean isHappy(int n) {
+        int s = 0;
+        Set<Integer> set = new HashSet<Integer>();
+        while (true) {
+            while (n > 0) {
+                int d = n % 10;
+                n = n / 10;
+                s += d * d;
+            }
+//            System.out.println(s);
+            if (s == 1 || set.contains(s)) {
+                break;
+            }
+            set.add(s);
+            n = s;
+            s = 0;
+        }
+        return s == 1;
+    }
+
 
     //二分查找 找mid值溢出问题考虑
     public int firstBadVersion(int n) {
@@ -43,7 +202,7 @@ public class EasyMain {
 
     boolean isBadVersion(int version) {
 //        return new Random().nextInt() % 2 == 0;
-        if( version >= 2){
+        if (version >= 2) {
             return true;
         }
         return false;

@@ -24,15 +24,80 @@ public class EasyMain {
 
 //        System.out.println(easy.countPrimes(10000));
 
-        System.out.println(easy.titleToNumber("A"));
+        System.out.println(easy.strStr("mississippi", "issipi"));
 
+    }
+
+    public int strStr(String haystack, String needle) {
+        if (haystack.length() < needle.length()) {
+            return -1;
+        }
+        if(haystack.length() == 0 && needle.length() == 0){
+            return 0;
+        }
+
+        if(needle.length() == 0){
+            return 0;
+        }
+        return haystack.indexOf(needle);
+
+//      TimeLimit 不行,直接用jdk api 内部实现更高效
+//        for (int i = 0; i < haystack.length(); i++) {
+//            boolean flag = true;
+//            for (int j = 0; j < needle.length(); j++) {
+//                char c1 = needle.charAt(j);
+//
+//                if (haystack.length() <= i + j) {
+//                    flag = false;
+//                    break;
+//                }
+//                char c2 = haystack.charAt(i + j);
+//                if (c1 != c2) {
+//                    flag = false;
+//                    break;
+//                }
+//            }
+//            if (flag) {
+//                return i;
+//            }
+//        }
+//        return -1;
+    }
+
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length < 1) {
+            return "";
+        }
+
+        String res = "";
+        for (int i = 0; i < strs[0].length(); i++) {
+            boolean flag = true;
+            char c1 = strs[0].charAt(i);
+            for (int j = 1; j < strs.length; j++) {
+                if (strs[j].length() <= i) {
+                    flag = false;
+                    break;
+                }
+                char c2 = strs[j].charAt(i);
+                if (c1 != c2) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                res += c1;
+            } else {
+                break;
+            }
+        }
+        return res;
     }
 
     //http://www.cnblogs.com/ganganloveu/p/4193373.html
     // n!尾部0的个数 5的幂次
     public int trailingZeroes(int n) {
         int ret = 0;
-        while(n > 0){
+        while (n > 0) {
             ret += n / 5;
             n /= 5;
         }

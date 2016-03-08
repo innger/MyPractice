@@ -18,8 +18,8 @@ public interface ApiClientConstant {
     String PREFIX = "jws";
 
     String LICENSE_KEY = "6247e65f-3f4f-4b68-beab-2f2547edf8cb";
-    String USERNAME = "yaohongyi";
-    String PASSWORD = "autonavi2011";
+    String USERNAME = "test_yaohongyi";
+    String PASSWORD = "test_autonavi2011";
     String WS_URL = "https://api.10646.cn/ws/service/terminal";
 
     String VERSION = "1.0";

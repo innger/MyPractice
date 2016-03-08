@@ -1,6 +1,7 @@
 package com.ryl.learn.puzzlers;
 
 public class JavaPluzzer {
+
     public static void main(String[] args) {
         System.out.println(isOdd(-11));
         System.out.println(-11 % -2); //(a/b)*b+a%b == a
@@ -36,4 +37,5 @@ public class JavaPluzzer {
 //		return i%2 !=0;
         return (i & 1) == 1;
     }
+
 }

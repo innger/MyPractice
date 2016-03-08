@@ -28,6 +28,11 @@ public class EasyMain {
 
     }
 
+    //数独
+    public boolean isValidSudoku(char[][] board) {
+        return false;
+    }
+
     public int strStr(String haystack, String needle) {
         if (haystack.length() < needle.length()) {
             return -1;

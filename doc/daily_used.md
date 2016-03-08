@@ -2,6 +2,13 @@
 年前最后一天上班,把电脑拿到公司,配置了一下 [Idea](https://github.com/ViceFantasyPlace/activate-power-mode) 和 [Atom](https://github.com/JoelBesada/activate-power-mode) 的activate-power-mode插件
 感受了一把狂拽炫酷吊炸天,过年啦也放礼花庆祝一下,以后就用这个啦
 
+IDEA中编译plugin
+```
+git clone https://github.com/ViceFantasyPlace/activate-power-mode.git
+Build -> Prepare Plugin Moudle 'activate-power-mode' For Deployment 
+```
+直接install plugin from disk 选择生成的jar包即可
+
 *Atom* *markdown*大赞,怎么会有这么好的工具
 
 这些工具/插件的大神们,真的提升幸福感,世界很大,多体验点有意思的
@@ -22,15 +29,17 @@
  
 # 2016-02-24
  IDEA-15破解网址
- license server:
-  http://www.iteblog.com/idea/key.php
-  http://us.idea.lanyus.com/
-  http://idea.lanyus.com
-  http://15.idea.lanyus.com/
+ license server: <br>
+  http://www.iteblog.com/idea/key.php <br>
+  http://us.idea.lanyus.com/ <br>
+  http://idea.lanyus.com <br>
+  http://15.idea.lanyus.com/ <br>
   
   默认idea.vmoptions配置
-  -Xms128m
+  ```
+  -Xms128m 
   -Xmx750m
   -XX:MaxPermSize=350m
   -XX:ReservedCodeCacheSize=240m
   -XX:+UseCompressedOops
+  ```

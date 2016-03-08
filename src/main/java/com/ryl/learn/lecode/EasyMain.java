@@ -28,8 +28,17 @@ public class EasyMain {
 
     }
 
-    //数独
-    public boolean isValidSudoku(char[][] board) {
+    class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            this.val = x;
+        }
+    }
+
+    //数独 Todo
+    public boolean isValidSudoku(char[][] board){
         return false;
     }
 
@@ -1000,14 +1009,5 @@ public class EasyMain {
         }
         return res;
 
-    }
-
-    static class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            this.val = x;
-        }
     }
 }

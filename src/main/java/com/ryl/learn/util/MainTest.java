@@ -1,7 +1,5 @@
 package com.ryl.learn.util;
 
-import io.netty.buffer.ByteBufUtil;
-
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -14,12 +12,12 @@ public class MainTest {
     public static void main(String[] args) {
         for (int i = 0; i < 10; i++) {
             System.out.println(UUID.randomUUID().toString());
-            System.out.println(Integer.parseInt("b80cbec",16));
+            System.out.println(Integer.parseInt("b80cbec", 16));
         }
 
     }
 
-    public static void testMap(){
+    public static void testMap() {
         Map<String, Boolean> map = new HashMap<>();
         Boolean b = (map != null ? map.get("get") : false);
 //        Boolean b = map.get("get");

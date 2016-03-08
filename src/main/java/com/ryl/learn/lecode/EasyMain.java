@@ -32,11 +32,11 @@ public class EasyMain {
         if (haystack.length() < needle.length()) {
             return -1;
         }
-        if(haystack.length() == 0 && needle.length() == 0){
+        if (haystack.length() == 0 && needle.length() == 0) {
             return 0;
         }
 
-        if(needle.length() == 0){
+        if (needle.length() == 0) {
             return 0;
         }
         return haystack.indexOf(needle);
@@ -413,15 +413,6 @@ public class EasyMain {
         return true;
     }
 
-    static class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            this.val = x;
-        }
-    }
-
     public ListNode oddEvenList(ListNode head) {
         if (head == null) return null;
         ListNode pre = null;
@@ -455,7 +446,6 @@ public class EasyMain {
         }
         System.out.println();
     }
-
 
     public String countAndSay(int n) {
         String res = "1";
@@ -513,7 +503,6 @@ public class EasyMain {
         }
         return 0;
     }
-
 
     public String addBinary(String a, String b) {
         int i = a.length() - 1;
@@ -590,7 +579,6 @@ public class EasyMain {
         return res.intValue();
     }
 
-
     public int majorityElement(int[] nums) {
         int m = nums[0];
         int cnt = 1;
@@ -632,7 +620,6 @@ public class EasyMain {
 
     }
 
-
     public void moveZeroes(int[] nums) {
         for (int i = 0; i < nums.length; i++) {
             while (nums[i] == 0) {
@@ -662,7 +649,6 @@ public class EasyMain {
         return list.get(rowIndex);
     }
 
-
     public List<List<Integer>> generate(int numRows) {
         if (numRows <= 0) return new ArrayList<List<Integer>>();
         List<List<Integer>> list = new ArrayList<List<Integer>>(numRows);
@@ -690,7 +676,6 @@ public class EasyMain {
         }
         return list;
     }
-
 
     public int[] plusOne(int[] digits) {
         int len = digits.length;
@@ -720,7 +705,6 @@ public class EasyMain {
         return res;
     }
 
-
     public int removeDuplicates(int[] nums) {
         int len = nums.length;
         int i = 0;
@@ -737,7 +721,6 @@ public class EasyMain {
         return len;
     }
 
-
     public int removeElement(int[] nums, int val) {
         int len = nums.length;
         int i = 0;
@@ -753,7 +736,6 @@ public class EasyMain {
         }
         return len;
     }
-
 
     public int reverse(int x) {
         String tmp = String.valueOf(x);
@@ -1013,5 +995,14 @@ public class EasyMain {
         }
         return res;
 
+    }
+
+    static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            this.val = x;
+        }
     }
 }

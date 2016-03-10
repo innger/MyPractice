@@ -1,8 +1,13 @@
 package com.ryl.learn.util;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by renyulong on 16/1/27.
@@ -10,11 +15,28 @@ import java.util.*;
 public class MainTest {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
+        /*for (int i = 0; i < 10; i++) {
             System.out.println(UUID.randomUUID().toString());
             System.out.println(Integer.parseInt("b80cbec", 16));
-        }
+        }*/
 
+        System.out.println(getServerIp());
+
+        String[] arr = "182.92.253.18".split(",");
+
+        System.out.println(arr[0]);
+//        System.out.println(arr[1].trim());
+
+    }
+
+    public static String getServerIp() {
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            System.out.println(address.getHostName() + "\t" + address.getHostAddress());
+            return address.getHostAddress();
+        } catch (UnknownHostException e) {
+            return "-";
+        }
     }
 
     public static void testMap() {

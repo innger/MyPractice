@@ -1,5 +1,10 @@
 package com.ryl.learn.lecode;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Created by renyulong on 16/3/8.
  */
@@ -7,12 +12,69 @@ public class EasyCode {
 
     public static void main(String[] args) {
         EasyCode code = new EasyCode();
-        System.out.println(code.climbStairs(10));
+//        System.out.println(code.climbStairs(10));
 
-        ListNode head = initList(2);
-        printList(head);
+//        ListNode head = initList(2);
+//        printList(head);
+//        printList(code.removeElements(head, 2));
 
-        printList(code.removeElements(head,2));
+        System.out.println(code.wordPattern2("abba", "dog dog dog dog"));
+    }
+
+
+    public boolean wordPattern2(String pattern, String str) {
+        String[] arr = str.split("\\s");
+        if (arr.length != pattern.length()) {
+            return false;
+        }
+        //两个map判断是否一致
+        Map<Character, String> map1 = new HashMap<Character, String>();
+        Map<String, Character> map2 = new HashMap<String, Character>();
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            String s = arr[i];
+            String tmps = map1.get(c);
+            if (tmps != null && !tmps.equals(arr[i])) {
+                return false;
+            }
+            Character tmpc = map2.get(s);
+            if (tmpc != null && tmpc != c) {
+                return false;
+            }
+
+            map1.put(c, s);
+            map2.put(s, c);
+        }
+
+        return true;
+    }
+
+
+    public boolean wordPattern(String pattern, String str) {
+        String[] arr = str.split("\\s");
+        if (arr.length != pattern.length()) {
+            return false;
+        }
+        //用set size 判断是否一致
+        Set<Character> charSet = new HashSet<Character>();
+        Set<String> strSet = new HashSet<String>();
+        Map<Character, String> map = new HashMap<Character, String>();
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            String tmp = map.get(c);
+            if (tmp != null && !tmp.equals(arr[i])) {
+                return false;
+            } else {
+                map.put(c, arr[i]);
+                charSet.add(c);
+                strSet.add(arr[i]);
+            }
+        }
+        if (charSet.size() != strSet.size()) {
+            return false;
+        }
+
+        return true;
     }
 
     //复制node值 再删除
@@ -27,10 +89,10 @@ public class EasyCode {
             return head;
         }
 
-        while(head != null && head.val == val){
+        while (head != null && head.val == val) {
             head = head.next;
         }
-        if(head == null || head.next == null){
+        if (head == null || head.next == null) {
             return head;
         }
 
@@ -38,9 +100,9 @@ public class EasyCode {
         ListNode node = head.next;
         while (node != null) {
             int v = node.val;
-            if(v == val){
+            if (v == val) {
                 pre.next = node.next;
-            }else{
+            } else {
                 pre = node;
             }
             node = node.next;

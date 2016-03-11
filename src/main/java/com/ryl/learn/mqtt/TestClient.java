@@ -40,7 +40,7 @@ public class TestClient {
     private void init() {
         try {
             //host为主机名，test为clientid即连接MQTT的客户端ID，一般以客户端唯一标识符表示，MemoryPersistence设置clientid的保存形式，默认为以内存保存
-            clientID = UUID.randomUUID().toString();
+            clientID = UUID.randomUUID().toString().replace("-","");
             client = new MqttClient(host, clientID, new MemoryPersistence());
             //MQTT的连接设置
             options = new MqttConnectOptions();
@@ -85,9 +85,8 @@ public class TestClient {
             public void run() {
                 try {
                     client.connect(options);
-                    client.subscribe(CommonConst.COMMON_TOPIC);
-                    String clientTopic = CommonConst.COMMON_TOPIC + "/" + clientID;
-                    client.subscribe(clientTopic);
+//                    client.subscribe(CommonConst.COMMON_TOPIC);
+//                    client.subscribe(CommonConst.COMMON_TOPIC + "/" + clientID);
 
                     //登录
                     LoginMessage login = new LoginMessage();

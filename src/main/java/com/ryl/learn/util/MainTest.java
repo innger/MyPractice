@@ -1,5 +1,7 @@
 package com.ryl.learn.util;
 
+import com.google.common.base.Charsets;
+
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -26,6 +28,8 @@ public class MainTest {
 
         System.out.println(arr[0]);
 //        System.out.println(arr[1].trim());
+
+        System.out.println(Charsets.UTF_8.name());
 
     }
 

@@ -3,6 +3,7 @@ package com.ryl.learn.mqtt;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.util.CharsetUtil;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,7 +12,6 @@ import java.util.Date;
  * Created by renyulong on 16/2/24.
  */
 public class LoginMessage implements Serializable {
-
 
     private Long messageId;
     private String userId;
@@ -56,7 +56,7 @@ public class LoginMessage implements Serializable {
                 "messageId=" + messageId +
                 ", userId='" + userId + '\'' +
                 ", token='" + token + '\'' +
-                ", date=" + date +
+                ", date=" + DateFormatUtils.format(date,"yyyy-MM-dd HH:mm:ss") +
                 '}';
     }
 

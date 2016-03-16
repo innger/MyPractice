@@ -18,7 +18,30 @@ public class EasyCode {
 //        printList(head);
 //        printList(code.removeElements(head, 2));
 
-        System.out.println(code.wordPattern2("abba", "dog dog dog dog"));
+        //00000010100101000001111010011100
+        System.out.println(code.reverseBits(43261596));
+    }
+
+    public int rob(int[] nums) {
+        //Todo
+        return 0;
+    }
+
+    //主要使用了Integer类的静态工具类 JDK实现
+    public int reverseBits(int n) {
+        String nstr = Integer.toBinaryString(n);
+        if (nstr.length() < 32) {
+            int num = 32 - nstr.length();
+            for (int i = 0; i < num; i++) {
+                nstr = "0"+nstr;
+            }
+        }
+
+        String mstr = "";
+        for (int i = nstr.length() - 1; i >= 0; i--) {
+            mstr += nstr.charAt(i);
+        }
+        return Integer.parseUnsignedInt(mstr,2);
     }
 
 

@@ -1,6 +1,5 @@
 package com.ryl.learn.mqtt;
 
-import io.netty.util.CharsetUtil;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ public class TestClient {
 
     private static final Logger logger = LoggerFactory.getLogger(TestClient.class);
 
-    private String host = "tcp://127.0.0.1:1883";
+    private String host = "tcp://100.69.214.64:1883";
     private String username = "clientuser";
     private String password = "clientuser";
 
@@ -30,6 +29,19 @@ public class TestClient {
 
     public TestClient(String clientID) {
         this.clientID = clientID;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        logger.info("begin");
+        TestClient client01 = new TestClient("amapauto_01");
+        client01.init();
+        client01.sendMessage();
+        TimeUnit.SECONDS.sleep(10);
+
+        TestClient client02 = new TestClient("amapauto_02");
+        client02.init();
+        client02.sendMessage();
+
     }
 
     private void startReconnect() {
@@ -77,15 +89,15 @@ public class TestClient {
                 public void messageArrived(String topicName, MqttMessage message)
                         throws Exception {
                     //subscribe后得到的消息会执行到这里面
-                    String str = new String(message.getPayload(), CharsetUtil.UTF_8);
-                    LoginMessage login = new LoginMessage();
-                    login.readFromByteArr(message.getPayload());
-                    logger.info("{} receive message topic=[{}] {}", clientID, topicName, login.toString());
+//                    String str = new String(message.getPayload(), CharsetUtil.UTF_8);
+//                    LoginMessage login = new LoginMessage();
+//                    login.readFromByteArr(message.getPayload());
+                    logger.info("{} messageArrived topic={} message={}", clientID, topicName, message);
                 }
             });
 
-//            client.connect(options);
-            connect();
+            client.connect(options);
+//            connect();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,27 +136,14 @@ public class TestClient {
                 message.setPayload(login.writeToByteArr());
 
                 try {
-                    client.getTopic(CommonConst.LOGIN_TOPIC).publish(message);
-                    logger.info("{} send message topic=[{}] {}",clientID,CommonConst.LOGIN_TOPIC,login.toString());
+                    String topic = CommonConst.TOPIC_LOCATION;
+                    client.getTopic(topic).publish(message);
+                    logger.info("{} send message topic=[{}] {}", clientID, topic, login.toString());
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
             }
-        }, 0 * 1000, 10 * 1000, TimeUnit.MILLISECONDS);
-
-    }
-
-
-    public static void main(String[] args) throws InterruptedException {
-        logger.info("begin");
-        TestClient client01 = new TestClient("amapauto_01");
-        client01.init();
-        client01.sendMessage();
-        TimeUnit.SECONDS.sleep(10);
-
-        TestClient client02 = new TestClient("amapauto_02");
-        client02.init();
-        client02.sendMessage();
+        }, 0 * 1000, 5 * 60 * 1000, TimeUnit.MILLISECONDS);
 
     }
 

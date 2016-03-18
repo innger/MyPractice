@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class MqttServer {
 
     private MqttClient mqttClient;
-//    private String host = "tcp://30.28.177.59:1883";
+    //    private String host = "tcp://30.28.177.59:1883";
     private String host = "tcp://mqtt.ons.aliyun.com:1883";
 
 
@@ -38,6 +38,12 @@ public class MqttServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        MqttServer server = new MqttServer();
+        server.connect();
+        server.sendMessage();
     }
 
     private void connect() {
@@ -60,7 +66,7 @@ public class MqttServer {
                 }
 
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    if(topic.equals(CommonConst.LOGIN_TOPIC)){
+                    if (topic.equals(CommonConst.TOPIC_LOGIN)) {
                         //验证登录
                         try {
                             LoginMessage login = new LoginMessage();
@@ -71,9 +77,9 @@ public class MqttServer {
                             mmsg.setQos(2);
                             mmsg.setRetained(true);
                             mmsg.setPayload((new Date().toString() + " " + login.getUserId() + " login succes.").getBytes(CharsetUtil.UTF_8));
-                            String ctopic = CommonConst.COMMON_TOPIC+"/"+login.getUserId();
+                            String ctopic = CommonConst.TOPIC_COMMON + "/" + login.getUserId();
                             mqttClient.getTopic(ctopic).publish(mmsg);
-                        }catch (Exception ex){
+                        } catch (Exception ex) {
                             System.err.println(ex);
                         }
                     }
@@ -82,8 +88,8 @@ public class MqttServer {
             });
 
             mqttClient.connect(options);
-            mqttClient.subscribe(CommonConst.LOGIN_TOPIC);
-            topic = mqttClient.getTopic(CommonConst.COMMON_TOPIC);
+            mqttClient.subscribe(CommonConst.TOPIC_LOGIN);
+            topic = mqttClient.getTopic(CommonConst.TOPIC_COMMON);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,12 +112,6 @@ public class MqttServer {
                 }
             }
         }, 0, 60, TimeUnit.SECONDS);
-    }
-
-    public static void main(String[] args) {
-        MqttServer server = new MqttServer();
-        server.connect();
-        server.sendMessage();
     }
 
 }

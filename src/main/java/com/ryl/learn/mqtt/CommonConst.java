@@ -7,9 +7,13 @@ public interface CommonConst {
 
     String SEED = "UHDS_3dxxko";
 
-    String COMMON_TOPIC = "test/topic";
+    String TOPIC_COMMON = "test/topic";
 
-    String LOGIN_TOPIC = "test/topic/login";
+    String TOPIC_LOGIN = "test/topic/login";
+
+    String TOPIC_SEND2CAR = "amapauto/send2car";
+
+    String TOPIC_LOCATION = "amapauto/location";
 
 
 }

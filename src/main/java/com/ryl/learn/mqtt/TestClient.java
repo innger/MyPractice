@@ -1,5 +1,6 @@
 package com.ryl.learn.mqtt;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
@@ -35,13 +36,13 @@ public class TestClient {
         logger.info("begin");
         TestClient client01 = new TestClient("amapauto_01");
         client01.init();
-        client01.sendMessage();
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(2);
 
         TestClient client02 = new TestClient("amapauto_02");
         client02.init();
-        client02.sendMessage();
 
+//        client01.sendMessage();
+//        client02.sendMessage();
     }
 
     private void startReconnect() {
@@ -49,10 +50,14 @@ public class TestClient {
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 if (!client.isConnected()) {
-                    connect();
+                    try {
+                        client.connect(options);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }, 0 * 1000, 10 * 1000, TimeUnit.MILLISECONDS);
+        }, 0 * 1000, 2 * 1000, TimeUnit.MILLISECONDS);
     }
 
     private void init() {
@@ -67,6 +72,7 @@ public class TestClient {
             //设置连接的用户名
             options.setUserName(username);
             //设置连接的密码
+            password = DigestUtils.md5Hex(username + "@" + "E4fMLkiLJeHdBhlK3AFxTLoZSc1bBjtG");
             options.setPassword(password.toCharArray());
             // 设置超时时间 单位为秒
             options.setConnectionTimeout(10);
@@ -78,7 +84,7 @@ public class TestClient {
                 public void connectionLost(Throwable cause) {
                     //连接丢失后，一般在这里面进行重连
                     logger.info("{} connectionLost reconnect...", clientID);
-//                    startReconnect();
+                    startReconnect();
                 }
 
                 public void deliveryComplete(IMqttDeliveryToken token) {
@@ -95,9 +101,7 @@ public class TestClient {
                     logger.info("{} messageArrived topic={} message={}", clientID, topicName, message);
                 }
             });
-
             client.connect(options);
-//            connect();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,8 +113,6 @@ public class TestClient {
             public void run() {
                 try {
                     client.connect(options);
-//                    client.subscribe(CommonConst.COMMON_TOPIC);
-//                    client.subscribe(CommonConst.COMMON_TOPIC + "/" + clientID);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -138,12 +140,12 @@ public class TestClient {
                 try {
                     String topic = CommonConst.TOPIC_LOCATION;
                     client.getTopic(topic).publish(message);
-                    logger.info("{} send message topic=[{}] {}", clientID, topic, login.toString());
+                    logger.info("{} send message topic={} {}", clientID, topic, login.toString());
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
             }
-        }, 0 * 1000, 5 * 60 * 1000, TimeUnit.MILLISECONDS);
+        }, 60 * 1000, 10 * 60 * 1000, TimeUnit.MILLISECONDS);
 
     }
 

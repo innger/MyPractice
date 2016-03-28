@@ -1,5 +1,6 @@
 package com.ryl.learn.mqtt;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -34,11 +35,12 @@ public class TestClient {
 
     public static void main(String[] args) throws InterruptedException {
         logger.info("begin");
-        TestClient client01 = new TestClient("amapauto_01");
+        TestClient client01 = new TestClient("VgpUYx8bX4kDADo+ouGrO+Nf");
         client01.init();
-        TimeUnit.SECONDS.sleep(2);
 
-        TestClient client02 = new TestClient("amapauto_02");
+//        TimeUnit.SECONDS.sleep(2);
+
+        TestClient client02 = new TestClient("abc");
         client02.init();
 
 //        client01.sendMessage();
@@ -52,6 +54,7 @@ public class TestClient {
                 if (!client.isConnected()) {
                     try {
                         client.connect(options);
+                        logger.info("reconnect success.");
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }
@@ -71,7 +74,7 @@ public class TestClient {
             options.setCleanSession(false);
             //设置连接的用户名
             options.setUserName(username);
-            //设置连接的密码
+            //设置连接的密码s
             password = DigestUtils.md5Hex(username + "@" + "E4fMLkiLJeHdBhlK3AFxTLoZSc1bBjtG");
             options.setPassword(password.toCharArray());
             // 设置超时时间 单位为秒
@@ -98,7 +101,10 @@ public class TestClient {
 //                    String str = new String(message.getPayload(), CharsetUtil.UTF_8);
 //                    LoginMessage login = new LoginMessage();
 //                    login.readFromByteArr(message.getPayload());
-                    logger.info("{} messageArrived topic={} message={}", clientID, topicName, message);
+                    JSONObject jsonObject = JSONObject.parseObject(message.toString());
+                    logger.info("{} messageArrived topic={} message={}", clientID, topicName, jsonObject);
+
+
                 }
             });
             client.connect(options);

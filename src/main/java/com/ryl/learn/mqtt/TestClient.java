@@ -1,6 +1,6 @@
 package com.ryl.learn.mqtt;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -60,7 +60,7 @@ public class TestClient {
                     }
                 }
             }
-        }, 0 * 1000, 2 * 1000, TimeUnit.MILLISECONDS);
+        }, 0 * 1000, 10 * 1000, TimeUnit.MILLISECONDS);
     }
 
     private void init() {
@@ -101,10 +101,8 @@ public class TestClient {
 //                    String str = new String(message.getPayload(), CharsetUtil.UTF_8);
 //                    LoginMessage login = new LoginMessage();
 //                    login.readFromByteArr(message.getPayload());
-                    JSONObject jsonObject = JSONObject.parseObject(message.toString());
-                    logger.info("{} messageArrived topic={} message={}", clientID, topicName, jsonObject);
 
-
+                    logger.info("{} messageArrived topic={} message={}", clientID, topicName, message);
                 }
             });
             client.connect(options);

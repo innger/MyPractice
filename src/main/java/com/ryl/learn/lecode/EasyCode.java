@@ -22,8 +22,10 @@ public class EasyCode {
         System.out.println(code.reverseBits(43261596));
     }
 
+    //求最大和,不能取连续的两个数
     public int rob(int[] nums) {
-        //Todo
+
+
         return 0;
     }
 

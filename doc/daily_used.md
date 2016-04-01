@@ -43,3 +43,7 @@ Build -> Prepare Plugin Moudle 'activate-power-mode' For Deployment
   -XX:ReservedCodeCacheSize=240m
   -XX:+UseCompressedOops
   ```
+
+# 2016-04-01
+ 左脚底还是持续疼,昨天试着想跑跑,结果不到一公里就疼得受不了停下了,心情非常沮丧,既然身体让我休息,那就安心歇歇养伤吧
+ 希望早点恢复

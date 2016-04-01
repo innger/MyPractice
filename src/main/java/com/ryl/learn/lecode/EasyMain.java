@@ -37,9 +37,29 @@ public class EasyMain {
         }
     }
 
-    //数独 Todo
-    public boolean isValidSudoku(char[][] board){
-        return false;
+    //判断一个数独是否合法
+    public boolean isValidSudoku(char[][] board) {
+        int rowValid[] = new int[10];
+        int colValid[][] = new int[9][10];
+        int subValid[][] = new int[9][10];
+
+        for (int i = 0; i < 9; i++) {
+            Arrays.fill(rowValid, 0);
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] != '.') {
+                    if (!checkValid(rowValid, board[i][j] - '0') || !checkValid(colValid[j], board[i][j] - '0')
+                            || !checkValid(subValid[i / 3 * 3 + j / 3], board[i][j] - '0'))
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean checkValid(int[] vec, int val) {
+        if (vec[val] == 1) return false;
+        vec[val] = 1;
+        return true;
     }
 
     public int strStr(String haystack, String needle) {

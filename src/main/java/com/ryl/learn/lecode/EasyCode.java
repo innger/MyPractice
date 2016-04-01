@@ -19,14 +19,47 @@ public class EasyCode {
 //        printList(code.removeElements(head, 2));
 
         //00000010100101000001111010011100
-        System.out.println(code.reverseBits(43261596));
+//        System.out.println(code.reverseBits(43261596));
+
+        System.out.println(code.rob(new int[]{1, 2, 3, 4, 5, 6}));
     }
 
-    //求最大和,不能取连续的两个数
+
+    class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+    }
+
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        }
+        if (p == null || q == null) {
+            return false;
+        }
+        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+
+    }
+
+
+    //求最大和,不能取连续的两个数 dp
+    //http://www.meetqun.com/thread-8777-1-1.html
+    //http://www.meetqun.com/thread-8176-1-1.html
     public int rob(int[] nums) {
-
-
-        return 0;
+        int take = 0;
+        int notake = 0;
+        int max = 0;
+        for (int i = 0; i < nums.length; i++) {
+            take = notake + nums[i]; //偷第i个
+            notake = max; //不偷第i个
+            max = Math.max(take, notake); //比较取最大值
+        }
+        return max;
     }
 
     //主要使用了Integer类的静态工具类 JDK实现
@@ -35,7 +68,7 @@ public class EasyCode {
         if (nstr.length() < 32) {
             int num = 32 - nstr.length();
             for (int i = 0; i < num; i++) {
-                nstr = "0"+nstr;
+                nstr = "0" + nstr;
             }
         }
 
@@ -43,7 +76,7 @@ public class EasyCode {
         for (int i = nstr.length() - 1; i >= 0; i--) {
             mstr += nstr.charAt(i);
         }
-        return Integer.parseUnsignedInt(mstr,2);
+        return Integer.parseUnsignedInt(mstr, 2);
     }
 
 

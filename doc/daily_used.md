@@ -1,3 +1,21 @@
+# 2016-04-05
+
+logback默认应该使用程序运行时的编码，也就是tomcat启动时的编码，那么就可以通过设置tomcat启动时的JVM参数来更改编码：
+   打开catalina.bat，在代码的第一行即set CATALINA_OPTS之前，增加一行：
+   set JAVA_OPTS=%JAVA_OPTS%  -Dfile.encoding=UTF-8
+   重新启动tomcat测试，日志文件正常。
+
+vim设置编码:
+* :set encoding
+* :set fileencoding
+* :set fileencodings
+* :set termencoding
+<br>
+如果是GB18030,会提示无效的编码字符,使用如下设置:
+```
+:edit ++enc=gb18030
+```
+
 # 2016-02-05 
 年前最后一天上班,把电脑拿到公司,配置了一下 [Idea](https://github.com/ViceFantasyPlace/activate-power-mode) 和 [Atom](https://github.com/JoelBesada/activate-power-mode) 的activate-power-mode插件
 感受了一把狂拽炫酷吊炸天,过年啦也放礼花庆祝一下,以后就用这个啦

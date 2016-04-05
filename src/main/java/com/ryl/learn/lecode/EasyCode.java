@@ -14,25 +14,53 @@ public class EasyCode {
         EasyCode code = new EasyCode();
 //        System.out.println(code.climbStairs(10));
 
-//        ListNode head = initList(2);
-//        printList(head);
-//        printList(code.removeElements(head, 2));
+        ListNode list1 = initList(5);
+        ListNode list2 = initList(5);
+        printList(code.mergeTwoLists(list1, list2));
 
         //00000010100101000001111010011100
 //        System.out.println(code.reverseBits(43261596));
 
-        System.out.println(code.rob(new int[]{1, 2, 3, 4, 5, 6}));
+//        System.out.println(code.rob(new int[]{1, 2, 3, 4, 5, 6}));
     }
 
-
-    class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode(int val) {
-            this.val = val;
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) {
+            if (l2 == null) {
+                return l1;
+            }
+            if (l1 == null) {
+                return l2;
+            }
         }
+        ListNode head = null;
+        while (l1 != null && l2 != null) {
+            int v1 = l1.val;
+            int v2 = l2.val;
+            if (v1 > v2) {
+                if (head == null) {
+                    head = l2;
+                }
+                while (l2.next != null && l2.next.val < v1) {
+                    l2 = l2.next;
+                }
+                ListNode tmp = l2.next;
+                l2.next = l1;
+                l2 = tmp;
+            } else {
+                if (head == null) {
+                    head = l1;
+                }
+                while (l1.next != null && l1.next.val <= v2) {
+                    l1 = l1.next;
+                }
+                ListNode tmp = l1.next;
+                l1.next = l2;
+                l1 = tmp;
+            }
+        }
+
+        return head;
     }
 
     public boolean isSameTree(TreeNode p, TreeNode q) {
@@ -225,7 +253,7 @@ public class EasyCode {
         ListNode head = new ListNode(1);
         ListNode node = head;
         for (int i = 2; i <= n; i++) {
-            ListNode tmp = new ListNode(1);
+            ListNode tmp = new ListNode(i);
             node.next = tmp;
             node = tmp;
             /*if (i % 2 == 0) {
@@ -255,4 +283,13 @@ public class EasyCode {
         }
     }
 
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+    }
 }

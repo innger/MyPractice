@@ -19,7 +19,7 @@ public class TestClient {
 
     private static final Logger logger = LoggerFactory.getLogger(TestClient.class);
 
-    private String host = "tcp://100.69.214.64:1883";
+    private String host = "tcp://10.178.93.89:1883"; //100.69.214.64
     private String username = "clientuser";
     private String password = "clientuser";
 

@@ -10,7 +10,69 @@ public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
-        System.out.println(main.fourSum(new int[]{0, 0, 0, 0}, 0));
+        System.out.println(Arrays.toString(main.productExceptSelf(new int[]{1, 2, 3, 4})));
+
+    }
+
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+        int min = prices[0];
+        int profit = 0;
+        for (int i = 1; i < prices.length; i++) {
+            int cur = prices[i] - min;
+            if (cur > profit) {
+                profit = cur;
+            }
+            if (prices[i] < min) {
+                min = prices[i];
+            }
+        }
+        return profit;
+    }
+
+    //双数组解法
+    //http://blog.csdn.net/xudli/article/details/46911603
+    public int[] productExceptSelf(int[] nums) {
+        int[] arr = new int[nums.length];
+        arr[nums.length - 1] = 1;
+        for (int i = nums.length - 2; i >= 0; i--) {
+            arr[i] = arr[i + 1] * nums[i + 1];
+        }
+        int left = 1;
+        for (int i = 0; i < nums.length; i++) {
+            arr[i] = arr[i] * left;
+            left = left * nums[i];
+        }
+        return arr;
+    }
+
+    public int[] productExceptSelf1(int[] nums) {
+        int[] arr = new int[nums.length];
+        Arrays.fill(arr, 1);
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < arr.length; j++) {
+                if (i != j) {
+                    arr[j] = arr[j] * nums[i];
+                }
+            }
+        }
+        return arr;
+    }
+
+    //Solve it without division and in O(n).
+    public int[] productExceptSelf2(int[] nums) {
+        int all = 1;
+        for (int i = 0; i < nums.length; i++) {
+            all = all * nums[i];
+        }
+
+        int[] arr = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            arr[i] = all / nums[i];
+        }
+        return arr;
     }
 
     public List<List<Integer>> fourSum(int[] nums, int target) {

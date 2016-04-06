@@ -14,15 +14,69 @@ public class EasyCode {
         EasyCode code = new EasyCode();
 //        System.out.println(code.climbStairs(10));
 
-        ListNode list1 = initList(5);
-        ListNode list2 = initList(5);
-        printList(code.mergeTwoLists(list1, list2));
+//        ListNode list1 = initList(5);
+//        ListNode list2 = initList(5);
+//        printList(code.mergeTwoLists(list1, list2));
 
         //00000010100101000001111010011100
 //        System.out.println(code.reverseBits(43261596));
 
 //        System.out.println(code.rob(new int[]{1, 2, 3, 4, 5, 6}));
     }
+
+    public boolean isBalanced(TreeNode root) {
+        treeDepth(root);
+        if (root == null) {
+            return true;
+        }
+        int l = 0, r = 0;
+        if (root.left != null) {
+            l = root.left.val;
+        }
+        if (root.right != null) {
+            r = root.right.val;
+        }
+        if (Math.abs(l - r) <= 1 && isBalanced(root.left) && isBalanced(root.right)) {
+            return true;
+        }
+        return false;
+    }
+
+    //利用TreeNode val记录二叉树深度
+    private int treeDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        root.val = Math.max(treeDepth(root.left), treeDepth(root.right)) + 1;
+        return root.val;
+    }
+
+    //判断二叉树是否平衡
+    public boolean isBalanced2(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        if (root.left == null && root.right == null) {
+            return true;
+        }
+
+        if (Math.abs(maxDepth(root.left) - maxDepth(root.right)) > 1) {
+            return false;
+        }
+        return isBalanced2(root.left) && isBalanced2(root.right);
+    }
+
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+//        return left > right ? (left + 1) : (right + 1);
+//        return 1 + (left > right ? left : right);
+        return 1 + Math.max(left, right);
+    }
+
 
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         if (l1 == null || l2 == null) {

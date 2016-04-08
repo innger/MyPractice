@@ -19,7 +19,8 @@ public class TestClient {
 
     private static final Logger logger = LoggerFactory.getLogger(TestClient.class);
 
-    private String host = "tcp://10.178.93.89:1883"; //100.69.214.64
+//    private String host = "tcp://100.69.214.64:1883";
+    private String host = "tcp://cmg.amap.com:80";
     private String username = "clientuser";
     private String password = "clientuser";
 
@@ -35,13 +36,13 @@ public class TestClient {
 
     public static void main(String[] args) throws InterruptedException {
         logger.info("begin");
-        TestClient client01 = new TestClient("VgpUYx8bX4kDADo+ouGrO+Nf");
+        TestClient client01 = new TestClient("VgpUYx8bX4kDADo+ouGrO+Nf123");
         client01.init();
 
 //        TimeUnit.SECONDS.sleep(2);
 
-        TestClient client02 = new TestClient("abc");
-        client02.init();
+//        TestClient client02 = new TestClient("abc");
+//        client02.init();
 
 //        client01.sendMessage();
 //        client02.sendMessage();
@@ -80,7 +81,7 @@ public class TestClient {
             // 设置超时时间 单位为秒
             options.setConnectionTimeout(10);
             // 设置会话心跳时间 单位为秒 服务器会每隔1.5*20秒的时间向客户端发送个消息判断客户端是否在线，但这个方法并没有重连的机制
-            options.setKeepAliveInterval(20);
+            options.setKeepAliveInterval(10);
             //设置回调
             client.setCallback(new MqttCallback() {
 

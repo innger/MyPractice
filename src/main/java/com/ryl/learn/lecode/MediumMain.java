@@ -3,17 +3,91 @@ package com.ryl.learn.lecode;
 import java.util.*;
 
 /**
- * 题目答案都能搜到
  * Created by renyulong on 16/2/3.
  */
 public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
-        System.out.println(Arrays.toString(main.productExceptSelf(new int[]{1, 2, 3, 4})));
+
+        List<List<Integer>> input = new ArrayList<>();
+        int num = 1;
+        for (int i = 0; i < 2; i++) {
+            List<Integer> list = new ArrayList<Integer>();
+            for (int j = 0; j <= i; j++) {
+                list.add(j, num);
+                num++;
+            }
+            input.add(list);
+        }
+        System.out.println(input);
+
+        System.out.println(main.minimumTotal2(input));
 
     }
 
+    public int removeDuplicates(int[] nums) {
+
+
+        return 1;
+    }
+
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        for (int row = 0; row < n / 2; row++) {
+            for (int col = row; col < n - row - 1; col++) {
+                int top = matrix[row][col]; // back top
+                //left->top
+                matrix[row][col] = matrix[n - col - 1][row];
+                //bottom->left
+                matrix[n - col - 1][row] = matrix[n - row - 1][n - col - 1];
+                //right->bottom
+                matrix[n - row - 1][n - col - 1] = matrix[col][n - row - 1];
+                //top->right
+                matrix[col][n - row - 1] = top;
+            }
+        }
+    }
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        return null;
+    }
+
+
+    //动态规划，从下往上走
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int m = triangle.size();
+        if (m == 0) {
+            return 0;
+        }
+        Integer[] dp = new Integer[triangle.get(m - 1).size()];
+        triangle.get(m - 1).toArray(dp);
+        for (int r = m - 2; r >= 0; r--) {
+            for (int c = 0; c <= r; c++) {
+                dp[c] = Math.min(dp[c], dp[c + 1]) + triangle.get(r).get(c);
+            }
+        }
+        return dp[0];
+    }
+
+    //triangle数组可改变,直接在原数组上操作
+    public int minimumTotal2(List<List<Integer>> triangle) {
+        int m = triangle.size();
+        if (m == 0) {
+            return 0;
+        }
+        for (int r = m - 2; r >= 0; r--) {
+            for (int c = 0; c <= r; c++) {
+                int v1 = triangle.get(r + 1).get(c);
+                int v2 = triangle.get(r + 1).get(c + 1);
+                triangle.get(r).set(c, Math.min(v1, v2) + triangle.get(r).get(c));
+            }
+        }
+        return triangle.get(0).get(0);
+    }
+
+
+    //Best Time to Buy and Sell Stock
     public int maxProfit2(int[] prices) {
         if (prices == null || prices.length == 0) {
             return 0;

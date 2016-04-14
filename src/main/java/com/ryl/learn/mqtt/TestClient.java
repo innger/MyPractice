@@ -1,13 +1,15 @@
 package com.ryl.learn.mqtt;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -19,8 +21,10 @@ public class TestClient {
 
     private static final Logger logger = LoggerFactory.getLogger(TestClient.class);
 
-//    private String host = "tcp://100.69.214.64:1883";
-    private String host = "tcp://cmg.amap.com:80";
+    private static String hostDaily = "tcp://100.69.214.64:1883";
+    private static String hostPub = "tcp://cmg.amap.com:80"; //140.205.61.30
+    private static String hostPre = "tcp://140.205.173.46:80";
+
     private String username = "clientuser";
     private String password = "clientuser";
 
@@ -29,23 +33,25 @@ public class TestClient {
 
     private ScheduledExecutorService scheduler;
     private String clientID;
+    private String host;
 
-    public TestClient(String clientID) {
+    public TestClient(String clientID, String host) {
         this.clientID = clientID;
+        this.host = host;
     }
 
     public static void main(String[] args) throws InterruptedException {
         logger.info("begin");
-        TestClient client01 = new TestClient("VgpUYx8bX4kDADo+ouGrO+Nf123");
-        client01.init();
-
-//        TimeUnit.SECONDS.sleep(2);
-
-//        TestClient client02 = new TestClient("abc");
-//        client02.init();
-
-//        client01.sendMessage();
-//        client02.sendMessage();
+        int pool = 100;
+        ExecutorService service = Executors.newFixedThreadPool(pool);
+        for (int i = 0; i < 200; i++) {
+            service.execute(() -> {
+                //VgpUYx8bX4kDADo+ouGrO+Nf
+                String clientID = StringUtils.remove(UUID.randomUUID().toString(),"-");
+                TestClient client01 = new TestClient(clientID, hostDaily);
+                client01.init();
+            });
+        }
     }
 
     private void startReconnect() {
@@ -67,7 +73,6 @@ public class TestClient {
     private void init() {
         try {
             //host为主机名，test为clientid即连接MQTT的客户端ID，一般以客户端唯一标识符表示，MemoryPersistence设置clientid的保存形式，默认为以内存保存
-//            clientID = UUID.randomUUID().toString().replace("-", "");
             client = new MqttClient(host, clientID, new MemoryPersistence());
             //MQTT的连接设置
             options = new MqttConnectOptions();
@@ -81,7 +86,7 @@ public class TestClient {
             // 设置超时时间 单位为秒
             options.setConnectionTimeout(10);
             // 设置会话心跳时间 单位为秒 服务器会每隔1.5*20秒的时间向客户端发送个消息判断客户端是否在线，但这个方法并没有重连的机制
-            options.setKeepAliveInterval(10);
+            options.setKeepAliveInterval(500);
             //设置回调
             client.setCallback(new MqttCallback() {
 
@@ -106,6 +111,7 @@ public class TestClient {
                     logger.info("{} messageArrived topic={} message={}", clientID, topicName, message);
                 }
             });
+            logger.info("{} connect to server {}", clientID, host);
             client.connect(options);
         } catch (Exception e) {
             e.printStackTrace();

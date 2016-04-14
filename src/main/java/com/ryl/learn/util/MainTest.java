@@ -1,17 +1,16 @@
 package com.ryl.learn.util;
 
 import com.google.common.base.Charsets;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
+ * MainTest
  * Created by renyulong on 16/1/27.
  */
 public class MainTest {
@@ -29,14 +28,14 @@ public class MainTest {
         System.out.println(arr[0]);
 //        System.out.println(arr[1].trim());
 
-        System.out.println(Charsets.UTF_8.name());
+        System.out.println(Charsets.UTF_8.displayName(Locale.TRADITIONAL_CHINESE));
 
     }
 
     public static String getServerIp() {
         try {
             InetAddress address = InetAddress.getLocalHost();
-            System.out.println(address.getHostName() + "\t" + address.getHostAddress());
+            System.out.println(address.getHostName() + StringUtils.LF + address.getHostAddress());
             return address.getHostAddress();
         } catch (UnknownHostException e) {
             return "-";
@@ -45,8 +44,8 @@ public class MainTest {
 
     public static void testMap() {
         Map<String, Boolean> map = new HashMap<>();
-        Boolean b = (map != null ? map.get("get") : false);
-//        Boolean b = map.get("get");
+//        Boolean b = (map != null ? map.get("get") : false);
+        Boolean b = map.get("get");
         System.out.println(b);
     }
 
@@ -58,7 +57,7 @@ public class MainTest {
         buffer.flip();
 //        System.out.println(buffer.getInt());
 
-        for (int i = 0; i <= Integer.MAX_VALUE; i++) {
+        for (int i = 0; i <= Integer.MAX_VALUE - 300; i++) {
             ByteBuffer b = ByteBuffer.allocate(4);
             b.putInt(i);
             if (!isValid(b.array())) {
@@ -77,8 +76,8 @@ public class MainTest {
 
         buffer.putLong(0, 15712189);
         bytes = buffer.array();
-        for (int i = 0; i < bytes.length; i++) {
-            System.out.println(bytes[i]);
+        for (byte b : bytes) {
+            System.out.println(b);
         }
 
 
@@ -99,10 +98,10 @@ public class MainTest {
         //random种子相同,重复执行产生的随机序列相同
         Random random = new Random(10000);
         for (int i = 0; i < 10; i++) {
-//            System.out.println(random.nextInt(10000));
+            System.out.println(random.nextInt(10000));
         }
 
-        System.out.println("1".getBytes());
+        System.out.println(Arrays.toString("1".getBytes()));
         System.out.println(0x00efbfbd);
 
         System.out.println(testDelimiter());
@@ -131,9 +130,7 @@ public class MainTest {
             long msgId = buffer.getLong();
 
             boolean valid = isValid(buffer.array());
-            if (!valid) {
-                continue;
-            } else {
+            if (valid) {
                 return msgId;
             }
         }

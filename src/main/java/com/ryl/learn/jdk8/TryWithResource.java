@@ -7,14 +7,14 @@ import java.io.FileInputStream;
  */
 public class TryWithResource {
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws Exception {
+        tryWithResource();
     }
 
     //实现java.lang.AutoClosable接口,可以在 try-with-resource语句块中使用
-    private void tryWithResource() throws Exception {
+    private static void tryWithResource() throws Exception {
         try (FileInputStream fis = new FileInputStream("~/test.log")) {
-            int data = 0;
+            int data;
             while ((data = fis.read()) != -1) {
                 System.out.println((char) data);
             }

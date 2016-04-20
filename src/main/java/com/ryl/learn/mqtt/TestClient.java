@@ -44,11 +44,13 @@ public class TestClient {
         logger.info("begin");
         int pool = 100;
         ExecutorService service = Executors.newFixedThreadPool(pool);
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 1; i++) {
             service.execute(() -> {
                 //VgpUYx8bX4kDADo+ouGrO+Nf
+                //Vbl3qJ+gJx0DAG417p8TpRRC
                 String clientID = StringUtils.remove(UUID.randomUUID().toString(),"-");
-                TestClient client01 = new TestClient(clientID, hostDaily);
+                clientID = "VgpUYx8bX4kDADo+ouGrO+Nf";
+                TestClient client01 = new TestClient(clientID, hostPub);
                 client01.init();
             });
         }
@@ -86,7 +88,7 @@ public class TestClient {
             // 设置超时时间 单位为秒
             options.setConnectionTimeout(10);
             // 设置会话心跳时间 单位为秒 服务器会每隔1.5*20秒的时间向客户端发送个消息判断客户端是否在线，但这个方法并没有重连的机制
-            options.setKeepAliveInterval(500);
+            options.setKeepAliveInterval(60);
             //设置回调
             client.setCallback(new MqttCallback() {
 

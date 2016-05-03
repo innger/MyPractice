@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,9 +41,12 @@ public class TestClient {
         this.host = host;
     }
 
+    public TestClient() {
+    }
+
     public static void main(String[] args) throws InterruptedException {
         logger.info("begin");
-        int pool = 100;
+        /*int pool = 100;
         ExecutorService service = Executors.newFixedThreadPool(pool);
         for (int i = 0; i < 1; i++) {
             service.execute(() -> {
@@ -53,6 +57,14 @@ public class TestClient {
                 TestClient client01 = new TestClient(clientID, hostPub);
                 client01.init();
             });
+        }*/
+
+        for (int i = 0; i < 1; i++) {
+            String tid = StringUtils.remove(UUID.randomUUID().toString(),"-");
+            logger.info("tid={} i={}", tid, i);
+            tid = "0972df55aeef43deabd92c9727225fe5";
+            TestClient client = new TestClient(tid, hostDaily);
+            client.init();
         }
     }
 

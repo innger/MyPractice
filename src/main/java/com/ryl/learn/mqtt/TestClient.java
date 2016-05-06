@@ -16,12 +16,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * mqtt client示例代码
  * Created by renyulong on 16/2/22.
  */
 public class TestClient {
 
     private static final Logger logger = LoggerFactory.getLogger(TestClient.class);
 
+    private static String hostLocal = "tcp://127.0.0.1:1883";
     private static String hostDaily = "tcp://100.69.214.64:1883";
     private static String hostPub = "tcp://cmg.amap.com:80"; //140.205.61.30
     private static String hostPre = "tcp://140.205.173.46:80";
@@ -59,10 +61,9 @@ public class TestClient {
             });
         }*/
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 5; i++) {
             String tid = StringUtils.remove(UUID.randomUUID().toString(),"-");
             logger.info("tid={} i={}", tid, i);
-            tid = "0972df55aeef43deabd92c9727225fe5";
             TestClient client = new TestClient(tid, hostDaily);
             client.init();
         }

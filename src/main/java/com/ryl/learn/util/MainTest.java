@@ -55,7 +55,7 @@ public class MainTest {
         ByteBuffer buffer = ByteBuffer.allocate(4);
         buffer.put(bytes, 0, 4);
         buffer.flip();
-//        System.out.println(buffer.getInt());
+        System.out.println(buffer.getInt());
 
         for (int i = 0; i <= Integer.MAX_VALUE - 300; i++) {
             ByteBuffer b = ByteBuffer.allocate(4);
@@ -140,7 +140,7 @@ public class MainTest {
         for (int i = 0; i < arr.length; i++) {
             if (i + 1 < arr.length && i + 2 < arr.length) {
                 if (arr[i] == -17 && arr[i + 1] == -65 && arr[i + 2] == -67) {
-//                    System.out.println(arr);
+                    System.out.println(arr);
                     return false;
                 }
             }

@@ -10,7 +10,102 @@ public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
-        main.letterCombinations("234");
+
+        main.wiggleSort(new int[]{2, 1, 4, 5, 6, 7});
+    }
+
+    //Given an unsorted array nums, reorder it such that nums[0] < nums[1] > nums[2] < nums[3] > nums[4]....
+    //奇偶有序
+    public void wiggleSort(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return;
+        }
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            list.add(nums[i]);
+        }
+        Collections.sort(list);
+        int odd = 1;
+        int even = 0;
+        for(int i = 0 ;i< nums.length;i++) {
+            if( (i&1) == 0) {
+            }
+        }
+    }
+
+    public int findKthLargestHeap(int[] nums, int k) {
+        initHeap(nums, nums.length);
+        for (int i = nums.length - 1; i >= 1; i--) {
+            int tmp = nums[i];
+            nums[i] = nums[0];
+            nums[0] = tmp;
+            minHeapFixdown(nums, 0, i);
+        }
+        System.out.println(Arrays.toString(nums));
+        return nums[k - 1];
+    }
+
+    private void initHeap(int[] a, int n) {
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            minHeapFixdown(a, i, n);
+        }
+    }
+
+    private void minHeapFixdown(int a[], int i, int n) {
+        int j = 2 * i + 1;
+        int temp = a[i];
+        while (j < n) {
+            if (j + 1 < n && a[j + 1] < a[j]) j++;
+            if (a[j] >= temp) break;
+            a[i] = a[j];
+            i = j;
+            j = 2 * i + 1;
+        }
+        a[i] = temp;
+    }
+
+    //另:topk 堆排序
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        List<Integer> list = new ArrayList<Integer>();
+        for (int n : nums) {
+            list.add(n);
+        }
+        Collections.sort(list, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
+            }
+        });
+//        System.out.println(list);
+        return list.get(k - 1);
+    }
+
+    //treemap 按照值排序
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
+        for (int n : nums) {
+            if (map.containsKey(n)) {
+                Integer val = map.get(n);
+                map.put(n, val + 1);
+            } else {
+                map.put(n, 1);
+            }
+        }
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<Map.Entry<Integer, Integer>>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Integer, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
+                return o2.getValue() - o1.getValue();
+            }
+        });
+        List<Integer> result = new ArrayList<Integer>();
+        for (int i = 0; i < k; i++) {
+            result.add(list.get(i).getKey());
+        }
+        return result;
     }
 
     public List<String> letterCombinations(String digits) {

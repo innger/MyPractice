@@ -25,3 +25,20 @@ do
    ssh -l $user $server "sh ~/script/stat_clientid.sh $date"
    rsync -zvrtopg -e "ssh" $user@$server:~/script/cmg-server.log.$date.$server ./
 done
+
+
+#
+hosts="cmg-server010178093026.et2 cmg-server010178093223.et2"
+servers="10.178.93.26 10.178.93.223"
+user="yulong.ryl"
+date=$1
+
+for server in $servers
+do
+    echo "$server"
+    ssh -l $user $server "sh ~/script/stat_conns.sh"
+    echo "#################"
+done
+
+#统计当前连接数
+grep 'Connect register client' /home/admin/cmg-server/logs/cmg-server.log | tail -1 | awk '{print $1" "$2"\t"$NF}'

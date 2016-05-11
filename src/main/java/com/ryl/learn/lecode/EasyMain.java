@@ -3,6 +3,7 @@ package com.ryl.learn.lecode;
 import java.util.*;
 
 /**
+ * easy problem 001
  * Created by renyulong on 16/1/25.
  */
 public class EasyMain {

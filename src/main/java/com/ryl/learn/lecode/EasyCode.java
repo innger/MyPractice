@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * easy problem 002
  * Created by renyulong on 16/3/8.
  */
 public class EasyCode {

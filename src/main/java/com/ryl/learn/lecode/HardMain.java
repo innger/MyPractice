@@ -3,6 +3,7 @@ package com.ryl.learn.lecode;
 import java.util.Arrays;
 
 /**
+ * hard problem
  * Created by renyulong on 16/2/3.
  */
 public class HardMain {

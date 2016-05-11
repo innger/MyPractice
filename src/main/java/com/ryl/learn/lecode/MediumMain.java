@@ -3,27 +3,250 @@ package com.ryl.learn.lecode;
 import java.util.*;
 
 /**
+ * medium problem
  * Created by renyulong on 16/2/3.
  */
 public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
+        main.letterCombinations("234");
+    }
 
-        List<List<Integer>> input = new ArrayList<>();
-        int num = 1;
-        for (int i = 0; i < 2; i++) {
-            List<Integer> list = new ArrayList<Integer>();
-            for (int j = 0; j <= i; j++) {
-                list.add(j, num);
-                num++;
+    public List<String> letterCombinations(String digits) {
+        String nums = "0123456789";
+        String[] letters = new String[]{null, null, "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        List<String> seqs = new ArrayList<String>();
+        for (int i = 0; i < digits.length(); i++) {
+            char ch = digits.charAt(i);
+            int index = nums.indexOf(ch);
+            String str = letters[index];
+            if (str != null) {
+                seqs.add(str);
             }
-            input.add(list);
         }
-        System.out.println(input);
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < seqs.size(); i++) {
+            String str = seqs.get(i);
+            if (list.isEmpty()) {
+                for (char ch : str.toCharArray()) {
+                    list.add(String.valueOf(ch));
+                }
+            } else {
+                List<String> tmp = new ArrayList<String>();
+                for (String s : list) {
+                    for (char ch : str.toCharArray()) {
+                        tmp.add(s + ch);
+                    }
+                }
+                list = tmp;
+            }
+        }
+        System.out.println(list);
+        return list;
+    }
 
-        System.out.println(main.minimumTotal2(input));
+    public int maxArea(int[] height) {
+        return 0;
+    }
 
+    //最长回文
+    public String longestPalindrome(String s) {
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+        if (s.length() == 1) {
+            return s;
+        }
+        String longest = s.substring(0, 1);
+        for (int i = 0; i < s.length(); i++) {
+            String tmp = getPalindrome(s, i, i);
+            if (tmp.length() > longest.length()) {
+                longest = tmp;
+            }
+            tmp = getPalindrome(s, i, i + 1);
+            if (tmp.length() > longest.length()) {
+                longest = tmp;
+            }
+        }
+        return longest;
+    }
+
+    private String getPalindrome(String s, int begin, int end) {
+        while (begin >= 0 && end <= s.length() - 1 && s.charAt(begin) == s.charAt(end)) {
+            begin--;
+            end++;
+        }
+        return s.substring(begin + 1, end);
+    }
+
+    //模拟大数相乘
+    public String multiply(String num1, String num2) {
+        if (num1 == null || num2 == null || "0".equals(num1) || "0".equals(num2)) {
+            return "0";
+        }
+        String result = "";
+        int fix = 1;
+        for (int i = num1.length() - 1; i >= 0; i--) {
+            int a = num1.charAt(i) - '0';
+            int carry = 0;
+            String line = "";
+            for (int j = num2.length() - 1; j >= 0; j--) {
+                int b = num2.charAt(j) - '0';
+                int mul = (a * b) + carry;
+                int num = mul % 10;
+                carry = mul / 10;
+                line = num + line;
+            }
+            if (carry > 0) {
+                line = carry + line;
+            }
+            if (result.equals("")) {
+                result = line;
+            } else {
+                //两行相加
+                System.out.print(result + "+" + line + "=");
+                String tmp = result.substring(result.length() - fix);
+                int m = result.length() - fix - 1;
+                int n = line.length() - 1;
+                int c = 0;
+                while (m >= 0 || n >= 0) {
+                    int i1 = m < 0 ? 0 : result.charAt(m) - '0';
+                    int i2 = n < 0 ? 0 : line.charAt(n) - '0';
+                    int sum = i1 + i2 + c;
+                    int num = sum % 10;
+                    c = sum / 10;
+                    tmp = num + tmp;
+                    m--;
+                    n--;
+                }
+                if (c > 0) {
+                    //最高位有进位
+                    tmp = c + tmp;
+                }
+                result = tmp;
+                fix++;
+            }
+            System.out.println(result);
+        }
+        return result;
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.isEmpty()) {
+            return 0;
+        }
+        int max = 0;
+        int len = 0;
+        int p = 0;
+        Set<Character> set = new HashSet<Character>();
+        for (int i = 0; i < s.length(); i++) {
+            Character ch = s.charAt(i);
+            if (set.contains(ch)) {
+                max = max < set.size() ? set.size() : max;
+                set.clear();
+                len = 0;
+                if (p == 0) {
+                    p = s.indexOf(ch);
+                }
+                i = s.indexOf(ch, p);
+                p = i + 1;
+            } else {
+                set.add(ch);
+                len++;
+                max = max < len ? len : max;
+            }
+        }
+        return max;
+    }
+
+
+    public class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
+        }
+    }
+
+    private ListNode createListNode(int[] arr) {
+        if (arr == null || arr.length < 1) {
+            return null;
+        }
+        ListNode head = new ListNode(arr[0]);
+        ListNode node = head;
+        for (int i = 1; i < arr.length; i++) {
+            ListNode next = new ListNode(arr[i]);
+            node.next = next;
+            node = next;
+        }
+        return head;
+    }
+
+    private void printListNode(ListNode head) {
+        while (head != null) {
+            System.out.print(head.val);
+            head = head.next;
+            if (head != null) {
+                System.out.print(" -> ");
+            }
+        }
+        System.out.println();
+    }
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) {
+            if (l1 == null && l2 != null) {
+                return l2;
+            }
+            if (l1 != null) {
+                return l1;
+            }
+            return null;
+        }
+
+        ListNode head = null;
+        ListNode node = null;
+        int carry = 0;
+        while (l1 != null && l2 != null) {
+            int sum = (l1.val + l2.val + carry) % 10;
+            carry = (l1.val + l2.val + carry) / 10;
+            if (head == null) {
+                head = new ListNode(sum);
+                node = head;
+            } else {
+                ListNode next = new ListNode(sum);
+                node.next = next;
+                node = next;
+            }
+            l1 = l1.next;
+            l2 = l2.next;
+        }
+        while (l1 != null) {
+            int sum = (l1.val + carry) % 10;
+            carry = (l1.val + carry) / 10;
+            ListNode next = new ListNode(sum);
+            node.next = next;
+            node = next;
+            l1 = l1.next;
+        }
+
+        while (l2 != null) {
+            int sum = (l2.val + carry) % 10;
+            carry = (l2.val + carry) / 10;
+            ListNode next = new ListNode(sum);
+            node.next = next;
+            node = next;
+            l2 = l2.next;
+        }
+
+        if (carry > 0) {
+            ListNode next = new ListNode(carry);
+            node.next = next;
+        }
+
+        return head;
     }
 
     public int removeDuplicates(int[] nums) {

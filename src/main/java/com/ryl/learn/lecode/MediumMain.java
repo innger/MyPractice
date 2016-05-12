@@ -10,13 +10,186 @@ public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
-
-        main.sortColors(new int[]{1, 0});
+        System.out.println(main.singleNumberII(new int[]{2,2,2,3}));
     }
 
-    // n = a + b + c, maximize the product of those integers
+    public int nthUglyNumber(int n) {
+        //Todo
+        return 1;
+    }
+
+    /**
+     * 异或法
+     * @param nums int[]
+     * @return 出现一次的数字
+     */
+    public int singleNumberI(int[] nums) {
+        int res = 0;
+        for (int n : nums) {
+            res ^= n;
+        }
+        return res;
+    }
+
+    /**
+     * every element appears three times except for one.
+     * 异或法
+     * @param nums int[]
+     * @return int
+     */
+    public int singleNumberII(int[] nums) {
+        if(nums.length == 1) {
+            return nums[0];
+        }
+        int res = 0;
+        for (int n : nums) {
+            res ^= n;
+        }
+        return res;
+    }
+
+    /**
+     * 数组中有两个数出现一次,其他都是两次,找出这两个数
+     * 先全部异或,根据结果,某位为1划分成两组
+     * 再各组异或 各求出出现一次的数
+     * @param nums int[]
+     * @return 两个出现一次的数字
+     */
+    public int[] singleNumberIII(int[] nums) {
+        if (nums == null) {
+            return null;
+        }
+        if (nums.length <= 3) {
+            return nums;
+        }
+        int or = 0;
+        for (int n : nums) {
+            or ^= n;
+        }
+        int i = indexOfOne(or);
+        List<Integer> list1 = new ArrayList<Integer>();
+        List<Integer> list2 = new ArrayList<Integer>();
+        for (int n : nums) {
+            if (isOne(n, i)) {
+                list1.add(n);
+            } else {
+                list2.add(n);
+            }
+        }
+        int res1 = 0;
+        for (int n : list1) {
+            res1 ^= n;
+        }
+        int res2 = 0;
+        for (int n : list2) {
+            res2 ^= n;
+        }
+        int[] res = new int[]{res1, res2};
+        System.out.println(Arrays.toString(res));
+        return res;
+    }
+
+    /**
+     * 数字n bits 最右出现1的index
+     * @param n n
+     * @return index
+     */
+    private int indexOfOne(int n) {
+        int i = 0;
+        if (n == 0) {
+            return i;
+        }
+        while (true) {
+            if ((n & 1) == 1) {
+                return i;
+            }
+            i++;
+            n = n >> 1;
+        }
+    }
+
+    /**
+     * n bits 第i位是否是1
+     * @param n n
+     * @param i index
+     * @return true false
+     */
+    private boolean isOne(int n, int i) {
+        while (i > 0) {
+            n = n >> 1;
+            i--;
+        }
+        return (n & 1) == 1;
+    }
+
+    //奇数变偶数
+    public int[] countBits(int num) {
+        int[] res = new int[num + 1];
+        int s = 0;
+        int len = 0;
+        for (int i = 0; i <= num; i++) {
+            if (i <= 1) {
+                res[i] = i;
+            } else {
+                if ((i & 1) == 1) {
+                    //偶变奇,+1
+                    res[i] = res[i - 1] + 1;
+                } else {
+                    //奇变偶
+                    if (s > 0 && (i - len) < s) {
+                        //根据之前计算的结果赋值
+                        res[i] = res[i - len];
+                    } else {
+                        res[i] = hammingWeight(i);
+                        if (res[i] == 1) {
+                            s = i;
+                            len = i - 1;
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 汉明权重 数字n bits中1的个数
+     * @param n 数字n
+     * @return number of bits 1
+     */
+    private int hammingWeight(int n) {
+        int cnt = 0;
+        while (n > 0) {
+            cnt++;
+            n = (n - 1) & n;
+        }
+        return cnt;
+    }
+
+
+
+    /**
+     * n = a + b + c, maximize the product of those integers n >= 2 找3
+     * There is a simple O(n) solution to this problem.
+     * You may check the breaking results of n ranging from 7 to 10 to discover the regularities.
+     * @param n n
+     * @return max multiply
+     */
     public int integerBreak(int n) {
-        return 0;
+        if (n <= 3) {
+            return n - 1;
+        }
+        int max = 1;
+        while (n > 3) {
+            n = n - 3;
+            if (n <= 1) {
+                max *= (n + 3);
+            } else {
+                max *= 3;
+            }
+        }
+        max *= n;
+        return max;
     }
 
     public void sortColors(int[] nums) {
@@ -45,8 +218,11 @@ public class MediumMain {
         System.out.println(Arrays.toString(nums));
     }
 
-    //Given an unsorted array nums, reorder it such that nums[0] < nums[1] > nums[2] < nums[3] > nums[4]....
-    //奇偶有序
+    /**
+     * Given an unsorted array nums, reorder it such that nums[0] < nums[1] > nums[2] < nums[3] > nums[4]....
+     * 奇偶有序
+     * @param nums int[]
+     */
     public void wiggleSort(int[] nums) {
         if (nums == null || nums.length <= 1) {
             return;
@@ -115,7 +291,6 @@ public class MediumMain {
                 return o2 - o1;
             }
         });
-//        System.out.println(list);
         return list.get(k - 1);
     }
 
@@ -144,6 +319,11 @@ public class MediumMain {
         return result;
     }
 
+    /**
+     * 输入号码,输出所有的字母组合
+     * @param digits string
+     * @return list
+     */
     public List<String> letterCombinations(String digits) {
         String nums = "0123456789";
         String[] letters = new String[]{null, null, "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
@@ -181,7 +361,11 @@ public class MediumMain {
         return 0;
     }
 
-    //最长回文
+    /**
+     * 最长回文
+     * @param s string
+     * @return string
+     */
     public String longestPalindrome(String s) {
         if (s == null || s.isEmpty()) {
             return null;
@@ -211,7 +395,12 @@ public class MediumMain {
         return s.substring(begin + 1, end);
     }
 
-    //模拟大数相乘
+    /**
+     * 模拟大正整数相乘
+     * @param num1 bigInteger
+     * @param num2 bigInteger
+     * @return multiply result
+     */
     public String multiply(String num1, String num2) {
         if (num1 == null || num2 == null || "0".equals(num1) || "0".equals(num2)) {
             return "0";
@@ -326,6 +515,12 @@ public class MediumMain {
         System.out.println();
     }
 
+    /**
+     * 链表模拟大数相加
+     * @param l1 node
+     * @param l2 node
+     * @return node
+     */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         if (l1 == null || l2 == null) {
             if (l1 == null && l2 != null) {
@@ -381,7 +576,7 @@ public class MediumMain {
     }
 
     public int removeDuplicates(int[] nums) {
-
+        //Todo
 
         return 1;
     }
@@ -404,11 +599,15 @@ public class MediumMain {
     }
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        //Todo
         return null;
     }
 
-
-    //动态规划，从下往上走
+    /**
+     * 动态规划，从下往上走
+     * @param triangle
+     * @return
+     */
     public int minimumTotal(List<List<Integer>> triangle) {
         int m = triangle.size();
         if (m == 0) {
@@ -602,7 +801,6 @@ public class MediumMain {
         }
     }
 
-    //
     private void judgeAndPutWrong(int[] num, int i, int p, int q, List<List<Integer>> list) {
         while (p < q) {
             if (num[p] + num[q] + num[i] < 0) {
@@ -765,9 +963,9 @@ public class MediumMain {
      * 先排序,从两头查找,再循环原始数组找到索引 效率比较低
      * 不如上面用Hashmap的方式直接查询索引
      *
-     * @param nums
-     * @param target
-     * @return
+     * @param nums int[]
+     * @param target int
+     * @return int[]
      */
     public int[] twoSumUSort(int[] nums, int target) {
         int len = nums.length;

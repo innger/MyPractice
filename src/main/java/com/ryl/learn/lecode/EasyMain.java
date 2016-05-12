@@ -10,23 +10,6 @@ public class EasyMain {
 
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
-
-//        ListNode head = new ListNode(1);
-//        ListNode node = head;
-//        for (int i = 2; i <= 10; i++) {
-//            ListNode tmp = new ListNode(i);
-//            node.next = tmp;
-//            node = tmp;
-//        }
-//        easy.printListNode(head);
-//        easy.printListNode(easy.reverseListLoop(head));
-//        ListNode newHead = easy.removeNthFromEnd(head, 2);
-//        easy.printListNode(newHead);
-
-//        System.out.println(easy.countPrimes(10000));
-
-        System.out.println(easy.strStr("mississippi", "issipi"));
-
     }
 
     class ListNode {

@@ -13,17 +13,86 @@ public class EasyCode {
 
     public static void main(String[] args) {
         EasyCode code = new EasyCode();
-//        System.out.println(code.climbStairs(10));
-
-//        ListNode list1 = initList(5);
-//        ListNode list2 = initList(5);
-//        printList(code.mergeTwoLists(list1, list2));
-
-        //00000010100101000001111010011100
-//        System.out.println(code.reverseBits(43261596));
-
-//        System.out.println(code.rob(new int[]{1, 2, 3, 4, 5, 6}));
+        System.out.println(code.isPowerOfFour(-2147483648));
     }
+
+    public boolean isPowerOfFour(int num) {
+        if (num <= 0) {
+            return false;
+        }
+        if (num == 1) {
+            return true;
+        }
+        while (num > 1) {
+            int n = num % 4;
+            if (n != 0) {
+                return false;
+            }
+            num = num >> 1 >> 1;
+        }
+        return true;
+    }
+
+    //不能直接遍历string, charAt ,拼接新的字符串,当非常长的时候, time limit exceeded
+    //将String转换成char[]
+    public String reverseString(String s) {
+        if (s == null || s.isEmpty() || s.length() == 1) {
+            return s;
+        }
+        char[] arr = s.toCharArray();
+        int i = 0;
+        int j = arr.length - 1;
+        while (i < j) {
+            char ch = arr[i];
+            arr[i] = arr[j];
+            arr[j] = ch;
+            i++;
+            j--;
+        }
+        return new String(arr);
+    }
+
+    //just reverse 元音字母 aeiou
+    //two pointer
+    public String reverseVowels(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        char[] arr = s.toCharArray();
+        int i = 0;
+        int j = arr.length - 1;
+        while (i < j) {
+            char c1 = s.charAt(i);
+            while (!isVowels(c1)) {
+                i++;
+                if (i > j) break;
+                c1 = s.charAt(i);
+            }
+            if (i >= j) break;
+            char c2 = s.charAt(j);
+            while (!isVowels(c2)) {
+                j--;
+                if (j < 0) break;
+                c2 = s.charAt(j);
+            }
+            //交换i j
+            char ch = arr[i];
+            arr[i] = arr[j];
+            arr[j] = ch;
+            i++;
+            j--;
+        }
+        return new String(arr);
+    }
+
+    private boolean isVowels(char ch) {
+        return ch == 'a' || ch == 'A' ||
+                ch == 'e' || ch == 'E' ||
+                ch == 'i' || ch == 'I' ||
+                ch == 'o' || ch == 'O' ||
+                ch == 'u' || ch == 'U';
+    }
+
 
     public boolean isBalanced(TreeNode root) {
         treeDepth(root);

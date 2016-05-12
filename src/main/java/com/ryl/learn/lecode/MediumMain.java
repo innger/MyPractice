@@ -11,7 +11,38 @@ public class MediumMain {
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
 
-        main.wiggleSort(new int[]{2, 1, 4, 5, 6, 7});
+        main.sortColors(new int[]{1, 0});
+    }
+
+    // n = a + b + c, maximize the product of those integers
+    public int integerBreak(int n) {
+        return 0;
+    }
+
+    public void sortColors(int[] nums) {
+        int i0 = 0;
+        int i1 = 0;
+        int i2 = 0;
+        for (int n : nums) {
+            if (n == 0) i0++;
+            if (n == 1) i1++;
+            if (n == 2) i2++;
+        }
+        int index = 0;
+        for (int i = 0; i < i0; i++) {
+            nums[index] = 0;
+            index++;
+        }
+        for (int i = 0; i < i1; i++) {
+            nums[index] = 1;
+            index++;
+        }
+        for (int i = 0; i < i2; i++) {
+            nums[index] = 2;
+            index++;
+        }
+
+        System.out.println(Arrays.toString(nums));
     }
 
     //Given an unsorted array nums, reorder it such that nums[0] < nums[1] > nums[2] < nums[3] > nums[4]....
@@ -20,17 +51,22 @@ public class MediumMain {
         if (nums == null || nums.length <= 1) {
             return;
         }
+        int len = nums.length;
         List<Integer> list = new ArrayList<Integer>();
-        for (int i = 0; i < nums.length; i++) {
-            list.add(nums[i]);
+        for (int n : nums) {
+            list.add(n);
         }
         Collections.sort(list);
-        int odd = 1;
-        int even = 0;
-        for(int i = 0 ;i< nums.length;i++) {
-            if( (i&1) == 0) {
-            }
+        int j = len - 1;
+        for (int i = 1; i < len; i += 2, j--) {
+            nums[i] = list.get(j);
         }
+        for (int i = 0; i < len; i += 2, j--) {
+            nums[i] = list.get(j);
+        }
+
+
+        System.out.println(Arrays.toString(nums));
     }
 
     public int findKthLargestHeap(int[] nums, int k) {

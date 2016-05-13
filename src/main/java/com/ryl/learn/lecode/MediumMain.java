@@ -10,7 +10,44 @@ public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
-        System.out.println(main.singleNumberII(new int[]{2,2,2,3}));
+        System.out.println(main.maxArea(new int[]{1, 1, 2, 3, 4, 5, 6, 7}));
+    }
+
+    /**
+     * a1, a2, ..., an,  (i, ai) and (i, 0) and x-axis 组成的四边形,contains the most water
+     * You may not slant the container.
+     * two poiters
+     *
+     * @param height int[]
+     * @return int
+     */
+    public int maxArea(int[] height) {
+        // TODO: 16/5/13  
+        if (height == null || height.length < 2) {
+            return 0;
+        }
+        int i = 0;
+        int j = i + 1;
+        int max = 0;
+        while (i < j && j < height.length - 1) {
+            int h = Math.min(height[i], height[j]);
+            int w = j - i;
+            int a = h * w;
+            max = a > max ? a : max;
+            if(j+1 < height.length - 1) {
+                j++;
+            }
+
+            if (i + 1 < j && Math.min(height[i + 1], height[j]) > h) {
+                i++;
+            } else if (j - 1 > i && Math.min(height[i], height[j - 1]) > h) {
+                j--;
+            } else {
+                i++;
+                j--;
+            }
+        }
+        return max;
     }
 
     public int nthUglyNumber(int n) {
@@ -20,6 +57,7 @@ public class MediumMain {
 
     /**
      * 异或法
+     *
      * @param nums int[]
      * @return 出现一次的数字
      */
@@ -32,26 +70,62 @@ public class MediumMain {
     }
 
     /**
+     * 整个数列的数加起来取3的余数,就是那个特殊数在该位上的值
+     * http://www.raychase.net/2573
+     *
+     * @param nums int[]
+     * @return single num
+     */
+    public int singleNumberII2(int[] nums) {
+        int ret = 0;
+        for (int i = 0; i < 32; i++) {
+            int c = 0;
+            int mask = 1 << i; //mask第位为1,其余位全是0
+            for (int j = 0; j < nums.length; j++) {
+                int val = nums[j] & mask;
+                if (val != 0) { //如果在该位上为1,则++
+                    c++;
+                }
+            }
+            if (c % 3 > 0) { //对3取余数,只可能是0 or 1
+                ret |= mask;
+            }
+        }
+        return ret;
+    }
+
+    /**
      * every element appears three times except for one.
-     * 异或法
+     * 使用map,key:count 出现3次则删除该key
+     *
      * @param nums int[]
      * @return int
      */
     public int singleNumberII(int[] nums) {
-        if(nums.length == 1) {
+        if (nums.length == 1) {
             return nums[0];
         }
-        int res = 0;
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
         for (int n : nums) {
-            res ^= n;
+            if (map.containsKey(n)) {
+                int cnt = map.get(n);
+                if (cnt == 2) {
+                    map.remove(n);
+                } else {
+                    map.put(n, cnt + 1);
+                }
+            } else {
+                map.put(n, 1);
+            }
         }
-        return res;
+        return map.keySet().iterator().next();
     }
 
     /**
      * 数组中有两个数出现一次,其他都是两次,找出这两个数
      * 先全部异或,根据结果,某位为1划分成两组
      * 再各组异或 各求出出现一次的数
+     *
      * @param nums int[]
      * @return 两个出现一次的数字
      */
@@ -91,6 +165,7 @@ public class MediumMain {
 
     /**
      * 数字n bits 最右出现1的index
+     *
      * @param n n
      * @return index
      */
@@ -110,6 +185,7 @@ public class MediumMain {
 
     /**
      * n bits 第i位是否是1
+     *
      * @param n n
      * @param i index
      * @return true false
@@ -154,6 +230,7 @@ public class MediumMain {
 
     /**
      * 汉明权重 数字n bits中1的个数
+     *
      * @param n 数字n
      * @return number of bits 1
      */
@@ -167,11 +244,11 @@ public class MediumMain {
     }
 
 
-
     /**
      * n = a + b + c, maximize the product of those integers n >= 2 找3
      * There is a simple O(n) solution to this problem.
      * You may check the breaking results of n ranging from 7 to 10 to discover the regularities.
+     *
      * @param n n
      * @return max multiply
      */
@@ -221,6 +298,7 @@ public class MediumMain {
     /**
      * Given an unsorted array nums, reorder it such that nums[0] < nums[1] > nums[2] < nums[3] > nums[4]....
      * 奇偶有序
+     *
      * @param nums int[]
      */
     public void wiggleSort(int[] nums) {
@@ -321,6 +399,7 @@ public class MediumMain {
 
     /**
      * 输入号码,输出所有的字母组合
+     *
      * @param digits string
      * @return list
      */
@@ -357,12 +436,9 @@ public class MediumMain {
         return list;
     }
 
-    public int maxArea(int[] height) {
-        return 0;
-    }
-
     /**
      * 最长回文
+     *
      * @param s string
      * @return string
      */
@@ -397,6 +473,7 @@ public class MediumMain {
 
     /**
      * 模拟大正整数相乘
+     *
      * @param num1 bigInteger
      * @param num2 bigInteger
      * @return multiply result
@@ -517,6 +594,7 @@ public class MediumMain {
 
     /**
      * 链表模拟大数相加
+     *
      * @param l1 node
      * @param l2 node
      * @return node
@@ -605,6 +683,7 @@ public class MediumMain {
 
     /**
      * 动态规划，从下往上走
+     *
      * @param triangle
      * @return
      */
@@ -963,7 +1042,7 @@ public class MediumMain {
      * 先排序,从两头查找,再循环原始数组找到索引 效率比较低
      * 不如上面用Hashmap的方式直接查询索引
      *
-     * @param nums int[]
+     * @param nums   int[]
      * @param target int
      * @return int[]
      */

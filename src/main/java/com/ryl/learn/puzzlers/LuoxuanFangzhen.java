@@ -2,6 +2,14 @@ package com.ryl.learn.puzzlers;
 
 import java.util.Scanner;
 
+/**
+ * 螺旋方阵
+ * 1      2      3      4       5
+ * 16     17     18     19      6
+ * 15     24     25     20      7
+ * 14     23     22     21      8
+ * 13     12     11     10      9
+ */
 public class LuoxuanFangzhen {
 
     public int getNum(int n, int i, int j) {

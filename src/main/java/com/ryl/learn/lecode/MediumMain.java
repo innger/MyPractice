@@ -16,13 +16,12 @@ public class MediumMain {
     /**
      * a1, a2, ..., an,  (i, ai) and (i, 0) and x-axis 组成的四边形,contains the most water
      * You may not slant the container.
-     * two poiters
+     * two pointers
      *
      * @param height int[]
      * @return int
      */
     public int maxArea(int[] height) {
-        // TODO: 16/5/13  
         if (height == null || height.length < 2) {
             return 0;
         }

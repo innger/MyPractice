@@ -1,6 +1,10 @@
 package com.ryl.learn.puzzlers;
 
+/**
+ * 八皇后问题
+ */
 public class BaHuanghou {
+
     private static boolean[][] hh = new boolean[8][8];//8*8棋盘
     private static int count = 0;//已经放上的皇后数
     private static int num = 0;//摆放方式的总数

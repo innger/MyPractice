@@ -26,6 +26,5 @@ public class NumberPrinter extends Thread {
         for (int i = 0; i < 3; i++) {
             new NumberPrinter(i).start();
         }
-        System.out.println(System.currentTimeMillis());
     }
 }  

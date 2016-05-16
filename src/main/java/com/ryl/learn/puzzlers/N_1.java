@@ -24,7 +24,11 @@ public class N_1 {
         return true;
     }
 
-    //置反的思想
+    /**
+     * 将数组置反,如果出现负数或者多个0,则返回false
+     * @param a int[]
+     * @return true/false
+     */
     private static boolean setConverse(int[] a) {
         int N = a.length;
         int zero = 0; //取反 防止出现多个0
@@ -45,6 +49,6 @@ public class N_1 {
     }
 
     public static void main(String[] args) {
-        System.out.println(setConverse(new int[]{2, 3, 0, -1, 4}));
+        System.out.println(setConverse(new int[]{2, 3, 0, 1, 4}));
     }
 }

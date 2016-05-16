@@ -12,6 +12,10 @@ public class Insertion {
         System.out.println(Arrays.toString(array));
     }
 
+    /**
+     * 插入排序
+     * @param array int[]
+     */
     private static void insertSort(int[] array) {
         int j;
         for (int i = 1; i < array.length; i++) {
@@ -23,6 +27,10 @@ public class Insertion {
         }
     }
 
+    /**
+     * 希尔排序
+     * @param a int[]
+     */
     private static void shellSort(int[] a) {
         int j;
         for (int gap = a.length / 2; gap > 0; gap = gap / 2) {

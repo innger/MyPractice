@@ -3,7 +3,9 @@ package com.ryl.learn.puzzlers;
 import java.math.BigInteger;
 
 public class T56 {
+
     public static void main(String[] args) {
+
         BigInteger fiveThousand = new BigInteger("5000");
         BigInteger fiftyThousand = new BigInteger("50000");
         BigInteger fiveHundredThousand = new BigInteger("500000");

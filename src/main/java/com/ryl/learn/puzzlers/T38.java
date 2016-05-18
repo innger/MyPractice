@@ -1,6 +1,7 @@
 package com.ryl.learn.puzzlers;
 
 public class T38 {
+
     public static final long GUEST_USER_ID = -1;
     private static long USER_ID;
 
@@ -20,9 +21,11 @@ public class T38 {
     public static void main(String[] args) {
         System.out.println(USER_ID);
     }
-}
 
-class IdUnavailableException extends Exception {
-    IdUnavailableException() {
+
+    static class IdUnavailableException extends Exception {
+        IdUnavailableException() {
+        }
     }
 }
+

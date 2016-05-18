@@ -7,6 +7,7 @@ import java.util.List;
 
 public class T60 {
     public static void main(String[] args) {
+
         List<String> original = new ArrayList<String>();
         original.add("ren");
         original.add("ren");

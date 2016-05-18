@@ -10,13 +10,13 @@ public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
-        System.out.println(main.maxArea(new int[]{1, 1, 2, 3, 4, 5, 6, 7}));
+        System.out.println(main.maxArea2(new int[]{1, 1, 2, 3, 4, 5, 6, 7}));
     }
 
     /**
      * a1, a2, ..., an,  (i, ai) and (i, 0) and x-axis 组成的四边形,contains the most water
      * You may not slant the container.
-     * two pointers
+     * two pointers 两头向中间收缩
      *
      * @param height int[]
      * @return int
@@ -26,24 +26,57 @@ public class MediumMain {
             return 0;
         }
         int i = 0;
-        int j = i + 1;
+        int j = height.length - 1;
         int max = 0;
-        while (i < j && j < height.length - 1) {
+        while (i < j) {
             int h = Math.min(height[i], height[j]);
             int w = j - i;
             int a = h * w;
-            max = a > max ? a : max;
-            if(j+1 < height.length - 1) {
-                j++;
-            }
+            max = Math.max(max, a);
 
             if (i + 1 < j && Math.min(height[i + 1], height[j]) > h) {
                 i++;
             } else if (j - 1 > i && Math.min(height[i], height[j - 1]) > h) {
                 j--;
             } else {
-                i++;
-                j--;
+                //从小的边推进
+                if (height[j] < height[i]) {
+                    j--;
+                } else {
+                    i++;
+                }
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 优化方案,内部嵌套while循环,取消无用的面积计算
+     * @param height int[]
+     * @return maxArea
+     */
+    public int maxArea2(int[] height) {
+        if (height == null || height.length < 2) {
+            return 0;
+        }
+        int i = 0;
+        int j = height.length - 1;
+        int max = 0;
+        while (i < j) {
+            max = Math.max(max, Math.min(height[i], height[j]) * (j - i));
+            if (height[i] < height[j]) {
+                int k = i;
+                while (k < j && height[k] <= height[i]) {
+                    k++;
+                }
+                i = k;
+            } else {
+                int k = j;
+                while (k > i && height[k] <= height[j]) {
+                    //找到比height[j]大的
+                    k--;
+                }
+                j = k;
             }
         }
         return max;
@@ -675,6 +708,12 @@ public class MediumMain {
         }
     }
 
+    /**
+     * 从数组中选出序列,和为给定的target值,每个选中的数字不限次数
+     * @param candidates int[]
+     * @param target int sum
+     * @return all combination
+     */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         //Todo
         return null;
@@ -683,8 +722,8 @@ public class MediumMain {
     /**
      * 动态规划，从下往上走
      *
-     * @param triangle
-     * @return
+     * @param triangle list<list<Integer>>
+     * @return min
      */
     public int minimumTotal(List<List<Integer>> triangle) {
         int m = triangle.size();

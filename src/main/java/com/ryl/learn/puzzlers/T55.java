@@ -11,32 +11,35 @@ public class T55 {
         System.out.println(Creature1.numCreated());
     }
 
-}
+    static class Creature {
+        private static long numCreated = 0;
 
-class Creature {
-    private static long numCreated = 0;
+        public Creature() {
+            synchronized (Creature.class) {
+                numCreated++;
+            }
 
-    public Creature() {
-        synchronized (Creature.class) {
-            numCreated++;
         }
 
+        public static synchronized long numCreated() {
+            return numCreated;
+        }
     }
 
-    public static synchronized long numCreated() {
-        return numCreated;
+    //jdk5 新增的 原子类型变量 不要需要额外的线程同步
+    static class Creature1 {
+        private static AtomicLong numCreated = new AtomicLong();
+
+        public Creature1() {
+            numCreated.incrementAndGet();
+        }
+
+        public static long numCreated() {
+            return numCreated.get();
+        }
     }
 }
 
-//jdk5 新增的 原子类型变量 不要需要额外的线程同步  
-class Creature1 {
-    private static AtomicLong numCreated = new AtomicLong();
 
-    public Creature1() {
-        numCreated.incrementAndGet();
-    }
 
-    public static long numCreated() {
-        return numCreated.get();
-    }
-}
+

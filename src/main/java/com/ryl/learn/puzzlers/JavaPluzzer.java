@@ -19,7 +19,7 @@ public class JavaPluzzer {
 
         short m = 1;
         short n = 2;
-//		m =  (m+n);
+//        m = m + n; //required short found int
         m += n;
 
         Object buy = "buy";
@@ -27,13 +27,16 @@ public class JavaPluzzer {
         buy = buy + java;
 //		buy+= java;
         System.out.println((int) (char) (byte) -1);
-
-        System.out.println("2+2=" + (2 + 2));
     }
 
-    //判断是够为奇数
+    /**
+     * 判断是否为奇数
+     *
+     * @param i int
+     * @return true/false
+     */
     private static boolean isOdd(int i) {
-//		return i%2 == 1;
+//		return i%2 == 1; //负数问题
 //		return i%2 !=0;
         return (i & 1) == 1;
     }

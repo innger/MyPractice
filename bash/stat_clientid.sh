@@ -19,6 +19,11 @@ servers="10.178.93.26 10.178.93.223"
 user="yulong.ryl"
 date=$1
 
+if [ -z "$date" ]; then
+    date=`date -d "yesterday" +%Y-%m-%d`
+fi
+echo "$date"
+
 for server in $hosts
 do
    echo "$server"
@@ -26,8 +31,13 @@ do
    rsync -zvrtopg -e "ssh" $user@$server:~/script/cmg-server.log.$date.$server ./
 done
 
+echo "####################"
+dau=`cat ./cmg-server.log.$date* | sort | uniq | wc -l`
+echo "$dau"
+curl "http://10.180.16.211:7001/ws/cmg/mail?date=$date&dau=$dau"
 
-#
+
+#统计当前连接数
 hosts="cmg-server010178093026.et2 cmg-server010178093223.et2"
 servers="10.178.93.26 10.178.93.223"
 user="yulong.ryl"

@@ -1,9 +1,6 @@
 package com.ryl.learn.lecode;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * easy problem 002
@@ -13,7 +10,203 @@ public class EasyCode {
 
     public static void main(String[] args) {
         EasyCode code = new EasyCode();
-        System.out.println(code.isPowerOfFour(-2147483648));
+        System.out.println(code.computeArea(0, 0, 0, 0, -1, -1, 1, 1));
+    }
+
+
+    /**
+     * 223. Rectangle Area
+     * (A,B) (C,D) (E,F) (G,H) 四个点组成两个矩形,求覆盖的总面积
+     *
+     * @param A int
+     * @param B int
+     * @param C int
+     * @param D int
+     * @param E int
+     * @param F int
+     * @param G int
+     * @param H int
+     * @return area
+     */
+    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int area1 = Math.abs((C - A) * (D - B));
+        int area2 = Math.abs((G - E) * (H - F));
+        //重合部分面积
+        int area3 = 0;
+        //判断两个矩形是否有重合
+        if (isBetween(A, C, E) || isBetween(A, C, G)) {
+
+        }
+
+        if (C > E && H > B) {
+            area3 = (C - E) * (H - B);
+        }
+        return area1 + area2 - area3;
+    }
+
+    private boolean isBetween(int a, int b, int target) {
+        int min = Math.min(a, b);
+        int max = Math.max(a, b);
+        return target > min && target < max;
+    }
+
+
+    /**
+     * 242. Valid Anagram 同字母异序词
+     * write a function to determine if t is an anagram of s.
+     * map equals
+     *
+     * @param s string
+     * @param t string
+     * @return true/false
+     */
+    public boolean isAnagram(String s, String t) {
+        if (s == null) {
+            return t == null;
+        }
+        if (s.length() == 0) {
+            return t != null && t.length() == 0;
+        }
+        Map<Character, Integer> maps = new HashMap<Character, Integer>();
+        Map<Character, Integer> mapt = new HashMap<Character, Integer>();
+        fillString2Map(s, maps);
+        fillString2Map(t, mapt);
+        return maps.equals(mapt);
+    }
+
+    private void fillString2Map(String s, Map<Character, Integer> map) {
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (map.containsKey(ch)) {
+                map.put(ch, 1 + map.get(ch));
+            } else {
+                map.put(ch, 1);
+            }
+        }
+    }
+
+    /**
+     * 226. Invert Binary Tree
+     * This problem was inspired by this original tweet by Max Howell:
+     * Google: 90% of our engineers use the software you wrote (Homebrew),
+     * but you can’t invert a binary tree on a whiteboard so fuck off.
+     * bug-free
+     *
+     * @param root treeNode
+     * @return root
+     */
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+        doInvertTree(root);
+        return root;
+    }
+
+    /**
+     * 递归 swap(left,right)
+     *
+     * @param node treeNode
+     */
+    private void doInvertTree(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        if (node.left != null || node.right != null) {
+            TreeNode tmp = node.left;
+            node.left = node.right;
+            node.right = tmp;
+        }
+        doInvertTree(node.left);
+        doInvertTree(node.right);
+    }
+
+    /**
+     * 349. Intersection of Two Arrays
+     * compute two arrays intersection
+     *
+     * @param nums1 int[]
+     * @param nums2 int[]
+     * @return int[] 两个数组公共的元素
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0) {
+            return new int[]{};
+        }
+        List<Integer> resultList = new ArrayList<Integer>();
+        Set<Integer> set1 = new HashSet<Integer>();
+        for (int i : nums1) {
+            set1.add(i);
+        }
+        for (int i : nums2) {
+            if (set1.contains(i)) {
+                resultList.add(i);
+                set1.remove(i);
+            }
+        }
+        if (resultList.size() == 0) {
+            return new int[]{};
+        } else {
+            int[] arr = new int[resultList.size()];
+            for (int i = 0; i < resultList.size(); i++) {
+                arr[i] = resultList.get(i);
+            }
+            return arr;
+        }
+    }
+
+    /**
+     * A:      a1 → a2
+     * ↘
+     * c1 → c2 → c3
+     * ↗
+     * B: b1 → b2 → b3
+     * bug-free
+     *
+     * @param headA listnode
+     * @param headB listnode
+     * @return the intersectionNode c1
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        ListNode head = headA;
+        int lenA = 0;
+        while (head.next != null) {
+            lenA++;
+            head = head.next;
+        }
+        head = headB;
+        int lenB = 0;
+        while (head.next != null) {
+            lenB++;
+            head = head.next;
+        }
+        ListNode head1;
+        ListNode head2;
+        if (lenA > lenB) {
+            head1 = headA;
+            head2 = headB;
+        } else {
+            head1 = headB;
+            head2 = headA;
+        }
+        int sub = Math.abs(lenA - lenB);
+        while (sub > 0) {
+            head1 = head1.next;
+            sub--;
+        }
+
+        while (head1 != null && head2 != null) {
+            if (head1 == head2) {
+                return head1;
+            }
+            head1 = head1.next;
+            head2 = head2.next;
+        }
+
+        return null;
     }
 
     public boolean isPowerOfFour(int num) {

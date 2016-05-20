@@ -4,22 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-interface Type1 {
-    //接口里面声明 抛出异常 实现类可以不抛
-    void f() throws InterruptedException;
 
-    //接口 没有声明 抛出异常 则实现类中 一定不能抛出异常
-    //接口 就是约定
-    void h();
-}
-
-interface Type2 {
-    void f() throws CloneNotSupportedException;
-}
-
-interface Type3 extends Type1, Type2 {
-
-}
 
 public class T37 {
 
@@ -62,35 +47,52 @@ public class T37 {
         return "i am a private method.";
     }
 
+    interface Type1 {
+        //接口里面声明 抛出异常 实现类可以不抛
+        void f() throws InterruptedException;
+
+        //接口 没有声明 抛出异常 则实现类中 一定不能抛出异常
+        //接口 就是约定
+        void h();
+    }
+
+    interface Type2 {
+        void f() throws CloneNotSupportedException;
+    }
+
+    interface Type3 extends Type1, Type2 {
+
+    }
+
+    static class Arcane3 implements Type3 {
+
+        @Override
+        public void f() {
+            System.out.println("Hello World!");
+        }
+
+        @Override
+        public void h() {
+
+        }
+    }
+
+    static class Type1Impl implements Type1 {
+
+        @Override
+        public void f() {
+            System.out.println(" Type1 Impl");
+        }
+
+        @Override
+        public void h() {
+
+        }
+    }
+
 }
 
-class Arcane3 implements Type3 {
 
-    @Override
-    public void f() {
-        System.out.println("Hello World!");
-    }
-
-    @Override
-    public void h() {
-
-    }
-
-}
-
-class Type1Impl implements Type1 {
-
-    @Override
-    public void f() {
-        System.out.println(" Type1 Impl");
-    }
-
-    @Override
-    public void h() {
-
-    }
-
-}
 
 
 

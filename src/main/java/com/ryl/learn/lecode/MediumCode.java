@@ -16,6 +16,16 @@ public class MediumCode {
     }
 
     /**
+     * 166. Fraction to Recurring Decimal
+     * @param numerator int 除数
+     * @param denominator int 被除数
+     * @return string 小数表示
+     */
+    public String fractionToDecimal(int numerator, int denominator) {
+        return null;
+    }
+
+    /**
      * 菲波那切数列
      * "112358" is an additive number because the digits can form an additive sequence: 1, 1, 2, 3, 5, 8.
      * @param num string

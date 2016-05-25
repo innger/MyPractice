@@ -35,7 +35,7 @@ public class EasyCode {
         int area3 = 0;
         //判断两个矩形是否有重合
         if (isBetween(A, C, E) || isBetween(A, C, G)) {
-
+            // TODO: 16/5/20  
         }
 
         if (C > E && H > B) {

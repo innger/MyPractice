@@ -30,6 +30,7 @@ public class MainTest {
 
         System.out.println(Charsets.UTF_8.displayName(Locale.TRADITIONAL_CHINESE));
         System.out.println("京A456221".substring(0,2));
+
     }
 
     public static String getServerIp() {

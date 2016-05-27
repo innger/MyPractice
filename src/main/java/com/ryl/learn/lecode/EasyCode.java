@@ -11,6 +11,173 @@ public class EasyCode {
     public static void main(String[] args) {
         EasyCode code = new EasyCode();
         System.out.println(code.computeArea(0, 0, 0, 0, -1, -1, 1, 1));
+        SortedMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
+        for (int i = 0; i < 10; i++) {
+            map.put(i, i);
+        }
+        map.remove(0);
+        System.out.println(map.keySet().iterator().next());
+
+        int[] res = code.getMinArray(new int[]{1, 2, 3, 4, 1, 6, 3}, 3);
+        System.out.println(Arrays.toString(res));
+    }
+
+    /**
+     * 234. Palindrome Linked List
+     * 判断一个链表是不是回文
+     * 后半段链表翻转,两头往中间比较
+     *
+     * @param head listNode
+     * @return true/false
+     */
+    public boolean isPalindrome(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        if (head.next == null) {
+            //单个元素
+            return true;
+        }
+        if (head.next.next == null) {
+            //两个元素
+            return head.val == head.next.val;
+        }
+        int len = 0;
+        ListNode node = head;
+        while (node != null) {
+            len++;
+            node = node.next;
+        }
+        if ((len & 1) == 0) {
+            //偶数
+
+
+        } else {
+            //奇数
+
+        }
+        // TODO: 16/5/25  
+        return false;
+    }
+
+    /**
+     * m区间长度,窗口沿着数组移动,输出每次窗口中最小值组成的数组
+     *
+     * @param arr int[]
+     * @param m   区间长度
+     * @return int[] 最小值组成的数组
+     */
+    public int[] getMinArray(int[] arr, int m) {
+        if (arr == null || arr.length == 0) {
+            return new int[0];
+        }
+        if (m >= arr.length) {
+            //窗口不移动,及arr中的最小值
+            int min = Integer.MAX_VALUE;
+            for (int i = 0; i < arr.length; i++) {
+                if (min > arr[i]) {
+                    min = arr[i];
+                }
+            }
+            return new int[]{min};
+        }
+        int[] res = new int[arr.length - m + 1];
+        int resi = 0;
+        int i = 0;
+        int j = m - 1;
+        TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>(); //按照key排序
+        while (j < arr.length) {
+            if (i == 0) {
+                for (int n = i; n <= j; n++) {
+                    fillTreeMap(map, arr[n]);
+                }
+                res[resi] = map.firstKey();
+            } else {
+                removeTreeMap(map, arr[i - 1]);
+                fillTreeMap(map, arr[j]);
+                res[resi] = map.firstKey();
+            }
+            i++;
+            j++;
+            resi++;
+        }
+        return res;
+    }
+
+    private void fillTreeMap(Map<Integer, Integer> map, int n) {
+        Integer count = map.get(n);
+        if (count == null) {
+            map.put(n, 1);
+        } else {
+            map.put(n, count + 1);
+        }
+    }
+
+    private void removeTreeMap(Map<Integer, Integer> map, int n) {
+        Integer count = map.get(n);
+        if (count <= 1) {
+            map.remove(n);
+        } else {
+            map.put(n, count - 1);
+        }
+    }
+
+    /**
+     * 155. Min Stack
+     * Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+     */
+    class MinStack {
+
+        private TreeMap<Integer, Integer> map;
+        private Stack<Integer> stack;
+        private Integer min;
+
+        /**
+         * initialize your data structure here.
+         */
+        public MinStack() {
+            stack = new Stack<Integer>();
+            map = new TreeMap<Integer, Integer>();
+            min = Integer.MAX_VALUE;
+        }
+
+        public void push(int x) {
+            if (map.containsKey(x)) {
+                int num = map.get(x);
+                map.put(x, num + 1);
+            } else {
+                map.put(x, 1);
+            }
+            stack.push(x);
+            if (x < min) {
+                min = x;
+            }
+        }
+
+        public void pop() {
+            if (!stack.empty()) {
+                int top = stack.pop();
+                int num = map.get(top);
+                if (num <= 1) {
+                    map.remove(top);
+                } else {
+                    map.put(top, num - 1);
+                }
+                if (map.isEmpty()) {
+                    min = Integer.MAX_VALUE;
+                } else {
+                    min = map.firstKey();
+                }
+            }
+        }
+
+        public int top() {
+            return stack.peek();
+        }
+
+        public int getMin() {
+            return min;
+        }
     }
 
 

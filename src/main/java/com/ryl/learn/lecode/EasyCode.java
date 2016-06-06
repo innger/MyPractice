@@ -122,9 +122,51 @@ public class EasyCode {
         }
     }
 
+    // TODO: 16/5/27  
+    class MinStack2 {
+
+        private Stack<Integer>  stack;
+        private Stack<Integer> minStack;
+
+        public MinStack2() {
+            stack = new Stack<Integer>();
+            minStack = new Stack<Integer>();
+        }
+
+        public void push(int x) {
+            stack.push(x);
+            if(minStack.isEmpty()) {
+                minStack.push(x);
+            } else {
+                int top = minStack.peek();
+                if(x < top) {
+                    minStack.push(x);
+                }
+            }
+        }
+
+        public void pop() {
+            if(!stack.isEmpty()) {
+                stack.pop();
+
+
+            }
+        }
+
+        public int top() {
+            return 0;
+        }
+
+        public int getMin() {
+            return 0;
+        }
+
+    }
+
     /**
      * 155. Min Stack
      * Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+     * 用TreeMap记录排序的key
      */
     class MinStack {
 

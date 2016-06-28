@@ -1,6 +1,10 @@
 package com.ryl.learn.util;
 
 import com.google.common.base.Charsets;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -29,7 +33,15 @@ public class MainTest {
 //        System.out.println(arr[1].trim());
 
         System.out.println(Charsets.UTF_8.displayName(Locale.TRADITIONAL_CHINESE));
-        System.out.println("京A456221".substring(0,2));
+        System.out.println("京A456221".substring(0, 2));
+        for (int i = 0; i < 100; i++) {
+            Integer msgId = new Random().nextInt(65535);
+            int msgId2  = RandomUtils.nextInt(1, 65535);
+            System.out.println(msgId + msgId2);
+
+        }
+
+
 
     }
 

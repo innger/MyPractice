@@ -1,7 +1,5 @@
 package com.ryl.learn.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -29,7 +27,6 @@ public class HttpForm {
 
 
     public static void main(String[] args) throws Exception {
-//        login();
         sendMobile();
     }
 
@@ -58,28 +55,17 @@ public class HttpForm {
             HttpResponse response = client.execute(post);
             String respStr = EntityUtils.toString(response.getEntity(), "UTF-8");
             num++;
-            System.out.println(num+ " " + mobile + " " + respStr);
+            System.out.println(num + " " + mobile + " " + respStr);
         }
     }
 
     public static void sendMobile() throws Exception {
         ExecutorService service = Executors.newFixedThreadPool(20);
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost("http://www.gc-home.com/?m=User&c=Register&a=sendMobileCode");
+        HttpPost post = new HttpPost("http://www.gc-home.com/index.php/User/Register/get_ajax_userName");
+        post.setHeader("Cookie", "PHPSESSID=ibiflhni9f04fn0vb7ia2tbou1; incap_ses_222_826927=YSGdI1rN+g0A2S7nEbUUA4/uaFcAAAAAxA9pjtgmdvYmWS/hh2A3nQ==; incap_ses_401_826927=gJdJW7/9tlCK6MCylaOQBR0AaVcAAAAAVokAy8yKJEhS+6uWVo9ILg==; visid_incap_826927=56gpyh9IQ4KK7Ze/Zge7wSGfaFcAAAAAQUIPAAAAAACPoV/SFbekgYfNaSuz9XbT; incap_ses_406_826927=b8wzOZti1wcFrPeld2eiBeoAaVcAAAAAE/gJ/TFDFjpPSL9B2niXng==");
 
-        post.setHeader("Accept", "*/*");
-        post.setHeader("Accept-Encoding", "gzip, deflate");
-        post.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4");
-        post.setHeader("Connection", "keep-alive");
-        post.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        post.setHeader("Cookie", "PHPSESSID=ibiflhni9f04fn0vb7ia2tbou1; visid_incap_826927=56gpyh9IQ4KK7Ze/Zge7wSGfaFcAAAAAQUIPAAAAAACPoV/SFbekgYfNaSuz9XbT; incap_ses_406_826927=/mLGfc+BqgSeeFpUdWeiBSGfaFcAAAAAwzgUJ7wOY6EPol8FP74tuA==");
-        post.setHeader("Host", "www.gc-home.com");
-        post.setHeader("Origin", "http://www.gc-home.com");
-        post.setHeader("Referer", "http://www.gc-home.com/index.php/User/Register/index/G08277770");
-        post.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
-        post.setHeader("X-Requested-With", "XMLHttpRequest");
-
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             service.submit(new SendMobileWorker(client, post, i));
         }
     }
@@ -101,21 +87,24 @@ public class HttpForm {
         public void run() {
             while (true) {
                 try {
-                    String mobile = prefix[num.intValue() % len] + RandomStringUtils.randomNumeric(8);
+                    /*String mobile = prefix[num.intValue() % len] + RandomStringUtils.randomNumeric(8);
 
                     if (num.intValue() % 10 == 0) {
                         mobile = "15210830381";
                     }
+
+                    String code = RandomStringUtils.randomNumeric(6);
                     List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
-                    formParams.add(new BasicNameValuePair("mobile", mobile));
-                    formParams.add(new BasicNameValuePair("type", "reg"));
+                    formParams.add(new BasicNameValuePair("serialize", "userMobile=" + mobile + "&IMGCode=&mobile_code=" + code + "&type=forgot"));
+                    formParams.add(new BasicNameValuePair("actype", "forgot1"));
 
                     UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, "UTF-8");
-                    post.setEntity(entity);
+                    post.setEntity(entity);*/
 
                     HttpResponse response = client.execute(post);
-                    JSONObject json = JSON.parseObject(EntityUtils.toString(response.getEntity(), "UTF-8"));
-                    System.out.println(Thread.currentThread().getName() + "-" + thread + " " + mobile + " " + json.getBoolean("status") + " " + json.getString("errMsg") + " " + num.getAndIncrement());
+                    String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+                    System.out.println(Thread.currentThread().getName() + " " + num.getAndIncrement() + " " + result);
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

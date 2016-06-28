@@ -23,6 +23,86 @@ public class EasyCode {
     }
 
     /**
+     * 24. Swap Nodes in Pairs
+     * Given a linked list, swap every two adjacent nodes and return its head.
+     *
+     * @param head ListNode
+     * @return ListNode
+     */
+    public ListNode swapPairs(ListNode head) {
+        // TODO: 16/6/23  
+        return null;
+    }
+
+    /**
+     * 141. Linked List Cycle
+     * Given a linked list, determine if it has a cycle in it.
+     * 快慢指针
+     * @param head ListNode
+     * @return true/false
+     */
+    public boolean hasCycle(ListNode head) {
+        if(head == null || head.next == null) {
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while(slow != null && fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 350. Intersection of Two Arrays II
+     * Given two arrays, write a function to compute their intersection.
+     * 使用map记录nums1元素出现的次数,再遍历nums2判断 重复的元素
+     * bug-free
+     * @param nums1 int[]
+     * @param nums2 int[]
+     * @return int[]
+     */
+    public int[] intersect(int[] nums1, int[] nums2) {
+        if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0) {
+            return new int[]{};
+        }
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int n : nums1) {
+            if (map.containsKey(n)) {
+                int c = map.get(n);
+                map.put(n, c + 1);
+            } else {
+                map.put(n, 1);
+            }
+        }
+        List<Integer> list = new ArrayList<Integer>();
+        for (int n : nums2) {
+            if (map.containsKey(n)) {
+                int c = map.get(n);
+                if (c == 1) {
+                    map.remove(n);
+                } else {
+                    map.put(n, c - 1);
+                }
+                list.add(n);
+            }
+        }
+        if (list.isEmpty()) {
+            return new int[]{};
+        } else {
+            int[] arr = new int[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                arr[i] = list.get(i);
+            }
+            return arr;
+        }
+    }
+
+    /**
      * 234. Palindrome Linked List
      * 判断一个链表是不是回文
      * 后半段链表翻转,两头往中间比较
@@ -122,10 +202,12 @@ public class EasyCode {
         }
     }
 
-    // TODO: 16/5/27  
+    /**
+     * 两个stack记录元素值
+     */
     class MinStack2 {
 
-        private Stack<Integer>  stack;
+        private Stack<Integer> stack;
         private Stack<Integer> minStack;
 
         public MinStack2() {
@@ -135,30 +217,31 @@ public class EasyCode {
 
         public void push(int x) {
             stack.push(x);
-            if(minStack.isEmpty()) {
+            if (minStack.isEmpty()) {
                 minStack.push(x);
             } else {
                 int top = minStack.peek();
-                if(x < top) {
+                if (x <= top) {
                     minStack.push(x);
                 }
             }
         }
 
         public void pop() {
-            if(!stack.isEmpty()) {
-                stack.pop();
-
-
+            if (!stack.isEmpty()) {
+                int top = stack.pop();
+                if (top == minStack.peek()) {
+                    minStack.pop();
+                }
             }
         }
 
         public int top() {
-            return 0;
+            return stack.peek();
         }
 
         public int getMin() {
-            return 0;
+            return minStack.peek();
         }
 
     }

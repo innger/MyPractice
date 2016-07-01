@@ -20,6 +20,11 @@ public class EasyCode {
 
         int[] res = code.getMinArray(new int[]{1, 2, 3, 4, 1, 6, 3}, 3);
         System.out.println(Arrays.toString(res));
+
+        ListNode head = initList(9);
+        printList(head);
+        ListNode newhead = code.swapPairs(head);
+        printList(newhead);
     }
 
     /**
@@ -30,8 +35,25 @@ public class EasyCode {
      * @return ListNode
      */
     public ListNode swapPairs(ListNode head) {
-        // TODO: 16/6/23  
-        return null;
+        if(head == null || head.next == null) {
+            return head;
+        }
+        ListNode newhead = head.next;
+        ListNode node = head;
+        ListNode next = head.next;
+        while(node.next != null) {
+            ListNode temp = next.next;
+            next.next = node;
+            if(temp != null && temp.next != null) {
+                node.next = temp.next;
+            } else {
+                node.next = temp;
+                break;
+            }
+            node = temp;
+            next = node.next;
+        }
+        return newhead;
     }
 
     /**

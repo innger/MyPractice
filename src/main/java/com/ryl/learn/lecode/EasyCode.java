@@ -23,8 +23,23 @@ public class EasyCode {
 
         ListNode head = initList(9);
         printList(head);
-        ListNode newhead = code.swapPairs(head);
-        printList(newhead);
+        boolean b = code.isPalindrome(head);
+        System.out.println(b);
+    }
+
+    /**
+     * 371. Sum of Two Integers
+     * Calculate the sum of two integers a and b, but you are not allowed to use the operator + and -.
+     *
+     * @param a int
+     * @param b int
+     * @return sum
+     */
+    public int getSum(int a, int b) {
+        if (b == 0) return a;
+        int sum = a ^ b;
+        int carray = (a & b) << 1;
+        return getSum(sum, carray);
     }
 
     /**
@@ -35,16 +50,16 @@ public class EasyCode {
      * @return ListNode
      */
     public ListNode swapPairs(ListNode head) {
-        if(head == null || head.next == null) {
+        if (head == null || head.next == null) {
             return head;
         }
         ListNode newhead = head.next;
         ListNode node = head;
         ListNode next = head.next;
-        while(node.next != null) {
+        while (node.next != null) {
             ListNode temp = next.next;
             next.next = node;
-            if(temp != null && temp.next != null) {
+            if (temp != null && temp.next != null) {
                 node.next = temp.next;
             } else {
                 node.next = temp;
@@ -60,19 +75,20 @@ public class EasyCode {
      * 141. Linked List Cycle
      * Given a linked list, determine if it has a cycle in it.
      * 快慢指针
+     *
      * @param head ListNode
      * @return true/false
      */
     public boolean hasCycle(ListNode head) {
-        if(head == null || head.next == null) {
+        if (head == null || head.next == null) {
             return false;
         }
         ListNode slow = head;
         ListNode fast = head;
-        while(slow != null && fast != null && fast.next != null) {
+        while (slow != null && fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
-            if(slow == fast) {
+            if (slow == fast) {
                 return true;
             }
         }
@@ -84,6 +100,7 @@ public class EasyCode {
      * Given two arrays, write a function to compute their intersection.
      * 使用map记录nums1元素出现的次数,再遍历nums2判断 重复的元素
      * bug-free
+     *
      * @param nums1 int[]
      * @param nums2 int[]
      * @return int[]
@@ -127,14 +144,14 @@ public class EasyCode {
     /**
      * 234. Palindrome Linked List
      * 判断一个链表是不是回文
-     * 后半段链表翻转,两头往中间比较
+     * 前半段链表翻转,从中间外两头比较
      *
      * @param head listNode
      * @return true/false
      */
     public boolean isPalindrome(ListNode head) {
         if (head == null) {
-            return false;
+            return true;
         }
         if (head.next == null) {
             //单个元素
@@ -152,14 +169,50 @@ public class EasyCode {
         }
         if ((len & 1) == 0) {
             //偶数
-
-
+            int mid = len / 2;
+            int i = 0;
+            ListNode n1 = head;
+            ListNode n2 = head.next;
+            n1.next = null;
+            while (i < mid - 1) {
+                ListNode n = n2.next;
+                n2.next = n1;
+                n1 = n2;
+                n2 = n;
+                i++;
+            }
+            while (n1 != null && n2 != null) {
+                if (n1.val != n2.val) {
+                    return false;
+                }
+                n1 = n1.next;
+                n2 = n2.next;
+            }
+            return true;
         } else {
             //奇数
-
+            int mid = len / 2;
+            int i = 0;
+            ListNode n1 = head;
+            ListNode n2 = head.next;
+            n1.next = null;
+            while (i < mid) {
+                ListNode n = n2.next;
+                n2.next = n1;
+                n1 = n2;
+                n2 = n;
+                i++;
+            }
+            n1 = n1.next;
+            while (n1 != null && n2 != null) {
+                if (n1.val != n2.val) {
+                    return false;
+                }
+                n1 = n1.next;
+                n2 = n2.next;
+            }
+            return true;
         }
-        // TODO: 16/5/25  
-        return false;
     }
 
     /**
@@ -885,13 +938,13 @@ public class EasyCode {
         ListNode node = head;
         for (int i = 2; i <= n; i++) {
             ListNode tmp = new ListNode(i);
+            if (i > 5) {
+                tmp = new ListNode(10 - i);
+            }
+
             node.next = tmp;
             node = tmp;
-            /*if (i % 2 == 0) {
-                tmp = new ListNode(1);
-                node.next = tmp;
-                node = tmp;
-            }*/
+
         }
         return head;
     }

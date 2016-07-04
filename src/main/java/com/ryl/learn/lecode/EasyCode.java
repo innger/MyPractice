@@ -1,6 +1,7 @@
 package com.ryl.learn.lecode;
 
 import java.util.*;
+import java.util.regex.Matcher;
 
 /**
  * easy problem 002
@@ -25,6 +26,8 @@ public class EasyCode {
         printList(head);
         boolean b = code.isPalindrome(head);
         System.out.println(b);
+        int rec = code.computeArea(0,0,0,0,-1,-1,1,1);
+        System.out.println(rec);
     }
 
     /**
@@ -393,20 +396,36 @@ public class EasyCode {
      * @param F int
      * @param G int
      * @param H int
-     * @return area
+     * @return area int
      */
     public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
         int area1 = Math.abs((C - A) * (D - B));
         int area2 = Math.abs((G - E) * (H - F));
+        //判断两个矩形是否有重合
+        //无重合
+        int left1 = Math.min(A,C);
+        int right1 = Math.max(A,C);
+        int left2 = Math.min(E,G);
+        int right2 = Math.max(E,G);
+        if(right1 <= left2 || left1 >= right2) {
+            return area1 + area2;
+        }
+        int top1 = Math.max(B,D);
+        int bom1 = Math.min(B,D);
+        int top2 = Math.max(F,H);
+        int bom2 = Math.min(F,H);
+        if(bom1 >= top2 || top1 <= bom2) {
+            return area1 + area2;
+        }
+        //有重合,计算area3
+        int left = Math.max(left1,left2);
+        int right = Math.min(right1,right2);
+        int top = Math.min(top1,top2);
+        int bom = Math.max(bom1,bom2);
         //重合部分面积
         int area3 = 0;
-        //判断两个矩形是否有重合
-        if (isBetween(A, C, E) || isBetween(A, C, G)) {
-            // TODO: 16/5/20  
-        }
-
-        if (C > E && H > B) {
-            area3 = (C - E) * (H - B);
+        if(left < right && top > bom) {
+            area3 = (right - left) * (top - bom);
         }
         return area1 + area2 - area3;
     }

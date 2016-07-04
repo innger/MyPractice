@@ -10,7 +10,10 @@ public class MediumMain {
 
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
-        System.out.println(main.maxArea2(new int[]{1, 1, 2, 3, 4, 5, 6, 7}));
+        int[] arr = new int[]{1, 1, 1, 1, 3, 3};
+        arr = new int[]{1, 1, 1, 1, 2, 2, 3};
+        int len = main.removeDuplicates(arr);
+        System.out.println(len + " " + Arrays.toString(arr));
     }
 
     /**
@@ -52,6 +55,7 @@ public class MediumMain {
 
     /**
      * 优化方案,内部嵌套while循环,取消无用的面积计算
+     *
      * @param height int[]
      * @return maxArea
      */
@@ -685,10 +689,41 @@ public class MediumMain {
         return head;
     }
 
+    /**
+     * 80. Remove Duplicates from Sorted Array II
+     * What if duplicates are allowed at most twice?
+     * 重复的元素最多出现两次
+     * [1,1,1,2,2,3] return 5 with the first five elements of nums being 1, 1, 2, 2 and 3.
+     * It doesn't matter what you leave beyond the new length.
+     *
+     * @param nums int[]
+     * @return len int
+     */
     public int removeDuplicates(int[] nums) {
-        //Todo
-
-        return 1;
+        if (nums == null) return 0;
+        if (nums.length <= 2) return nums.length;
+        int i1 = 0;
+        int i2 = 1;
+        boolean dup = false;
+        while (i2 < nums.length) {
+            if (dup && nums[i1] == nums[i2]) {
+                i2++;
+                continue;
+            }
+            if (nums[i1] != nums[i2]) {
+                dup = false;
+                nums[++i1] = nums[i2];
+                i2++;
+                continue;
+            }
+            if (nums[i1] == nums[i2]) {
+                dup = true;
+                i1++;
+                nums[i1] = nums[i2];
+                i2++;
+            }
+        }
+        return i1 + 1;
     }
 
     public void rotate(int[][] matrix) {
@@ -710,8 +745,9 @@ public class MediumMain {
 
     /**
      * 从数组中选出序列,和为给定的target值,每个选中的数字不限次数
+     *
      * @param candidates int[]
-     * @param target int sum
+     * @param target     int sum
      * @return all combination
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {

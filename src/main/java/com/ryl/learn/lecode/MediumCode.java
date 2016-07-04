@@ -191,7 +191,8 @@ public class MediumCode {
     }
 
     /**
-     * Given nums = [0, 1, 3] return 2. 0-n find the missing number
+     * Given nums = [0, 1, 3] return 2.
+     * 0-n find the missing number
      *
      * @param nums 输入数组
      * @return 丢失的数字
@@ -199,7 +200,7 @@ public class MediumCode {
 
     public int missingNumber(int[] nums) {
         int len = nums.length;
-        int sum = ((len + 1) * len) / 2; //0-n求和
+        int sum = ((len + 1) * len) / 2; //0 - n求和
         int tmp = 0;
         for (int n : nums) {
             tmp += n;

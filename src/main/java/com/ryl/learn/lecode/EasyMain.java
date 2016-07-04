@@ -963,9 +963,9 @@ public class EasyMain {
      * b d f h j
      * c   g   k
      *
-     * @param str
-     * @param n
-     * @return
+     * @param str string
+     * @param n int
+     * @return string
      */
 
     public String zigZag(String str, int n) {

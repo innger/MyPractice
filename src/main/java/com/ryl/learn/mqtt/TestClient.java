@@ -61,12 +61,11 @@ public class TestClient {
             });
         }*/
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             String tid = StringUtils.remove(UUID.randomUUID().toString(),"-");
-//            tid = "Vwx1fpn/HSUDACcCT3IwJ0bs";
-//            tid = "V2K3hmCCuqYDAO/6R20jgJnp";
+            tid = "V3ISXalJAvEDAEXW5JGoBa0x";
             logger.info("tid={} i={}", tid, i);
-            TestClient client = new TestClient(tid, hostDaily);
+            TestClient client = new TestClient(tid, hostPub);
             client.init();
         }
     }

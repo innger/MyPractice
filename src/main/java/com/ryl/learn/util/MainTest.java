@@ -9,9 +9,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * MainTest
@@ -19,7 +23,7 @@ import java.util.*;
  */
 public class MainTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
         /*for (int i = 0; i < 10; i++) {
             System.out.println(UUID.randomUUID().toString());
             System.out.println(Integer.parseInt("b80cbec", 16));
@@ -34,15 +38,20 @@ public class MainTest {
 
         System.out.println(Charsets.UTF_8.displayName(Locale.TRADITIONAL_CHINESE));
         System.out.println("京A456221".substring(0, 2));
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             Integer msgId = new Random().nextInt(65535);
             int msgId2  = RandomUtils.nextInt(1, 65535);
             System.out.println(msgId + msgId2);
-
         }
 
-
-
+        String str = "androidauto://openFeature?featureName=openUrl&createTime=2016-07-05 14:03:11&actionUrl=http%3A%2F%2Fwww.baidu.com%3Fa%3D1%26a%3Dv&sourceApplication=amap";
+        Pattern pattern = Pattern.compile("actionUrl=(.*?)(&|$)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.find()) {
+            System.out.println(URLDecoder.decode(matcher.group(1),"UTF-8"));
+        }
+        String url = "http://www.baidu.com?a=1&a=v";
+        System.out.println(URLEncoder.encode(url, Charsets.UTF_8.name()));
     }
 
     public static String getServerIp() {

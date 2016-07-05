@@ -11,10 +11,12 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.joda.time.DateTime;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * wan图片上传
@@ -25,7 +27,9 @@ public class HttpUpload {
     private String username = "eppe123@sogou.com";
     private String password = "123456";
     private static final String url = "http://wan.sogou.com/feedback/upload.do?code=72089c_eppe123%40sogou.com";
-    private static final String filepath = "/Users/alibaba/Documents/p1465257560.jpg";
+    private static final String filepath = "/Users/lz/Pictures/8.jpg";
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private static final String format = "yyyy-MM-dd HH:mm:ss";
 
 
     public static void main(String[] args) {
@@ -49,11 +53,14 @@ public class HttpUpload {
             while (true) {
                 try {
                     HttpResponse response = httpclient.execute(httppost);
+                    String current = new DateTime().toString(format);
                     int statusCode = response.getStatusLine().getStatusCode();
                     if (statusCode == HttpStatus.SC_OK) {
                         HttpEntity resEntity = response.getEntity();
                         String result = EntityUtils.toString(resEntity);
-                        System.out.println(Thread.currentThread().getName() + " " + result);
+                        System.out.println(current + " " + Thread.currentThread().getName() + " " + result + " " + count.incrementAndGet());
+                    } else {
+                        System.out.println(current + " " + Thread.currentThread().getName() + " " + statusCode);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

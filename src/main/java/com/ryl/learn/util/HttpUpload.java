@@ -33,12 +33,15 @@ public class HttpUpload {
 
 
     public static void main(String[] args) {
-        ExecutorService service = Executors.newFixedThreadPool(100);
+        uploadImage();
+    }
+
+    public static void uploadImage() {
+        ExecutorService service = Executors.newFixedThreadPool(10);
         String url = "http://wan.sogou.com/feedback/upload.do?code=72089c_eppe123%40sogou.com";
         String filepath = "/Users/lz/Pictures/8.jpg";
-        url = "http://wan.sogou.com/ajax/i2.do?_=" + System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
-            service.submit(new i2doWorker(url));
+        for (int i = 0; i < 10; i++) {
+            service.submit(new UploadWorker(url,filepath));
         }
     }
 
@@ -80,22 +83,23 @@ public class HttpUpload {
         @Override
         public void run() {
             HttpClient httpclient = HttpClientBuilder.create().build();
-            HttpPost httppost = new HttpPost(url + "&t=" + System.currentTimeMillis());
             File file = new File(filepath);
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             builder.addBinaryBody("file", file, ContentType.DEFAULT_BINARY, RandomStringUtils.randomAlphanumeric(10) + ".jpg");
             HttpEntity entity = builder.build();
-            httppost.setEntity(entity);
             while (true) {
                 try {
+                    HttpPost httppost = new HttpPost(url + "&t=" + System.nanoTime());
+                    httppost.setEntity(entity);
+                    httppost.addHeader("Cookie","swfLayer=1; SUV=004F7D8DB65CFD03577C64796F108139; IPLOC=CN3301; JSESSIONID=aaapRZJZYX1LthVxv69wv; IESESSION=alive; tencentSig=5346518016; pgv_pvi=8242046976; pgv_si=s6700715008; _qdda=3-1.3k1w3y; _qddab=3-dgeab0.iqa8sx31; source=0010000100000; ppinf=5|1467771390|1468980990|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MTEwMHx1bmlxbmFtZTowOnxjcnQ6MTA6MTQ2Nzc3MTM5MHxyZWZuaWNrOjA6fHVzZXJpZDoxNzplcHBlMTIzQHNvZ291LmNvbXw; pprdig=foDvo2HeWBSdjGj_YxrcipFGxE11s1PkrEa-xpVaRLFRB9X04PpbyespjAnMDkyQr2A8iYoHuWbdC5AHeuHZhgx7t6Ow6C9HJQmkn0Tm0u7BRbuvXX0LarFz95uk-ghs960ywj17-dvqe8IJznBOn3MW1OWxoDoaLLeh-QXubbo; email=eppe123%40sogou.com; ppmdig=1467771391000000fd64e4845d6b5d3dad6586578df799e7; JSESSIONID=aaapRZJZYX1LthVxv69wv");
                     HttpResponse response = httpclient.execute(httppost);
                     String current = new DateTime().toString(format);
                     int statusCode = response.getStatusLine().getStatusCode();
                     if (statusCode == HttpStatus.SC_OK) {
                         HttpEntity resEntity = response.getEntity();
                         String result = EntityUtils.toString(resEntity);
-                        System.out.println(current + " " + Thread.currentThread().getName() + " " + result + " " + count.incrementAndGet());
+                        System.out.println(current + " " + Thread.currentThread().getName() + " " + statusCode+"/"+result + " " + count.incrementAndGet());
                     } else {
                         System.out.println(current + " " + Thread.currentThread().getName() + " " + statusCode);
                     }

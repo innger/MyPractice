@@ -52,10 +52,12 @@ public class HttpUpload {
     }
 
     public static void uploadApk() {
-        ExecutorService service = Executors.newFixedThreadPool(10);
+        ExecutorService service = Executors.newFixedThreadPool(1);
+        //open wan 上传接口没有做登录限制
         String url = "http://open.wan.sogou.com/api/game/create/demo/upload?1=1";
+//        url = "http://open.wan.sogou.com/api/file/upload/image?1=1";
         String filepath = "/Users/lz/Downloads/Animal_liqucn_1.33.apk";
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             service.submit(new UploadWorker(url, filepath));
         }
     }
@@ -130,7 +132,7 @@ public class HttpUpload {
                     } else {
                         System.out.println(current + " " + Thread.currentThread().getName() + " " + statusCode);
                     }
-//                    Thread.sleep(1000);
+                    Thread.sleep(1000);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println(e);

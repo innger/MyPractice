@@ -14,6 +14,9 @@ public class MediumMain {
         arr = new int[]{1, 1, 1, 1, 2, 2, 3};
         int len = main.removeDuplicates(arr);
         System.out.println(len + " " + Arrays.toString(arr));
+
+        int ugly = main.nthUglyNumber(7);
+        System.out.println(ugly);
     }
 
     /**
@@ -86,9 +89,50 @@ public class MediumMain {
         return max;
     }
 
+    /**
+     * 264. Ugly Number II
+     * Write a program to find the n-th ugly number.
+     * Ugly numbers are positive numbers whose prime factors only include 2, 3, 5.
+     * <p>
+     * 1, 2, 3, 4, 5, 6, 8, 9, 10, 12
+     * <p>
+     * Note that 1 is typically treated as an ugly number.
+     * 剑指offer上好像有类似题目
+     * @param n int
+     * @return the Nth
+     */
     public int nthUglyNumber(int n) {
-        //Todo
-        return 1;
+        if(n < 1) return 0;
+        if(n <= 6) return n;
+        List<Integer> l2 = new ArrayList<Integer>();
+        l2.add(2);
+        List<Integer> l3 = new ArrayList<Integer>();
+        l3.add(3);
+        List<Integer> l5 = new ArrayList<Integer>();
+        l5.add(5);
+        int i2 = 0,i3 = 0,i5 = 0;
+
+        int ugly = 0;
+        for(int i = 1; i < n; i++) {
+            int u2 = l2.get(i2);
+            int u3 = l3.get(i3);
+            int u5 = l5.get(i5);
+            ugly = Math.min(Math.min(u2,u3),u5);
+            System.out.println(ugly + " "+ l2 + " " + l3 + " "+ l5);
+            l2.add(ugly * 2);
+            l3.add(ugly * 3);
+            l5.add(ugly * 5);
+            if(ugly == u2) {
+                i2++;
+            }
+            if(ugly == u3) {
+                i3++;
+            }
+            if(ugly == u5) {
+                i5++;
+            }
+        }
+        return ugly;
     }
 
     /**

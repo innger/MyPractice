@@ -16,6 +16,19 @@ public class MediumCode {
     }
 
     /**
+     * 113. Path Sum II
+     * Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+     *
+     * @param root TreeNode
+     * @param sum int
+     * @return List<List<Integer>>
+     */
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        // TODO: 16/7/7  
+        return null;
+    }
+
+    /**
      * 166. Fraction to Recurring Decimal
      * @param numerator int 除数
      * @param denominator int 被除数

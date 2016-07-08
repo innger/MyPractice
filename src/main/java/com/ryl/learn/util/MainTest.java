@@ -8,6 +8,8 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -52,6 +54,11 @@ public class MainTest {
         }
         String url = "http://www.baidu.com?a=1&a=v";
         System.out.println(URLEncoder.encode(url, Charsets.UTF_8.name()));
+
+        //bigdecimal 四舍五入
+        BigDecimal decimal = new BigDecimal(12.005);
+        System.out.println(decimal.setScale(0,BigDecimal.ROUND_HALF_UP));
+
     }
 
     public static String getServerIp() {

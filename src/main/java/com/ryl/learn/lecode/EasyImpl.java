@@ -12,9 +12,12 @@ public class EasyImpl {
         EasyImpl easy = new EasyImpl();
 
         TreeNode root = new TreeNode(1);
-//        root.left = new TreeNode(2);
+        root.left = new TreeNode(2);
+//        root.right = new TreeNode(3);
+//        root.left.left = new TreeNode(4);
+//        root.left.right = new TreeNode(5);
         TreeNode node = root;
-        for(int i = 2 ; i<= 5 ;i++) {
+        for (int i = 2; i <= 5; i++) {
             TreeNode tmp = new TreeNode(i);
             node.left = tmp;
             node = tmp;
@@ -27,18 +30,18 @@ public class EasyImpl {
      * 112. Path Sum
      * Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that
      * adding up all the values along the path equals the given sum.
-     *
+     * <p>
      * 居然bug-free,这都行
      *
      * @param root TreeNode
-     * @param sum int
+     * @param sum  int
      * @return true/false
      */
     public boolean hasPathSum(TreeNode root, int sum) {
-        if(root == null) {
+        if (root == null) {
             return false;
         }
-        if(root.left == null && root.right == null ) {
+        if (root.left == null && root.right == null) {
             return root.val == sum;
         }
         return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
@@ -55,20 +58,27 @@ public class EasyImpl {
      * @return int depth
      */
     public int minDepth(TreeNode root) {
-        //// TODO: 16/7/7
         if (root == null) return 0;
         if (root.left == null && root.right == null) {
             return 1;
         }
-        int left = 1 + minDepth(root.left);
-        System.out.println(left);
-        int right = 1 + minDepth(root.right);
+        int left = 0;
+        if (root.left != null) {
+            left = 1 + minDepth(root.left);
+        }
+        int right = 0;
+        if (root.right != null) {
+            right = 1 + minDepth(root.right);
+        }
+        if (left == 0 || right == 0) {
+            return Math.max(left, right);
+        }
         return Math.min(left, right);
     }
 
     private int findLeaf(TreeNode root) {
-        if(root == null) return 0;
-        if(root.left == null && root.right == null) {
+        if (root == null) return 0;
+        if (root.left == null && root.right == null) {
             return 1;
         }
         return 1;

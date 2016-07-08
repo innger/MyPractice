@@ -1,6 +1,9 @@
 package com.ryl.learn.lecode;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * EasyImpl 实现
@@ -24,6 +27,98 @@ public class EasyImpl {
         }
 
         System.out.println(easy.minDepth(root));
+    }
+
+    /**
+     * 225. Implement Stack using Queues
+     * LinkedList 居然实现Deque extends Queue接口
+     */
+    class MyStack {
+
+        private Queue<Integer> queue1 = new LinkedList<Integer>();
+        private Queue<Integer> queue2 = new LinkedList<Integer>();
+
+        // Push element x onto stack.
+        public void push(int x) {
+            while (!queue1.isEmpty()) {
+                Integer i = queue1.poll();
+                queue2.add(i);
+            }
+            queue1.add(x);
+            while (!queue2.isEmpty()) {
+                Integer i = queue2.poll();
+                queue1.add(i);
+            }
+        }
+
+        // Removes the element on top of the stack.
+        public void pop() {
+            queue1.poll();
+        }
+
+        // Get the top element.
+        public int top() {
+            return queue1.peek();
+        }
+
+        // Return whether the stack is empty.
+        public boolean empty() {
+            return queue1.isEmpty();
+        }
+    }
+
+
+    /**
+     * 232. Implement Queue using Stacks
+     * bug-free
+     */
+    class MyQueue {
+
+        private Stack<Integer> inStack = new Stack<Integer>();
+        private Stack<Integer> outStack = new Stack<Integer>();
+
+        // Push element x to the back of queue.
+        public void push(int x) {
+            while (!inStack.isEmpty()) {
+                Integer i = inStack.pop();
+                outStack.push(i);
+            }
+            inStack.push(x);
+            while (!outStack.isEmpty()) {
+                Integer i = outStack.pop();
+                inStack.push(i);
+            }
+        }
+
+        // Removes the element from in front of queue.
+        public void pop() {
+            inStack.pop();
+        }
+
+        // Get the front element.
+        public int peek() {
+            return inStack.peek();
+        }
+
+        // Return whether the queue is empty.
+        public boolean empty() {
+            return inStack.isEmpty();
+        }
+    }
+
+
+    /**
+     * 235. Lowest Common Ancestor of a Binary Search Tree
+     * Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+     *
+     * @param root TreeNode
+     * @param p    TreeNode
+     * @param q    TreeNode
+     * @return TreeNode
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+        return null;
     }
 
     /**
@@ -53,6 +148,7 @@ public class EasyImpl {
      * Depth-first Search
      * Breadth-first Search
      * 叶子节点到根节点的最短高度
+     * 二叉树递归解法,一般看上去都很对称美
      *
      * @param root TreeNode
      * @return int depth
@@ -76,14 +172,6 @@ public class EasyImpl {
         return Math.min(left, right);
     }
 
-    private int findLeaf(TreeNode root) {
-        if (root == null) return 0;
-        if (root.left == null && root.right == null) {
-            return 1;
-        }
-        return 1;
-    }
-
     static class TreeNode {
         int val;
         TreeNode left;
@@ -103,6 +191,7 @@ public class EasyImpl {
      * @return
      */
     public TreeNode constructTree(List<Integer> list) {
+        //todo
         return null;
     }
 }

@@ -11,8 +11,34 @@ public class MediumCode {
 
     public static void main(String[] args) {
         MediumCode code = new MediumCode();
+        int[] arr = new int[]{-2,1,};
+        System.out.println(code.maxSubArray(arr));
 
+    }
 
+    /**
+     * 53. Maximum Subarray
+     * Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+     * 连续子数组最大值
+     *
+     * @param nums int[]
+     * @return int max
+     */
+    public int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        int cur = nums[0];
+        int max = cur;
+        for (int i = 1; i < nums.length; i++) {
+            if (cur < 0) {
+                cur = 0;
+            }
+            cur = cur + nums[i];
+            if (cur > max) {
+                max = cur;
+            }
+        }
+        return max;
     }
 
     /**
@@ -20,7 +46,7 @@ public class MediumCode {
      * Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
      *
      * @param root TreeNode
-     * @param sum int
+     * @param sum  int
      * @return List<List<Integer>>
      */
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
@@ -30,7 +56,8 @@ public class MediumCode {
 
     /**
      * 166. Fraction to Recurring Decimal
-     * @param numerator int 除数
+     *
+     * @param numerator   int 除数
      * @param denominator int 被除数
      * @return string 小数表示
      */
@@ -41,6 +68,7 @@ public class MediumCode {
     /**
      * 菲波那切数列
      * "112358" is an additive number because the digits can form an additive sequence: 1, 1, 2, 3, 5, 8.
+     *
      * @param num string
      * @return true/false
      */
@@ -50,6 +78,7 @@ public class MediumCode {
 
     /**
      * 二叉树前序遍历
+     *
      * @param root treeNode
      * @return list
      */
@@ -70,6 +99,7 @@ public class MediumCode {
 
     /**
      * 开关灯,最后剩几盏灯亮着
+     *
      * @param n int
      * @return int
      */

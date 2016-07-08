@@ -16,17 +16,44 @@ public class EasyImpl {
 
         TreeNode root = new TreeNode(1);
         root.left = new TreeNode(2);
-//        root.right = new TreeNode(3);
-//        root.left.left = new TreeNode(4);
-//        root.left.right = new TreeNode(5);
-        TreeNode node = root;
-        for (int i = 2; i <= 5; i++) {
-            TreeNode tmp = new TreeNode(i);
-            node.left = tmp;
-            node = tmp;
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+        root.left.right.left = new TreeNode(6);
+        root.left.right.right = new TreeNode(7);
+//        TreeNode node = root;
+//        for (int i = 2; i <= 5; i++) {
+//            TreeNode tmp = new TreeNode(i);
+//            node.left = tmp;
+//            node = tmp;
+//        }
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        System.out.println(root.val + " " + root.right.val);
+        easy.findPath(root, root.right, stack);
+        while (!stack.empty()) {
+            System.out.println(stack.pop().val);
+        }
+        System.out.println("===================");
+        System.out.println(root.val + " " + root.left.right.val);
+        easy.findPath(root, root.left.right, stack);
+        while (!stack.empty()) {
+            System.out.println(stack.pop().val);
         }
 
-        System.out.println(easy.minDepth(root));
+        easy.lowestCommonAncestor(root, root, root.right);
+
+    }
+
+    /**
+     * 257. Binary Tree Paths
+     * Given a binary tree, return all root-to-leaf paths.
+     *
+     * @param root TreeNode
+     * @return List<String>
+     */
+    public List<String> binaryTreePaths(TreeNode root) {
+        // TODO: 16/7/8  
+        return null;
     }
 
     /**
@@ -110,6 +137,8 @@ public class EasyImpl {
     /**
      * 235. Lowest Common Ancestor of a Binary Search Tree
      * Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+     * <p>
+     * 两个链表,找最后一个公共节点
      *
      * @param root TreeNode
      * @param p    TreeNode
@@ -117,8 +146,58 @@ public class EasyImpl {
      * @return TreeNode
      */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Stack<TreeNode> stack1 = new Stack<TreeNode>();
+        Stack<TreeNode> stack2 = new Stack<TreeNode>();
+        findPath(root, p, stack1);
+        findPath(root, q, stack2);
+        TreeNode[] arr1 = new TreeNode[stack1.size()];
+        int i = stack1.size() - 1;
+        while (!stack1.empty()) {
+            arr1[i] = stack1.pop();
+            i--;
+        }
 
-        return null;
+        i = stack2.size() - 1;
+        TreeNode[] arr2 = new TreeNode[stack2.size()];
+        while (!stack2.empty()) {
+            arr2[i] = stack2.pop();
+            i--;
+        }
+        TreeNode commom = null;
+        i = 0;
+        while (i < arr1.length && i < arr2.length) {
+            if (arr1[i] == arr2[i]) {
+                commom = arr1[i];
+            } else {
+                break;
+            }
+            i++;
+        }
+        return commom;
+    }
+
+    private boolean findPath(TreeNode root, TreeNode p, Stack<TreeNode> stack) {
+        // TODO: 16/7/8
+        if (root == null)
+            return false;
+        if (root == p) {
+            stack.push(p);
+            return true;
+        }
+        boolean res = false;
+        stack.push(root);
+        if (root.left != null) {
+            res = findPath(root.left, p, stack);
+        }
+        if (res) return true;
+
+        stack.pop();
+        if (root.right != null) {
+            res = findPath(root.right, p, stack);
+            if(!res)
+                stack.push(root);
+        }
+        return res;
     }
 
     /**

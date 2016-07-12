@@ -452,7 +452,6 @@ public class EasyMain {
         } else {
             tmp.next = head2;
         }
-//        printListNode(head);
         return head;
     }
 

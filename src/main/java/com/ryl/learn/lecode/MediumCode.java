@@ -1,6 +1,7 @@
 package com.ryl.learn.lecode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,9 +12,69 @@ public class MediumCode {
 
     public static void main(String[] args) {
         MediumCode code = new MediumCode();
-        int[] arr = new int[]{-2,1,};
-        System.out.println(code.maxSubArray(arr));
+        System.out.println(code.canJump(new int[]{2,3,1,1,4}));
+        System.out.println(code.canJump(new int[]{3,2,1,0,4}));
+    }
 
+    /**
+     * 55. Jump Game
+     * Each element in the array represents your maximum jump length at that position.
+     * Determine if you are able to reach the last index.
+     * A = [2,3,1,1,4], return true.
+     * A = [3,2,1,0,4], return false.
+     * <p>
+     * 动态规划的题目，保存一个当前最大可到达的距离maxreach，和一个当前这步可到达的距离比较,可以得到状态转移方程
+     * max(maxreach, A[i] + i);
+     * 遍历一遍数组，如果到某一步的时候最大距离并不能到这里，则说明不能走到最后，时间复杂度为O(N), 空间复杂度为O(1),
+     *
+     * @param nums int[]
+     * @return true/false
+     */
+    public boolean canJump(int[] nums) {
+        if (nums == null || nums.length == 0) return true;
+        int maxreach = 0;
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            if (maxreach < i) return false;
+            maxreach = Math.max(maxreach, nums[i] + i);
+        }
+        return true;
+    }
+
+    /**
+     * 313. Super Ugly Number
+     * Super ugly numbers are positive numbers whose all prime factors are in the given prime list primes of size k
+     * 1 is a super ugly number for any given primes
+     * The given numbers in primes are in ascending order
+     * 0 < k ≤ 100, 0 < n ≤ 106, 0 < primes[i] < 1000
+     * <p>
+     * 和ugly number的思路差不多，都是保存给的几个素数在ugly序列中的位置，代表那个位置的ugly number乘以那个素数大于当前的数，
+     * 这样每次就可以比较得到当前哪个相乘可以得到最小的ugly number.
+     *
+     * @param n      int
+     * @param primes int[]
+     * @return int 第n个super ugly number
+     */
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        int[] arr = new int[n]; //ugly number array
+        arr[0] = 1;
+        int len = primes.length;
+        int[] index = new int[len]; //针对primes元素的倍数
+        for (int m = 1; m < n; m++) {
+            int min = Integer.MAX_VALUE;
+            for (int i = 0; i < len; i++) {
+                min = Math.min(arr[index[i]] * primes[i], min);
+            }
+            arr[m] = min;
+            //更新index array
+            for (int i = 0; i < len; i++) {
+                while (arr[index[i]] * primes[i] <= min) {
+                    index[i]++;
+                }
+            }
+        }
+        System.out.println(Arrays.toString(arr));
+        return arr[n - 1];
     }
 
     /**
@@ -62,19 +123,75 @@ public class MediumCode {
      * @return string 小数表示
      */
     public String fractionToDecimal(int numerator, int denominator) {
+        // TODO: 16/7/12  
         return null;
     }
 
     /**
+     * 306. Additive Number
+     * <p>
      * 菲波那切数列
      * "112358" is an additive number because the digits can form an additive sequence: 1, 1, 2, 3, 5, 8.
+     * Given a string containing only digits '0'-'9', write a function to determine if it's an additive number.
+     * 确定第一个 第二个数,后续验证,可能超出Integer范围,使用string模拟大整数相加
      *
      * @param num string
      * @return true/false
      */
     public boolean isAdditiveNumber(String num) {
+        int len = num.length();
+        if (len < 3) return false;
+        for (int i = 1; i <= len - 2; i++) {
+            String num1 = num.substring(0, i);
+            for (int j = i + 1; j <= len - 1; j++) {
+                String num2 = num.substring(i, j);
+                String num3 = num.substring(j);
+                if (DFS(num1, num2, num3)) return true;
+                if (num.charAt(i) == '0') break;
+            }
+            if (num.charAt(0) == '0') break;
+        }
         return false;
     }
+
+    //deep first search
+    private boolean DFS(String num1, String num2, String num3) {
+        if (num3.length() == 0) return true;
+        String sum = addBigInteger(num1, num2);
+        for (int i = 1; i <= num3.length(); i++) {
+            String str = num3.substring(0, i);
+            String term = num3.substring(i);
+            if (str.equals(sum) && DFS(num2, str, term)) return true;
+            if (num3.charAt(0) == '0') break;
+        }
+        return false;
+    }
+
+
+    private String addBigInteger(String num1, String num2) {
+        int len1 = num1.length();
+        int len2 = num2.length();
+        String sum = "";
+        int flag = 0;
+        while (len1 > 0 || len2 > 0) {
+            int val = 0;
+            if (len1 > 0) {
+                val += num1.charAt(len1 - 1) - '0';
+                len1--;
+            }
+            if (len2 > 0) {
+                val += num2.charAt(len2 - 1) - '0';
+                len2--;
+            }
+            sum = String.valueOf((val + flag) % 10) + sum;
+            flag = (val + flag) / 10;
+        }
+        if (flag > 0) {
+            sum = "1" + sum;
+        }
+        return sum;
+    }
+
 
     /**
      * 二叉树前序遍历

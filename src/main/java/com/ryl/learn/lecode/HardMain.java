@@ -3,7 +3,7 @@ package com.ryl.learn.lecode;
 import java.util.Arrays;
 
 /**
- * hard problem
+ * hard problem 001
  * Created by renyulong on 16/2/3.
  */
 public class HardMain {
@@ -15,7 +15,13 @@ public class HardMain {
         System.out.println(main.maxProfitTimeLimit(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
     }
 
-    //http://liangjiabin.com/blog/2015/04/leetcode-best-time-to-buy-and-sell-stock.html
+    /**
+     *
+     *
+     * http://liangjiabin.com/blog/2015/04/leetcode-best-time-to-buy-and-sell-stock.html
+     * @param prices int[]
+     * @return max int
+     */
     public int maxProfit(int[] prices) {
         if (prices == null || prices.length == 0) {
             return 0;

@@ -1,9 +1,6 @@
 package com.ryl.learn.lecode;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * EasyImpl 实现
@@ -18,6 +15,7 @@ public class EasyImpl {
         root.left = new TreeNode(2);
         root.right = new TreeNode(3);
         root.left.left = new TreeNode(4);
+        root.left.left.left = new TreeNode(8);
         root.left.right = new TreeNode(5);
         root.left.right.left = new TreeNode(6);
         root.left.right.right = new TreeNode(7);
@@ -27,22 +25,30 @@ public class EasyImpl {
 //            node.left = tmp;
 //            node = tmp;
 //        }
-        Stack<TreeNode> stack = new Stack<TreeNode>();
-        System.out.println(root.val + " " + root.right.val);
-        easy.findPath(root, root.right, stack);
-        while (!stack.empty()) {
-            System.out.println(stack.pop().val);
+        Deque<TreeNode> list = new LinkedList<TreeNode>();
+        System.out.println(root.val + " " + root.left.left.left.val);
+        easy.findPath(root, root.left.left.left, list);
+        while (!list.isEmpty()) {
+            TreeNode node = list.removeLast();
+            System.out.println(node.val);
+        }
+
+        System.out.println("===================");
+        list = new LinkedList<TreeNode>();
+        System.out.println(root.val + " " + root.left.right.val);
+        easy.findPath(root, root.left.right, list);
+        while (!list.isEmpty()) {
+            TreeNode node = list.removeLast();
+            System.out.println(node.val);
         }
         System.out.println("===================");
-        System.out.println(root.val + " " + root.left.right.val);
-        easy.findPath(root, root.left.right, stack);
-        while (!stack.empty()) {
-            System.out.println(stack.pop().val);
-        }
-
-        easy.lowestCommonAncestor(root, root, root.right);
+        TreeNode common = easy.lowestCommonAncestor2(root, root.left.right, root.left.left.left);
+        System.out.println(common.val);
 
     }
+
+
+
 
     /**
      * 257. Binary Tree Paths
@@ -55,6 +61,18 @@ public class EasyImpl {
         // TODO: 16/7/8  
         return null;
     }
+
+    private boolean findPath(TreeNode root, Deque<TreeNode> deque) {
+        if (root == null) {
+            return false;
+        }
+        if (root.left == null && root.right == null) {
+            deque.addLast(root);
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * 225. Implement Stack using Queues
@@ -133,12 +151,40 @@ public class EasyImpl {
         }
     }
 
+    /**
+     * 235. Lowest Common Ancestor of a Binary [Search] Tree
+     * 二叉搜索树 有更方便的解法 bug-free
+     * Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+     *
+     * @param root TreeNode
+     * @param p    TreeNode
+     * @param q    TreeNode
+     * @return TreeNode
+     */
+    public TreeNode lowestCommonAncestorSearch(TreeNode root, TreeNode p, TreeNode q) {
+        int min = Math.min(p.val, q.val);
+        int max = Math.max(p.val, q.val);
+        return lowestCommonAncestorValue(root, min, max);
+    }
+
+    public TreeNode lowestCommonAncestorValue(TreeNode root, int min, int max) {
+        if(min <= root.val && max >= root.val) {
+            return root;
+        }
+        if(max <= root.val) {
+            return lowestCommonAncestorValue(root.left, min, max);
+        } else {
+            return lowestCommonAncestorValue(root.right, min, max);
+        }
+    }
+
 
     /**
-     * 235. Lowest Common Ancestor of a Binary Search Tree
-     * Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
-     * <p>
+     * 236. Lowest Common Ancestor of a Binary Tree
+     * Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
+     * 找出二叉树两个节点的最低公共祖先
      * 两个链表,找最后一个公共节点
+     * 针对任意二叉树的通用解法
      *
      * @param root TreeNode
      * @param p    TreeNode
@@ -176,26 +222,81 @@ public class EasyImpl {
         return commom;
     }
 
+    //使用deque
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        Deque<TreeNode> list1 = new LinkedList<TreeNode>();
+        Deque<TreeNode> list2 = new LinkedList<TreeNode>();
+        findPath(root, p, list1);
+        findPath(root, q, list2);
+        TreeNode common = root;
+        while(!list1.isEmpty() && !list2.isEmpty()) {
+            TreeNode node1 = list1.removeLast();
+            TreeNode node2 = list2.removeLast();
+            if(node1 == node2) {
+                common = node1;
+            } else {
+                break;
+            }
+        }
+        return common;
+    }
+
+
+    /**
+     * 剑指offer上最后一题
+     * 2016-07-11 早上来了还是翻书参考才写出来
+     * 二叉树递归遍历,用栈模拟 easy code
+     *
+     * @param root  TreeNode 根节点
+     * @param p     TreeNode 目标节点
+     * @param stack 栈
+     * @return true/false
+     */
     private boolean findPath(TreeNode root, TreeNode p, Stack<TreeNode> stack) {
-        // TODO: 16/7/8
         if (root == null)
             return false;
         if (root == p) {
-            stack.push(p);
+            stack.push(root);
             return true;
         }
         boolean res = false;
-        stack.push(root);
+        stack.push(root); //开始push
         if (root.left != null) {
             res = findPath(root.left, p, stack);
         }
-        if (res) return true;
-
-        stack.pop();
+        if (res) return true; //找到节点返回
         if (root.right != null) {
             res = findPath(root.right, p, stack);
-            if(!res)
-                stack.push(root);
+        }
+        if (!res) stack.pop(); //左右节点均没有找到,pop出来 最后pop 中间不对stack操作
+        return res;
+    }
+
+    /**
+     * 使用双向队列deque遍历
+     *
+     * @param root  TreeNode
+     * @param p     TreeNode
+     * @param deque deque 双向队列
+     * @return true/false
+     */
+    private boolean findPath(TreeNode root, TreeNode p, Deque<TreeNode> deque) {
+        if (root == null) return false;
+        if (root == p) {
+            deque.push(root);
+            return true;
+        }
+        boolean res = false;
+        deque.push(root);
+        if (root.left != null) {
+            res = findPath(root.left, p, deque);
+        }
+        if (res) return true;
+        if (root.right != null) {
+            res = findPath(root.right, p, deque);
+        }
+        if (!res) {
+            deque.pop();
         }
         return res;
     }

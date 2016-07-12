@@ -8,22 +8,16 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.nio.client.HttpAsyncClient;
 import org.apache.http.util.EntityUtils;
 import org.joda.time.DateTime;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -44,8 +38,8 @@ public class HttpUpload {
 
     public static void main(String[] args) {
 //        uploadApk();
-//        uploadImage();
-        sendHttp();
+        uploadImage();
+//        sendHttp();
     }
 
     public static void sendHttp() {
@@ -73,9 +67,10 @@ public class HttpUpload {
         ExecutorService service = Executors.newFixedThreadPool(10);
         String url = "http://wan.sogou.com/feedback/upload.do?code=70c03a_eppe333%40sogou.com";
         url = "http://mini.wan.sogou.com/v1/feedback/upload.do?code=22f172_eppe222@sogou.com";
+        url = "http://upload.i.sogou.com/upload.php?f=1&sw=50&lw=100&m=1&p=1&type=logo&upurl=http://haha.sogou.com/setting/";
         String filepath = "/Users/lz/Pictures/";
         for (int i = 0; i < 10; i++) {
-            service.submit(new UploadWorker(url, filepath + "1.jpg"));
+            service.submit(new UploadWorker(url, filepath +i +".jpg"));
         }
     }
 
@@ -98,14 +93,14 @@ public class HttpUpload {
 
                     List<NameValuePair> nvps = new ArrayList<NameValuePair>();
                     nvps.add(new BasicNameValuePair("content", "游戏难度有点大啊"));
-                    nvps.add(new BasicNameValuePair("gid","178"));
-                    nvps.add(new BasicNameValuePair("phone","13814567860"));
-                    nvps.add(new BasicNameValuePair("pic",""));
-                    nvps.add(new BasicNameValuePair("qq","1111"));
-                    nvps.add(new BasicNameValuePair("role","万世"));
-                    nvps.add(new BasicNameValuePair("sid","150"));
-                    nvps.add(new BasicNameValuePair("time","2016-01-01 00:00"));
-                    nvps.add(new BasicNameValuePair("type","10"));
+                    nvps.add(new BasicNameValuePair("gid", "178"));
+                    nvps.add(new BasicNameValuePair("phone", "13814567860"));
+                    nvps.add(new BasicNameValuePair("pic", ""));
+                    nvps.add(new BasicNameValuePair("qq", "1111"));
+                    nvps.add(new BasicNameValuePair("role", "万世"));
+                    nvps.add(new BasicNameValuePair("sid", "150"));
+                    nvps.add(new BasicNameValuePair("time", "2016-01-01 00:00"));
+                    nvps.add(new BasicNameValuePair("type", "10"));
 
                     post.setEntity(new UrlEncodedFormEntity(nvps, Charsets.UTF_8));
 
@@ -136,13 +131,14 @@ public class HttpUpload {
             File file = new File(filepath);
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-            builder.addBinaryBody("file", file, ContentType.DEFAULT_BINARY, RandomStringUtils.randomAlphanumeric(10) + ".jpg");
+            builder.addBinaryBody("Filedata", file, ContentType.DEFAULT_BINARY, RandomStringUtils.randomAlphanumeric(10) + ".jpg");
             HttpEntity entity = builder.build();
+            HttpPost httppost = new HttpPost(url + "&t=" + System.nanoTime());
+            httppost.setEntity(entity);
+            httppost.addHeader("Cookie", "SUV=004F7D8DB65CFD03577C64796F108139; pgv_pvi=8242046976; pgv_si=s6700715008; _ga=GA1.2.791106921.1467774573; IPLOC=CN1101; CXID=78B03FEC87FDF83DF09FC8A6BB8480CB; ad=Tyllllllll2gKAAAlllllVNM33wlllllHO8dlkllll9lllllxCxlw@@@@@@@@@@@; SUID=03FD5CB65412940A00000000577CC9E4; ppinf=5|1467966019|1469175619|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MTEwMHx1bmlxbmFtZTowOnxjcnQ6MTA6MTQ2Nzk2NjAxOXxyZWZuaWNrOjA6fHVzZXJpZDoxNzplcHBlNDQ0QHNvZ291LmNvbXw; pprdig=IUYU9VFQwidsHJ34U_QUr1NYjqsB9MbR7OLFahpm2WEZLJDY02wCKz_Ko9pb-yULU4A_0xcESFEvzRUyecMNaeEDkZiXzNXeDSbSM0h6a-XoMNKl3-hqAUIqIix-hg4ioMGZqLbXRjcvV4LwIBfq_av60u01DIc7HMkDuRukVrs; GOTO=");
+
             while (true) {
                 try {
-                    HttpPost httppost = new HttpPost(url + "&t=" + System.nanoTime());
-                    httppost.setEntity(entity);
-                    httppost.addHeader("Cookie", "swfLayer=1; SUV=004F7D8DB65CFD03577C64796F108139; pgv_pvi=8242046976; pgv_si=s6700715008; GOTO=; _ga=GA1.2.791106921.1467774573; IPLOC=CN1101; SUID=03FD5CB65412940A00000000577CC9E4; source=0010000100000; countdate=1|1467801812; email=eppe333%40sogou.com; JSESSIONID=aaapRZJZYX1LthVxv69wv; hostid=85749493; ppinf=5|1467802164|1469011764|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MTEwMHx1bmlxbmFtZTowOnxjcnQ6MTA6MTQ2NzgwMjE2NHxyZWZuaWNrOjA6fHVzZXJpZDoxNzplcHBlMjIyQHNvZ291LmNvbXw; pprdig=OiC292MQTFH5CuRgiZcWYrBSq-wsw9k7kLxwSztRq72wizaLBrYGzWVlddMFb6owA36VkVuhGjJpaWdvh1X8Ft29dQH51Uq_GymB1RWn8d1QWRDcAfdzeJG6Y--HwvBHtRzVFghxlwNXOrDe0eG6WKRD5zKtGyQ0WkQXnZOiDvU; ppmdig=1467802164000000e3476b8ff23581871d75913e5f53848d");
                     HttpResponse response = httpclient.execute(httppost);
                     String current = new DateTime().toString(format);
                     int statusCode = response.getStatusLine().getStatusCode();
@@ -153,7 +149,6 @@ public class HttpUpload {
                     } else {
                         System.out.println(current + " " + Thread.currentThread().getName() + " " + statusCode);
                     }
-                    Thread.sleep(1000);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println(e);

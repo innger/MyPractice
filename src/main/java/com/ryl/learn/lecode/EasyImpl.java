@@ -45,9 +45,57 @@ public class EasyImpl {
         TreeNode common = easy.lowestCommonAncestor2(root, root.left.right, root.left.left.left);
         System.out.println(common.val);
 
+        easy.levelOrder(root);
     }
 
+    /**
+     * 102. Binary Tree Level Order Traversal
+     * from left to right, level by level
+     * 从上到下按层打印二叉树节点值
+     * 剑指offer deque
+     *
+     * @param root TreeNode
+     * @return List the level order traversal of its nodes' values
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if(root == null) {
+            return result;
+        }
+        Deque<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.addFirst(root);
+        while(true) {
+            List<Integer> list = new ArrayList<Integer>();
+            Deque<TreeNode> tmpQ = new LinkedList<TreeNode>();
+            while (!queue.isEmpty()) {
+                TreeNode node = queue.removeLast();
+                list.add(node.val);
+                if (node.left != null) {
+                    tmpQ.addFirst(node.left);
+                }
+                if (node.right != null) {
+                    tmpQ.addFirst(node.right);
+                }
+            }
+            if(list.size() > 0) {
+                result.add(list);
+            }
+            if(tmpQ.isEmpty())
+                break;
+            queue = tmpQ;
+        }
+        return result;
+    }
 
+    /**
+     * 107. Binary Tree Level Order Traversal II
+     *  from left to right, level by level from leaf to root
+     * @param root TreeNode
+     * @return List 从下到上按层打印二叉树节点值
+     */
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        return null;
+    }
 
 
     /**
@@ -58,19 +106,22 @@ public class EasyImpl {
      * @return List<String>
      */
     public List<String> binaryTreePaths(TreeNode root) {
-        // TODO: 16/7/8  
-        return null;
+        List<String> paths = new ArrayList<String>();
+        if(root != null) {
+            findPath(root,String.valueOf(root.val), paths);
+        }
+        return paths;
     }
 
-    private boolean findPath(TreeNode root, Deque<TreeNode> deque) {
-        if (root == null) {
-            return false;
+    private void findPath(TreeNode root, String val, List<String> paths) {
+        if(root == null) return;
+        if(root.left == null && root.right == null) paths.add(val);
+        if(root.left != null) {
+            findPath(root.left,val+"->"+root.left.val, paths);
         }
-        if (root.left == null && root.right == null) {
-            deque.addLast(root);
-            return true;
+        if(root.right != null) {
+            findPath(root.right, val +"->" + root.right.val,paths);
         }
-        return false;
     }
 
 

@@ -12,8 +12,89 @@ public class MediumCode {
 
     public static void main(String[] args) {
         MediumCode code = new MediumCode();
-        System.out.println(code.canJump(new int[]{2, 3, 1, 1, 4}));
-        System.out.println(code.canJump(new int[]{3, 2, 1, 0, 4}));
+//        System.out.println(code.canJump(new int[]{2, 3, 1, 1, 4}));
+//        System.out.println(code.canJump(new int[]{3, 2, 1, 0, 4}));
+
+        int[][] matrix = new int[][]{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 50}};
+        matrix = new int[][]{{1}};
+        System.out.println(code.searchMatrix(matrix, 2));
+    }
+
+    /**
+     * 240. Search a 2D Matrix II
+     * Write an efficient algorithm that searches for a value in an m x n matrix.
+     * (1) Integers in each row are sorted in ascending from left to right. 每一行递增
+     * (2) Integers in each column are sorted in ascending from top to bottom. 每一列递增
+     * 剑指offer 从右上角开始查找,缩小范围
+     *
+     * [
+     * [1,   4,  7, 11, 15],
+     * [2,   5,  8, 12, 19],
+     * [3,   6,  9, 16, 22],
+     * [10, 13, 14, 17, 24],
+     * [18, 21, 23, 26, 30]
+     * ]
+     *
+     * @param matrix int[][]
+     * @param target int
+     * @return true/false
+     */
+    public boolean searchMatrixII(int[][] matrix, int target) {
+        if (matrix == null) {
+            return false;
+        }
+        int m = 0;
+        int n = matrix[0].length - 1;
+        while (m <= matrix.length - 1 && n >= 0) {
+            if (matrix[m][n] == target) {
+                return true;
+            } else if (matrix[m][n] > target) {
+                n--;
+            } else {
+                m++;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 74. Search a 2D Matrix
+     * Write an efficient algorithm that searches for a value in an m x n matrix.
+     * (1) Integers in each row are sorted from left to right.
+     * (2) The first integer of each row is greater than the last integer of the previous row.
+     * 每行首元素都比上一行的最后一个元素要大
+     * 按照II剑指offer方法,从右上角开始查找也AC
+     * 应该有另外的方法 [二分查找]
+     * <p>
+     * [
+     * [1,   3,  5,  7],
+     * [10, 11, 16, 20],
+     * [23, 30, 34, 50]
+     * ]
+     *
+     * @param matrix int[][]
+     * @param target int
+     * @return true/false
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if(matrix == null) return false;
+        int i = 0;
+        int j = matrix.length * matrix[0].length;
+        while (i <= j) {
+            int mid = (j - i) / 2 + i; //(i+j)/2 会int溢出
+            int m = mid / matrix[0].length;
+            int n = mid % matrix[0].length;
+            if(m > matrix.length - 1 || n > matrix[0].length - 1)
+                break;
+            if(matrix[m][n] == target) {
+                return true;
+            } else if (matrix[m][n] > target) {
+                j = mid - 1 ;
+            }  else {
+                i = mid + 1;
+            }
+        }
+        return false;
     }
 
     /**
@@ -23,7 +104,7 @@ public class MediumCode {
      * @return 二叉树的先序遍历
      */
     public List<Integer> preorderTraversal(TreeNode root) {
-    // TODO: 16/7/13
+        // TODO: 16/7/13
         return null;
     }
 

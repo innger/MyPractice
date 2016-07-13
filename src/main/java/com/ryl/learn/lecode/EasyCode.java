@@ -231,6 +231,20 @@ public class EasyCode {
     }
 
     /**
+     * 输出每个移动区间内最小值 [堆排序-最大堆]
+     * 构建m大小的最大堆
+     * 这么简单的问题,当时居然没想出来,确实太挫了
+     *
+     * @param arr int[]
+     * @param m int
+     * @return int[]
+     */
+    public int[] getMinArrayII(int[] arr, int m) {
+        // TODO: 16/7/13
+        return null;
+    }
+
+    /**
      * m区间长度,窗口沿着数组移动,输出每次窗口中最小值组成的数组
      *
      * @param arr int[]

@@ -13,39 +13,63 @@ public class EasyImpl {
 
         TreeNode root = new TreeNode(1);
         root.left = new TreeNode(2);
-        root.right = new TreeNode(3);
-        root.left.left = new TreeNode(4);
-        root.left.left.left = new TreeNode(8);
-        root.left.right = new TreeNode(5);
-        root.left.right.left = new TreeNode(6);
-        root.left.right.right = new TreeNode(7);
-//        TreeNode node = root;
-//        for (int i = 2; i <= 5; i++) {
-//            TreeNode tmp = new TreeNode(i);
-//            node.left = tmp;
-//            node = tmp;
-//        }
-        Deque<TreeNode> list = new LinkedList<TreeNode>();
-        System.out.println(root.val + " " + root.left.left.left.val);
-        easy.findPath(root, root.left.left.left, list);
-        while (!list.isEmpty()) {
-            TreeNode node = list.removeLast();
-            System.out.println(node.val);
-        }
+        root.right = new TreeNode(2);
+        root.left.left = new TreeNode(3);
+        root.left.right = new TreeNode(4);
 
-        System.out.println("===================");
-        list = new LinkedList<TreeNode>();
-        System.out.println(root.val + " " + root.left.right.val);
-        easy.findPath(root, root.left.right, list);
-        while (!list.isEmpty()) {
-            TreeNode node = list.removeLast();
-            System.out.println(node.val);
-        }
-        System.out.println("===================");
-        TreeNode common = easy.lowestCommonAncestor2(root, root.left.right, root.left.left.left);
-        System.out.println(common.val);
+        root.right.left = new TreeNode(4);
+        root.right.right = new TreeNode(3);
 
-        easy.levelOrder(root);
+        System.out.println(easy.isSymmetric(root));
+    }
+
+    /**
+     * 101. Symmetric Tree
+     * Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+     * 判断二叉树是否对称
+     * recursively and iteratively
+     *
+     * @param root TreeNode
+     * @return true/false
+     */
+    public boolean isSymmetric(TreeNode root) {
+        if(root == null)
+            return true;
+        return isSymmetric(root.left,root.right);
+    }
+
+    public boolean isSymmetric(TreeNode left, TreeNode right) {
+        if(left == null && right == null) {
+            return true;
+        }
+        // left.left right.right 和 right.left,left.right
+        return left != null && right != null && left.val == right.val && isSymmetric(left.left,right.right) &&
+                    isSymmetric(right.left,left.right);
+    }
+
+    /**
+     * 遍历方式,队列实现
+     * 分层打印类似
+     *
+     * @param root TreeNode
+     * @return true/false
+     */
+    public boolean isSymmetricIterative(TreeNode root) {
+        Queue<TreeNode> q = new LinkedList<TreeNode>();
+        q.add(root);
+        q.add(root);
+        while(!q.isEmpty()) {
+            TreeNode node1 = q.poll();
+            TreeNode node2 = q.poll();
+            if(node1 == null && node2 == null) continue;
+            if(node1 == null || node2 == null) return false;
+            if(node1.val != node2.val) return false;
+            q.add(node1.left);
+            q.add(node2.right);
+            q.add(node1.right);
+            q.add(node2.left);
+        }
+        return true;
     }
 
     /**
@@ -59,72 +83,69 @@ public class EasyImpl {
      */
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if(root == null) {
+        if (root == null) {
             return result;
         }
-        Deque<TreeNode> queue = new LinkedList<TreeNode>();
-        queue.addFirst(root);
-        while(true) {
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.add(root);
+        while (true) {
             List<Integer> list = new ArrayList<Integer>();
-            Deque<TreeNode> tmpQ = new LinkedList<TreeNode>();
-            while (!queue.isEmpty()) {
-                TreeNode node = queue.removeLast();
-                list.add(node.val);
-                if (node.left != null) {
-                    tmpQ.addFirst(node.left);
-                }
-                if (node.right != null) {
-                    tmpQ.addFirst(node.right);
-                }
-            }
-            if(list.size() > 0) {
+            Queue<TreeNode> tmpQ = new LinkedList<TreeNode>();
+            levelQueue(queue, tmpQ, list);
+            if (list.size() > 0) {
                 result.add(list);
             }
-            if(tmpQ.isEmpty())
+            if (tmpQ.isEmpty())
                 break;
             queue = tmpQ;
         }
         return result;
     }
 
+    private void levelQueue(Queue<TreeNode> queue, Queue<TreeNode> tmpQ, List<Integer> list) {
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.remove();
+            list.add(node.val);
+            if (node.left != null) {
+                tmpQ.add(node.left);
+            }
+            if (node.right != null) {
+                tmpQ.add(node.right);
+            }
+        }
+    }
+
     /**
      * 107. Binary Tree Level Order Traversal II
-     *  from left to right, level by level from leaf to root
+     * from left to right, level by level from leaf to root
+     *
      * @param root TreeNode
      * @return List 从下到上按层打印二叉树节点值
      */
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if(root == null) {
+        if (root == null) {
             return result;
         }
         Stack<List<Integer>> stack = new Stack<List<Integer>>();
-        Deque<TreeNode> queue = new LinkedList<TreeNode>();
-        queue.addFirst(root);
-        while(true) {
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.add(root);
+        while (true) {
             List<Integer> list = new ArrayList<Integer>();
-            Deque<TreeNode> tmpQ = new LinkedList<TreeNode>();
-            while(!queue.isEmpty()) {
-                TreeNode temp = queue.removeLast();
-                list.add(temp.val);
-                if (temp.left != null) {
-                    tmpQ.addFirst(temp.left);
-                }
-                if(temp.right != null) {
-                    tmpQ.addFirst(temp.right);
-                }
-            }
-            if(list.size() > 0) {
+            Queue<TreeNode> tmpQ = new LinkedList<TreeNode>();
+            levelQueue(queue, tmpQ, list);
+            if (list.size() > 0) {
                 stack.push(list);
             }
-            if(tmpQ.isEmpty()) {
+            if (tmpQ.isEmpty()) {
                 break;
             }
             queue = tmpQ;
         }
-        while(!stack.isEmpty()) {
+        while (!stack.isEmpty()) {
             result.add(stack.pop());
         }
+        System.out.println(result);
         return result;
     }
 
@@ -138,20 +159,20 @@ public class EasyImpl {
      */
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> paths = new ArrayList<String>();
-        if(root != null) {
-            findPath(root,String.valueOf(root.val), paths);
+        if (root != null) {
+            findPath(root, String.valueOf(root.val), paths);
         }
         return paths;
     }
 
     private void findPath(TreeNode root, String val, List<String> paths) {
-        if(root == null) return;
-        if(root.left == null && root.right == null) paths.add(val);
-        if(root.left != null) {
-            findPath(root.left,val+"->"+root.left.val, paths);
+        if (root == null) return;
+        if (root.left == null && root.right == null) paths.add(val);
+        if (root.left != null) {
+            findPath(root.left, val + "->" + root.left.val, paths);
         }
-        if(root.right != null) {
-            findPath(root.right, val +"->" + root.right.val,paths);
+        if (root.right != null) {
+            findPath(root.right, val + "->" + root.right.val, paths);
         }
     }
 
@@ -250,10 +271,10 @@ public class EasyImpl {
     }
 
     public TreeNode lowestCommonAncestorValue(TreeNode root, int min, int max) {
-        if(min <= root.val && max >= root.val) {
+        if (min <= root.val && max >= root.val) {
             return root;
         }
-        if(max <= root.val) {
+        if (max <= root.val) {
             return lowestCommonAncestorValue(root.left, min, max);
         } else {
             return lowestCommonAncestorValue(root.right, min, max);
@@ -311,10 +332,10 @@ public class EasyImpl {
         findPath(root, p, list1);
         findPath(root, q, list2);
         TreeNode common = root;
-        while(!list1.isEmpty() && !list2.isEmpty()) {
+        while (!list1.isEmpty() && !list2.isEmpty()) {
             TreeNode node1 = list1.removeLast();
             TreeNode node2 = list2.removeLast();
-            if(node1 == node2) {
+            if (node1 == node2) {
                 common = node1;
             } else {
                 break;

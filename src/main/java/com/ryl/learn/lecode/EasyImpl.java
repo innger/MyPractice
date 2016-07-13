@@ -94,7 +94,38 @@ public class EasyImpl {
      * @return List 从下到上按层打印二叉树节点值
      */
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
-        return null;
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if(root == null) {
+            return result;
+        }
+        Stack<List<Integer>> stack = new Stack<List<Integer>>();
+        Deque<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.addFirst(root);
+        while(true) {
+            List<Integer> list = new ArrayList<Integer>();
+            Deque<TreeNode> tmpQ = new LinkedList<TreeNode>();
+            while(!queue.isEmpty()) {
+                TreeNode temp = queue.removeLast();
+                list.add(temp.val);
+                if (temp.left != null) {
+                    tmpQ.addFirst(temp.left);
+                }
+                if(temp.right != null) {
+                    tmpQ.addFirst(temp.right);
+                }
+            }
+            if(list.size() > 0) {
+                stack.push(list);
+            }
+            if(tmpQ.isEmpty()) {
+                break;
+            }
+            queue = tmpQ;
+        }
+        while(!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+        return result;
     }
 
 

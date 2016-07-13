@@ -12,8 +12,31 @@ public class MediumCode {
 
     public static void main(String[] args) {
         MediumCode code = new MediumCode();
-        System.out.println(code.canJump(new int[]{2,3,1,1,4}));
-        System.out.println(code.canJump(new int[]{3,2,1,0,4}));
+        System.out.println(code.canJump(new int[]{2, 3, 1, 1, 4}));
+        System.out.println(code.canJump(new int[]{3, 2, 1, 0, 4}));
+    }
+
+    /**
+     * 144. Binary Tree Preorder Traversal
+     *
+     * @param root TreeNode
+     * @return 二叉树的先序遍历
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+    // TODO: 16/7/13
+        return null;
+    }
+
+    /**
+     * 94. Binary Tree Inorder Traversal
+     * Note: Recursive solution is trivial[微不足道的], could you do it iteratively?
+     *
+     * @param root TreeNode
+     * @return List[Integer] 二叉树中序遍历
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        // TODO: 16/7/13
+        return null;
     }
 
     /**
@@ -192,28 +215,6 @@ public class MediumCode {
         return sum;
     }
 
-
-    /**
-     * 二叉树前序遍历
-     *
-     * @param root treeNode
-     * @return list
-     */
-    public List<Integer> preorderTraversal(TreeNode root) {
-        // TODO: 16/5/13
-        return null;
-    }
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode(int x) {
-            val = x;
-        }
-    }
-
     /**
      * 开关灯,最后剩几盏灯亮着
      *
@@ -366,5 +367,15 @@ public class MediumCode {
             tmp += n;
         }
         return sum - tmp;
+    }
+
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int x) {
+            val = x;
+        }
     }
 }

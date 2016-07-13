@@ -21,6 +21,52 @@ public class EasyImpl {
         root.right.right = new TreeNode(3);
 
         System.out.println(easy.isSymmetric(root));
+        System.out.println(easy.guessNumber(1792997410));
+    }
+
+    /**
+     * 374. Guess Number Higher or Lower
+     * pick a number from 1 to n. You have to guess which number I picked.
+     * 数字猜大小 二分查找
+     *
+     * @param n int
+     * @return int
+     */
+    public int guessNumber(int n) {
+        int i = 1;
+        int j = n;
+        while (i < j) {
+            int g = (j - i) / 2 + i; //(high - low) / 2 + low; // 直接使用(high + low) / 2 可能导致溢出
+            int res = guess(g);
+            if (res == 0) {
+                return g;
+            } else if (res == -1) {
+                //my number is lower 猜大了
+                j = g - 1;
+            } else if (res == 1) {
+                //my number is higher 猜小了
+                i = g + 1;
+            }
+        }
+        return i;
+    }
+
+    /* The guess API is defined in the parent class GuessGame.
+        @param num, your guess
+        @return -1 if my number is lower, 1 if my number is higher, otherwise return 0
+      int guess(int num);
+      1792997410
+      1240808008
+     */
+    private int guess(int num) {
+        int mynumber = 1240808008;
+        if (mynumber == num) {
+            return 0;
+        } else if (mynumber > num) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 
     /**
@@ -33,18 +79,18 @@ public class EasyImpl {
      * @return true/false
      */
     public boolean isSymmetric(TreeNode root) {
-        if(root == null)
+        if (root == null)
             return true;
-        return isSymmetric(root.left,root.right);
+        return isSymmetric(root.left, root.right);
     }
 
     public boolean isSymmetric(TreeNode left, TreeNode right) {
-        if(left == null && right == null) {
+        if (left == null && right == null) {
             return true;
         }
         // left.left right.right 和 right.left,left.right
-        return left != null && right != null && left.val == right.val && isSymmetric(left.left,right.right) &&
-                    isSymmetric(right.left,left.right);
+        return left != null && right != null && left.val == right.val && isSymmetric(left.left, right.right) &&
+                isSymmetric(right.left, left.right);
     }
 
     /**
@@ -58,12 +104,12 @@ public class EasyImpl {
         Queue<TreeNode> q = new LinkedList<TreeNode>();
         q.add(root);
         q.add(root);
-        while(!q.isEmpty()) {
+        while (!q.isEmpty()) {
             TreeNode node1 = q.poll();
             TreeNode node2 = q.poll();
-            if(node1 == null && node2 == null) continue;
-            if(node1 == null || node2 == null) return false;
-            if(node1.val != node2.val) return false;
+            if (node1 == null && node2 == null) continue;
+            if (node1 == null || node2 == null) return false;
+            if (node1.val != node2.val) return false;
             q.add(node1.left);
             q.add(node2.right);
             q.add(node1.right);

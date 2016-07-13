@@ -1,9 +1,11 @@
 package com.ryl.learn.lecode.NestedList;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
+ * 341. Flatten Nested List Iterator
  *
  * Your NestedIterator object will be instantiated and called as such:
  * NestedIterator i = new NestedIterator(nestedList);
@@ -13,17 +15,33 @@ import java.util.List;
  */
 public class NestedIterator implements Iterator<Integer> {
 
-    public NestedIterator(List<NestedInteger> nestedList) {
+    private int index = 0;
+    private List<Integer> list = new ArrayList<Integer>();
 
+    private void dfs(List<NestedInteger> nestedList) {
+        for(NestedInteger val : nestedList) {
+            if(val.isInteger()) {
+                list.add(val.getInteger());
+            } else {
+                dfs(val.getList());
+            }
+        }
+    }
+
+    public NestedIterator(List<NestedInteger> nestedList) {
+        dfs(nestedList);
     }
 
     @Override
     public boolean hasNext() {
+        if(index < list.size()) {
+            return true;
+        }
         return false;
     }
 
     @Override
     public Integer next() {
-        return null;
+        return list.get(index++);
     }
 }

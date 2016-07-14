@@ -1,3 +1,6 @@
+# 2016-06-07-14
+弱成渣,哈哈
+
 # 2016-06-06
 Linux socket消耗内存
 sysctl -a | grep 'net.ipv4.tcp' | grep mem

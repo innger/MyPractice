@@ -18,6 +18,115 @@ public class MediumCode {
         int[][] matrix = new int[][]{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 50}};
         matrix = new int[][]{{1}};
         System.out.println(code.searchMatrix(matrix, 2));
+//        for(int i = 1 ;i < 20;i++) {
+//            System.out.println(i +" "+code.mySqrt(i));
+//        }
+        System.out.println(code.mySqrt(2147483647));
+    }
+
+
+    /**
+     * 367. Valid Perfect Square
+     * Given a positive integer num, write a function which returns True if num is a perfect square else False.
+     * Note: Do not use any built-in library function such as sqrt.
+     * 判断一个数是否能被完全开方
+     * 16 true | 14 false
+     *
+     * @param num int
+     * @return true/false
+     */
+    public boolean isPerfectSquare(int num) {
+        if (num == 1) return true;
+        int begin = 2;
+        int end = num / 2;
+        while (begin <= end) {
+            int mid = (end - begin) / 2 + begin;
+            if (num % mid == 0 && num / mid == mid)
+                return true;
+            if (num / mid > mid) {
+                begin = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 69. Sqrt(x)
+     * Compute and return the square root of x.
+     * 求开方
+     * return new Double(Math.sqrt(x)).intValue();
+     * 使用jdk Math函数不是该题本意,但是AC
+     *
+     * @param x int
+     * @return int
+     */
+    public int mySqrt(int x) {
+//        return new Double(Math.sqrt(x)).intValue();
+        if( x < 0) return -1;
+        if (x <= 1) return x;
+        int begin = 1;
+        int end = x / 2;
+        int mid = (end - begin) / 2 + begin;
+        while (begin <= end) {
+            mid = (end - begin) / 2 + begin;
+            int div = x / mid;
+            if (div < mid) {
+                end = mid - 1;
+            } else if(div > mid) {
+                begin = mid + 1;
+            } else {
+                return mid;
+            }
+        }
+        if(mid  > x / mid) return mid - 1;
+        return mid;
+    }
+
+    /**
+     * 50. Pow(x, n)
+     * <p>
+     * 1 如果y为偶数，直接计算mypow(x, y/2)*mypow(x, y/2)；
+     * 2 如果y为奇数，则y-1为偶数，回到了第一种情况。
+     *
+     * @param x double
+     * @param n int
+     * @return double
+     */
+    public double myPow(double x, int n) {
+//        return Math.pow(x, n); //直接用jdk函数当然不是这题的本意
+        if (n == 0) return 1;
+        if (n == 1) return x;
+        if (n < 0) return 1 / dopow(x, n);
+        else return dopow(x, n);
+    }
+
+    private double dopow(double x, int n) {
+        if (n == 0) return 1;
+        if (n == 1) return x;
+        double result;
+        double tmp = dopow(x, n / 2);
+        if ((n & 1) != 0) {
+            result = x * tmp * tmp;
+        } else {
+            result = tmp * tmp;
+        }
+        return result;
+    }
+
+    /**
+     * 372. Super Pow
+     * calculate pow(a,b) mod 1337
+     * a positive integer and b is an extremely large positive integer given in the form of an array.
+     *
+     * @param a int
+     * @param b int[]
+     * @return int
+     */
+    public int superPow(int a, int[] b) {
+        // TODO: 16/7/14
+        return 0;
     }
 
     /**
@@ -26,7 +135,7 @@ public class MediumCode {
      * (1) Integers in each row are sorted in ascending from left to right. 每一行递增
      * (2) Integers in each column are sorted in ascending from top to bottom. 每一列递增
      * 剑指offer 从右上角开始查找,缩小范围
-     *
+     * <p>
      * [
      * [1,   4,  7, 11, 15],
      * [2,   5,  8, 12, 19],
@@ -77,20 +186,20 @@ public class MediumCode {
      * @return true/false
      */
     public boolean searchMatrix(int[][] matrix, int target) {
-        if(matrix == null) return false;
+        if (matrix == null) return false;
         int i = 0;
         int j = matrix.length * matrix[0].length;
         while (i <= j) {
             int mid = (j - i) / 2 + i; //(i+j)/2 会int溢出
             int m = mid / matrix[0].length;
             int n = mid % matrix[0].length;
-            if(m > matrix.length - 1 || n > matrix[0].length - 1)
+            if (m > matrix.length - 1 || n > matrix[0].length - 1)
                 break;
-            if(matrix[m][n] == target) {
+            if (matrix[m][n] == target) {
                 return true;
             } else if (matrix[m][n] > target) {
-                j = mid - 1 ;
-            }  else {
+                j = mid - 1;
+            } else {
                 i = mid + 1;
             }
         }

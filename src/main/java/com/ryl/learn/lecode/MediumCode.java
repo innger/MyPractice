@@ -1,9 +1,6 @@
 package com.ryl.learn.lecode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created on 16/5/12 下午4:04.
@@ -21,7 +18,178 @@ public class MediumCode {
 //        for(int i = 1 ;i < 20;i++) {
 //            System.out.println(i +" "+code.mySqrt(i));
 //        }
-        System.out.println(code.mySqrt(2147483647));
+//        System.out.println(code.mySqrt(2147483647));
+        ListNode head = new ListNode(1);
+        ListNode tmp = head;
+        for (int i = 2; i <= 2; i++) {
+            tmp.next = new ListNode(i);
+            tmp = tmp.next;
+        }
+        code.printListNode(head);
+        head = code.rotateRight(head, 3);
+        code.printListNode(head);
+        System.out.println(code.reverseWords("a"));
+        System.out.println(code.reverseWords("     "));
+    }
+
+    /**
+     * 179. Largest Number
+     *
+     *
+     * @param nums int[]
+     * @return
+     */
+    public String largestNumber(int[] nums) {
+        // TODO: 16/7/15
+        return null;
+    }
+
+    /**
+     * 151. Reverse Words in a String
+     * Given an input string, reverse the string word by word.
+     * s = "the sky is blue",
+     * return "blue is sky the".
+     * 思路比较清晰,先翻转整个字符串,再根据空格翻转每个单词,边界条件比较多
+     * 前后空格消除,中间空格合并问题
+     *
+     * @param s String
+     * @return String
+     */
+    public String reverseWords(String s) {
+        if (s == null || s.equals("")) return s;
+        int len = s.length();
+        int i = len - 1;
+        char[] arr = new char[len];
+
+        while(i >= 0 && s.charAt(i) == ' ') {
+            i--;
+        }
+        int index = 0;
+        while (i >= 0) {
+            char cur = s.charAt(i);
+            char bef = arr[index > 0 ? index - 1 : index];
+            if(cur == ' ' && bef == ' ') {
+                i--;
+                continue;
+            }
+            arr[index] = cur;
+            index++;
+            i--;
+        }
+        len = index;
+        i = 0;
+        int j = i;
+        while (j < len) {
+            if (i < j && arr[j] == ' ') {
+                swapCharArray(arr, i, j - 1);
+                j++;
+                i = j;
+            }
+
+            while (j < len && arr[j] == ' ') {
+                j++;
+                i = j;
+            }
+
+            if (j < len && arr[j] != ' ') {
+                j++;
+            }
+        }
+        swapCharArray(arr, i, j - 1);
+        int newlen = len > 0 && arr[len - 1] == ' ' ? len - 1 : len;
+        char[] newarr = new char[newlen];
+        System.arraycopy(arr,0,newarr,0,newlen);
+        return new String(newarr);
+    }
+
+    private void swapCharArray(char[] arr, int i, int j) {
+        while (i < j) {
+            char tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+            i++;
+            j--;
+        }
+    }
+
+    /**
+     * 61. Rotate List
+     * Given a list, rotate the list to the right by k places, where k is non-negative.
+     * 1->2->3->4->5->NULL and k = 2,
+     * 4->5->1->2->3->NULL.
+     * 右旋转链表
+     *
+     * @param head ListNode
+     * @param k    int
+     * @return new head ListNode
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null || k <= 0)
+            return head;
+        ListNode node = head;
+        int len = 0;
+        while (node != null) {
+            len++;
+            node = node.next;
+        }
+        k = k % len;
+        if (k == 0) {
+            return head;
+        }
+        ListNode node1 = head;
+        ListNode node2 = head;
+        int i = 1;
+        while (node2 != null && i < k) {
+            node2 = node2.next;
+            i++;
+        }
+        ListNode pre = null;
+        while (node2 != null && node2.next != null) {
+            pre = node1;
+            node1 = node1.next;
+            node2 = node2.next;
+        }
+        if (pre != null) {
+            pre.next = null;
+            node2.next = head;
+        }
+        return node1;
+    }
+
+    /**
+     * 143. Reorder List
+     * Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+     * reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+     * You must do this in-place without altering the nodes' values.
+     * 使用stack bug-free
+     *
+     * @param head ListNode
+     */
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null || head.next.next == null) {
+            return;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        Stack<ListNode> stack = new Stack<ListNode>();
+        while (slow != null) {
+            stack.push(slow);
+            slow = slow.next;
+        }
+        ListNode node = head;
+        ListNode next = node.next;
+        while (!stack.isEmpty()) {
+            ListNode tmp = stack.pop();
+            node.next = tmp;
+            tmp.next = next;
+            node = next;
+            next = next.next;
+        }
+        next.next = null;
     }
 
 
@@ -64,7 +232,7 @@ public class MediumCode {
      */
     public int mySqrt(int x) {
 //        return new Double(Math.sqrt(x)).intValue();
-        if( x < 0) return -1;
+        if (x < 0) return -1;
         if (x <= 1) return x;
         int begin = 1;
         int end = x / 2;
@@ -74,13 +242,13 @@ public class MediumCode {
             int div = x / mid;
             if (div < mid) {
                 end = mid - 1;
-            } else if(div > mid) {
+            } else if (div > mid) {
                 begin = mid + 1;
             } else {
                 return mid;
             }
         }
-        if(mid  > x / mid) return mid - 1;
+        if (mid > x / mid) return mid - 1;
         return mid;
     }
 
@@ -559,12 +727,29 @@ public class MediumCode {
         return sum - tmp;
     }
 
-    public class TreeNode {
+    private void printListNode(ListNode head) {
+        while (head != null) {
+            System.out.print(head.val + "->");
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    public static class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
 
         TreeNode(int x) {
+            val = x;
+        }
+    }
+
+    public static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
             val = x;
         }
     }

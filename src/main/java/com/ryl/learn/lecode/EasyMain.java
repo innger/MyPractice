@@ -10,15 +10,15 @@ public class EasyMain {
 
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
-    }
-
-    class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            this.val = x;
+        ListNode head = new ListNode(1);
+        ListNode node = head;
+        for (int i = 2; i <= 5; i++) {
+            node.next = new ListNode(i);
+            node = node.next;
         }
+        easy.printListNode(head);
+        head = easy.oddEvenList2(head);
+        easy.printListNode(head);
     }
 
     //判断一个数独是否合法
@@ -431,8 +431,17 @@ public class EasyMain {
         return true;
     }
 
+    /**
+     * 328. Odd Even Linked List
+     * You should try to do it in place. The program should run in O(1) space complexity and O(nodes) time complexity.
+     * Given 1->2->3->4->5->NULL,
+     * return 1->3->5->2->4->NULL.
+     *
+     * @param head ListNode
+     * @return head ListNode
+     */
     public ListNode oddEvenList(ListNode head) {
-        if (head == null) return null;
+        if (head == null || head.next == null) return head;
         ListNode pre = null;
         ListNode tmp = head;
         ListNode head2 = head.next;
@@ -445,7 +454,7 @@ public class EasyMain {
             next = tmp.next;
             i++;
         }
-        if (i % 2 != 0) {
+        if ((i & 1) != 0) {
             if (pre != null) {
                 pre.next = head2;
             }
@@ -455,13 +464,36 @@ public class EasyMain {
         return head;
     }
 
+    //byr上看到另外的解法,调试一下
+    public ListNode oddEvenList2(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode cur = head;
+        ListNode second = head.next;
+        ListNode nxt = head.next;
+        while (cur.next != null) {
+            cur.next = cur.next.next;
+            if (cur.next != null)
+                cur = cur.next;
+        }
+        //第一个while循环完,链表断开,需要在一个循环里连接好两个链表
+        //这部分有问题，但不知道为什么4出不来；
+        while (nxt.next != null) {
+            nxt.next = nxt.next.next;
+            if (nxt.next != null)
+                nxt = nxt.next;
+        }
+        cur.next = second;
+        return head;
+    }
+
+
     private void printListNode(ListNode head) {
         ListNode tmp = head;
         while (tmp != null) {
-            System.out.print(tmp.val + " ");
+            System.out.print(tmp.val + "->");
             tmp = tmp.next;
         }
-        System.out.println();
+        System.out.println("null");
     }
 
     public String countAndSay(int n) {
@@ -963,7 +995,7 @@ public class EasyMain {
      * c   g   k
      *
      * @param str string
-     * @param n int
+     * @param n   int
      * @return string
      */
 
@@ -1011,6 +1043,14 @@ public class EasyMain {
             }
         }
         return res;
+    }
 
+    public static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            this.val = x;
+        }
     }
 }

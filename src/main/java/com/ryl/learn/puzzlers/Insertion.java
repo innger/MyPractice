@@ -10,6 +10,8 @@ public class Insertion {
 //		insertSort(array);
         shellSort(array);
         System.out.println(Arrays.toString(array));
+        quicksort(0,6);
+        System.out.println(Arrays.toString(x));
     }
 
     /**
@@ -42,6 +44,28 @@ public class Insertion {
                 a[j] = tmp;
             }
         }
+    }
+
+    private static int[] x = new int[]{1,32,45,3,12,100,50};
+
+    private static void quicksort(int l, int u){
+        int i, m;
+        if(l >= u) return;
+        m = l;
+        for(i = l+1; i<= u; i++)
+            if(x[i] < x[l]) // buggy!
+                swap(++m, i);
+
+        swap(l, m);
+
+        quicksort(l, m-1);
+        quicksort(m+1, u);
+    }
+
+    private static void swap(int i ,int j) {
+        int tmp = x[i];
+        x[i] = x[j];
+        x[j] = tmp;
     }
 
 

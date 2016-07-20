@@ -28,21 +28,59 @@ public class MediumCode {
         code.printListNode(head);
         head = code.rotateRight(head, 3);
         code.printListNode(head);
-        System.out.println(code.reverseWords("a"));
-        System.out.println(code.reverseWords("     "));
+        code.combine(4, 2);
     }
 
     /**
      * 179. Largest Number
-     *
+     * Given a list of non negative integers, arrange them such that they form the largest number.
+     * given [3, 30, 34, 5, 9], the largest formed number is 9534330.
+     * 数组从大到小排序,排序规则按位比较
      *
      * @param nums int[]
-     * @return
+     * @return String largestNumber
      */
     public String largestNumber(int[] nums) {
-        // TODO: 16/7/15
-        return null;
+        if (nums == null) return null;
+        if (nums.length == 1) return String.valueOf(nums[0]);
+        for (int i = 0; i < nums.length - 1; i++) {
+            int max = i;
+            for (int j = i + 1; j < nums.length; j++) {
+                if (compareNum(nums[j], nums[max]) > 0) {
+                    max = j;
+                }
+            }
+            if (i != max) {
+                int tmp = nums[i];
+                nums[i] = nums[max];
+                nums[max] = tmp;
+            }
+        }
+        String res = "";
+        for (int i = 0; i < nums.length; i++) {
+            if ("".equals(res) && nums[i] == 0) {
+                continue;
+            }
+            res += nums[i];
+        }
+        return "".equals(res) ? "0" : res;
     }
+
+    //交换顺序,比较两个数字大小,确定排序关系
+    private int compareNum(int num1, int num2) {
+        String str1 = "" + num1 + num2;
+        String str2 = "" + num2 + num1;
+        for (int i = 0; i < str1.length(); i++) {
+            char ch1 = str1.charAt(i);
+            char ch2 = str2.charAt(i);
+            if (ch1 == ch2) {
+                continue;
+            }
+            return ch1 - ch2 > 0 ? 1 : -1;
+        }
+        return 0;
+    }
+
 
     /**
      * 151. Reverse Words in a String
@@ -61,14 +99,14 @@ public class MediumCode {
         int i = len - 1;
         char[] arr = new char[len];
 
-        while(i >= 0 && s.charAt(i) == ' ') {
+        while (i >= 0 && s.charAt(i) == ' ') {
             i--;
         }
         int index = 0;
         while (i >= 0) {
             char cur = s.charAt(i);
             char bef = arr[index > 0 ? index - 1 : index];
-            if(cur == ' ' && bef == ' ') {
+            if (cur == ' ' && bef == ' ') {
                 i--;
                 continue;
             }
@@ -98,7 +136,7 @@ public class MediumCode {
         swapCharArray(arr, i, j - 1);
         int newlen = len > 0 && arr[len - 1] == ' ' ? len - 1 : len;
         char[] newarr = new char[newlen];
-        System.arraycopy(arr,0,newarr,0,newlen);
+        System.arraycopy(arr, 0, newarr, 0, newlen);
         return new String(newarr);
     }
 
@@ -585,16 +623,41 @@ public class MediumCode {
     }
 
     /**
+     * 77. Combinations
      * Given two integers n and k,
      *
-     * @param n 1 - n
-     * @param k k
+     * @param n int 1 - n
+     * @param k int k
      * @return return all possible combinations of k numbers out of 1 ... n.
      */
     public List<List<Integer>> combine(int n, int k) {
-        // TODO: 16/5/13
-        return null;
+        if (n <= 0) return null;
+        int[] arr = new int[n];
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = 0; i < n; i++) {
+            arr[i] = i + 1;
+        }
+        for (int i = 1; i <= k; i++) {
+            doCombine(arr, list, 0, i, 0, result);
+        }
+
+        return result;
     }
+
+    private void doCombine(int[] arr, List<Integer> list, int curLen, int combLen, int pos, List<List<Integer>> result) {
+        if (curLen == combLen) {
+            System.out.println(list);
+            result.add(list);
+        } else {
+//            list = new ArrayList<Integer>();
+            for (int i = pos; i < arr.length; i++) {
+                list.add(curLen,arr[i]);
+                doCombine(arr, list, curLen + 1, combLen, i + 1, result);
+            }
+        }
+    }
+
 
     /**
      * 求数组的组合

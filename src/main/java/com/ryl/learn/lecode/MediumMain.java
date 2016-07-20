@@ -175,6 +175,7 @@ public class MediumMain {
     }
 
     /**
+     * 137. Single Number II
      * every element appears three times except for one.
      * 使用map,key:count 出现3次则删除该key
      *
@@ -199,6 +200,21 @@ public class MediumMain {
             }
         }
         return map.keySet().iterator().next();
+    }
+
+    /**
+     * https://discuss.leetcode.com/topic/2031/challenge-me-thx
+     * 很惊艳的算法 This solution is awesome !
+     * @param nums int[]
+     * @return int
+     */
+    public int singleNumberIIBuggy(int[] nums) {
+        int ones = 0, twos = 0;
+        for(int i = 0; i < nums.length; i++){
+            ones = (ones ^ nums[i]) & ~twos;
+            twos = (twos ^ nums[i]) & ~ones;
+        }
+        return ones;
     }
 
     /**

@@ -18,14 +18,17 @@ import java.util.*;
  * <p>
  * unfollow(followerId, followeeId): Follower unfollows a followee.
  * <p>
+ *
+ * 每发布一次更新所有订阅者的列表,效率比较低 Time Limit Exception
+ *
  * Created on 16/7/25 下午2:16.
  */
 public class Twitter {
 
     Map<Integer, List<Integer>> userMap; //post tweet,发送给每个订阅者的tweet
     Map<Integer, Set<Integer>> subscribeMap; //订阅关系 pub-sub 1:n
-    Map<Integer, List<Integer>> tweetMap; //用户自己发送的tweet
-    List<Integer> allTweets; //全部的tweet 记录顺序
+    Map<Integer, List<Integer>> tweetMap; //每个用户自己发送的tweet
+    List<Integer> allTweets; //顺序记录全部tweet
 
     /**
      * Initialize your data structure here.
@@ -38,6 +41,7 @@ public class Twitter {
     }
 
     /**
+     * 每发送一条tweet,给订阅者list中添加一条
      * Compose a new tweet.
      */
     public void postTweet(int userId, int tweetId) {
@@ -126,15 +130,13 @@ public class Twitter {
         List<Integer> res = new ArrayList<Integer>();
         int len = allTweets.size();
         while (true) {
-            int index = len - i - 1;
-            if (index < 0 ) break;
-            int n = allTweets.get(index);
+            if (i >= len ) break;
+            int n = allTweets.get(i);
             if (posted.contains(n) || tweets.contains(n)) {
                 res.add(n);
             }
             i++;
         }
-        Collections.reverse(res);
         userMap.put(followerId, res);
     }
 

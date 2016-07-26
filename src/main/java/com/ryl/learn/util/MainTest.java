@@ -59,6 +59,18 @@ public class MainTest {
         BigDecimal decimal = new BigDecimal(12.005);
         System.out.println(decimal.setScale(0,BigDecimal.ROUND_HALF_UP));
 
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        Collections.sort(list, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
+            }
+        });
+        System.out.println(list);
     }
 
     public static String getServerIp() {

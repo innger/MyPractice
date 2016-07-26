@@ -22,6 +22,21 @@ public class EasyImpl {
 
         System.out.println(easy.isSymmetric(root));
         System.out.println(easy.guessNumber(1792997410));
+
+        //[1,2,3,4,5]
+        //[1,2,null,3,null,4,null,5,null]
+        List<Integer> list = new ArrayList<Integer>();
+        list.add(1);
+        list.add(2);
+        list.add(null);
+        list.add(3);
+        list.add(null);
+        list.add(4);
+        list.add(null);
+        list.add(5);
+        list.add(null);
+        TreeNode head =  easy.constructTree(list);
+        System.out.println(easy.levelOrder(head));
     }
 
     /**
@@ -512,15 +527,39 @@ public class EasyImpl {
     }
 
     /**
-     * 根据输入的List构造二叉树
+     * 根据输入的List构造二叉树,二叉堆
      * [1,2,3,4,5]
      * [1,2,null,3,null,4,null,5,null]
      *
      * @param list List<Integer>
-     * @return
+     * @return head TreeNode
      */
     public TreeNode constructTree(List<Integer> list) {
-        //todo
-        return null;
+        if (list == null || list.isEmpty()) return null;
+        List<TreeNode> treeNodes = new ArrayList<TreeNode>();
+        TreeNode head = new TreeNode(list.get(0));
+        treeNodes.add(head);
+        int len = list.size();
+        for (int i = 1; i < len; i++) {
+            Integer val = list.get(i);
+            if (val == null) {
+                treeNodes.add(null);
+            } else {
+                treeNodes.add(new TreeNode(val));
+            }
+        }
+        for (int i = 1; i < len; i++) {
+            TreeNode parent = treeNodes.get((i - 1) / 2);
+            if (parent != null) {
+                if ((i & 1) != 0) {
+                    //奇数
+                    parent.left = treeNodes.get(i);
+                } else {
+                    //偶数
+                    parent.right = treeNodes.get(i);
+                }
+            }
+        }
+        return head;
     }
 }

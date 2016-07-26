@@ -28,7 +28,210 @@ public class MediumCode {
         code.printListNode(head);
         head = code.rotateRight(head, 3);
         code.printListNode(head);
-        code.combine(4, 2);
+
+        System.out.println(code.findDuplicate(new int[]{1, 1, 2}));
+        System.out.println(code.canMeasureWater(2, 6, 5));
+        char[][] cmatrix = new char[][]{
+                {'1', '0', '1', '0', '0'},
+                {'1', '0', '1', '1', '1'},
+                {'1', '1', '1', '1', '1'},
+                {'1', '0', '1', '1', '1'}};
+        System.out.println(code.maximalSquareO1(cmatrix));
+    }
+
+    /**
+     * 221. Maximal Square
+     * Given a 2D binary matrix filled with 0's and 1's,
+     * find the largest square containing only 1's and return its area.
+     * 找到最大面积的正方形 DP
+     *
+     * @param matrix char[][]
+     * @return maxSquare int
+     */
+    public int maximalSquare(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int max = 0;
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int[][] dp = new int[n + 1][m + 1];
+        // dp(i, j) represents the length of the square
+        // whose lower-right corner is located at (i, j)
+        // dp(i, j) = min{ dp(i-1, j-1), dp(i-1, j), dp(i, j-1) }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                if (matrix[i - 1][j - 1] == '1') {
+                    dp[i][j] = Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1])) + 1;
+                    max = Math.max(max, dp[i][j]);
+                }
+            }
+        }
+        return max * max;
+    }
+
+    // u r so creative nice solution
+    //use O(1) space
+    public int maximalSquareO1(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int max = '0';
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (matrix[i][j] != '0' && i != 0 && j != 0) {
+                    matrix[i][j] = (char) (Math.min(
+                                            Math.min(matrix[i - 1][j] - '0', matrix[i][j - 1] - '0'),
+                                            matrix[i - 1][j - 1] - '0'
+                                        ) + 1 + '0');
+                }
+                if (matrix[i][j] > max) {
+                    max = matrix[i][j];
+                }
+            }
+        }
+        return (max - '0') * (max - '0');
+    }
+
+    /**
+     * 148. Sort List
+     * Sort a linked list in O(nlogn) time using constant space complexity.
+     * Merge Sort 归并排序
+     *
+     * @param head ListNode
+     * @return ListNode
+     */
+    public ListNode sortList(ListNode head) {
+        // TODO: 16/7/25  
+        return null;
+    }
+
+    /**
+     * 365. Water and Jug Problem
+     * 使用容量为x y的壶,是否能准确量出z容量的水,水量无限
+     * z必须可以除尽x和y的最大公约数
+     *
+     * @param x int
+     * @param y int
+     * @param z int
+     * @return boolean
+     */
+    public boolean canMeasureWater(int x, int y, int z) {
+        int total = x + y;
+        if (total < z) return false;
+        return z == 0 || z % gcd(x, y) == 0;
+    }
+
+    //辗转相除法求最大公约数
+    private int gcd(int x, int y) {
+        return y == 0 ? x : gcd(y, x % y);
+    }
+
+    /**
+     * 287. Find the Duplicate Number
+     * Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive),
+     * prove that at least one duplicate number must exist.
+     * Assume that there is only one duplicate number, find the duplicate one.
+     * 找出重复的数字,重复数字出现大于1次,可能是多次
+     * 1,先排序,然后找出一个重复的数字 该题的用意明显不是这样
+     * 2,使用二分查找先确定一个中间值mid，然后统计整个数组，看比mid小的数是否比mid多，如果多的话，说明重复的值就在[left, mid-1]之间，
+     * 否则就在[mid+1, right]之间。
+     *
+     * @param nums int[]
+     * @return int
+     */
+    public int findDuplicate(int[] nums) {
+        if (nums == null) return 0;
+        if (nums.length <= 2) return nums[0];
+        int left = 1;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int cnt = 0;
+            for (int val : nums) {
+                if (val <= mid) {
+                    cnt++;
+                }
+            }
+            if (cnt <= mid) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+
+    /**
+     * 46. Permutations
+     * Given a collection of [distinct] numbers, return all possible permutations.
+     * 参考com.ryl.learn.puzzlers.Permutation
+     *
+     * @param nums int[]
+     * @return 数字的全排列
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        if (nums == null) return null;
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if (nums.length == 1) {
+            List<Integer> list = new ArrayList<Integer>();
+            list.add(nums[0]);
+            res.add(list);
+            return res;
+        } else {
+            for (int i = 0; i < nums.length; i++) {
+                Integer num = nums[i];
+                List<Integer> result = new ArrayList<Integer>();
+                List<Integer> resultA = new ArrayList<Integer>();
+                resultA.addAll(result);
+                resultA.add(num);
+                int[] arr = new int[nums.length - 1];
+                System.arraycopy(nums, 0, arr, 0, i);
+                System.arraycopy(nums, i + 1, arr, i, nums.length - i - 1);
+                for (List<Integer> tmp : permute(arr)) {
+                    result = new ArrayList<Integer>(); //关键点
+                    result.addAll(resultA);
+                    result.addAll(tmp);
+                    res.add(result);
+                }
+            }
+            return res;
+        }
+    }
+
+    /**
+     * 357. Count Numbers with Unique Digits
+     * Given a non-negative integer n, count all numbers with unique digits, x, where 0 ≤ x < 10n(10的n次方).
+     * Given n = 2, return 91 (The answer should be the total numbers in the range of 0 ≤ x < 100, excluding [11,22,33,44,55,66,77,88,99])
+     * <p>
+     * Let f(k) = count of numbers with unique digits with length equals k.
+     * f(1) = 10, ..., f(k) = 9 * 9 * 8 * ... (9 - k + 2) [The first factor is 9 because a number cannot start with 0].
+     * k位数,第一位有1-9种选择,第二位0-9(除去第一位数字选择)9中选择
+     *
+     * @param n int
+     * @return int
+     */
+    public int countNumbersWithUniqueDigits(int n) {
+        if (n == 0) return 1;
+        int res = 0;
+        for (int i = 1; i <= n; i++) {
+            res += calculateK(i);
+        }
+        return res;
+    }
+
+    private int calculateK(int k) {
+        if (k == 0) return 1;
+        if (k == 1) return 10;
+        int res = 9 * 9;
+        for (int i = 2; i < k; i++) {
+            int n = 9 - (i + 1) + 2;
+            if (n < 1) n = 1;
+            res *= n;
+        }
+        return res;
     }
 
     /**
@@ -612,14 +815,16 @@ public class MediumCode {
     }
 
     /**
+     * 319. Bulb Switcher
      * 开关灯,最后剩几盏灯亮着
+     * 思路：思路只有一个，就是能够开方的数的个数。这很buggy
+     * http://blog.csdn.net/qq508618087/article/details/50517503
      *
      * @param n int
      * @return int
      */
     public int bulbSwitch(int n) {
-        // TODO: 16/5/13
-        return 0;
+        return new Double(Math.sqrt(n)).intValue();
     }
 
     /**
@@ -652,7 +857,7 @@ public class MediumCode {
         } else {
 //            list = new ArrayList<Integer>();
             for (int i = pos; i < arr.length; i++) {
-                list.add(curLen,arr[i]);
+                list.add(curLen, arr[i]);
                 doCombine(arr, list, curLen + 1, combLen, i + 1, result);
             }
         }

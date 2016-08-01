@@ -17,8 +17,8 @@ public class EasyMain {
             node = node.next;
         }
         easy.printListNode(head);
-        head = easy.oddEvenList2(head);
-        easy.printListNode(head);
+
+        System.out.println(easy.zigZag2("abcdefghijkl", 4));
     }
 
     //判断一个数独是否合法
@@ -990,9 +990,44 @@ public class EasyMain {
     }
 
     /**
+     * 不构造二维数组,直接拼字符串
+     * easy and clear ( interesting approach )
+     * really nice solution
+     * @param str string
+     * @param n int
+     * @return string
+     */
+    public String zigZag2(String str, int n) {
+        if (n <= 1) return str;
+        StringBuilder[] sb = new StringBuilder[n]; //n行
+        for (int i = 0; i < n; i++) {
+            sb[i] = new StringBuilder("");
+        }
+        int incre = 1; //控制方向
+        int index = 0;
+        for (int i = 0; i < str.length(); i++) {
+            sb[index].append(str.charAt(i));
+            if (index == 0) {
+                incre = 1;
+            }
+            if (index == n - 1) {
+                incre = -1;
+            }
+            index += incre;
+        }
+        String res = "";
+        for (int i = 0; i < n; i++) {
+            res += sb[i];
+        }
+        return res;
+    }
+
+    /**
      * a   e   i
      * b d f h j
      * c   g   k
+     *
+     * 构造一个zigZag二维数组,在顺序拼起来
      *
      * @param str string
      * @param n   int

@@ -35,8 +35,32 @@ public class EasyImpl {
         list.add(null);
         list.add(5);
         list.add(null);
-        TreeNode head =  easy.constructTree(list);
+        TreeNode head = easy.constructTree(list);
         System.out.println(easy.levelOrder(head));
+        System.out.println(easy.generatePossibleNextMoves("++++-"));
+    }
+
+    /**
+     * 293. Flip Game
+     * take turns to flip two consecutive "++" into "--".
+     * s = "++++"
+     * output : "--++", "+--+", "++--"
+     * 判断连续的是不是"++",将其反转后加入结果中去.
+     *
+     * @param s string
+     * @return List string
+     */
+    public List<String> generatePossibleNextMoves(String s) {
+        List<String> result = new ArrayList<String>();
+        if (s == null || s.length() < 2) return result;
+        for (int i = 0; i < s.length() - 1; i++) {
+            char c1 = s.charAt(i);
+            char c2 = s.charAt(i + 1);
+            if (c1 == '+' && c2 == '+') {
+                result.add(s.substring(0, i) + "--" + s.substring(i + 2));
+            }
+        }
+        return result;
     }
 
     /**

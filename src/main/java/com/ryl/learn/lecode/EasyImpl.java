@@ -41,6 +41,34 @@ public class EasyImpl {
     }
 
     /**
+     * 1000个数范围[0,999],有2个相同的数，求这个
+     * 令牌桶算法
+     * 或者
+     * 设少的是a，多的是b。扫一遍，求和减（0到999），得到b-a，求平方和然后减去0到999的平方。
+     * 得到b^2-a^2，然后可以得到b+a，然后算出来b
+     * @param arr int[]
+     * @return int duplicate number
+     */
+    public int findDuplicate(int[] arr) {
+        int i = 0;
+        int temp;
+        while(i < arr.length) {
+            if(arr[i] == i) {
+                i++;
+            } else {
+                if(arr[i] == arr[arr[i]]) {
+                    return arr[i];
+                } else {
+                    temp = arr[i];
+                    arr[i] = arr[temp];
+                    arr[temp] = temp;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
      * 293. Flip Game
      * take turns to flip two consecutive "++" into "--".
      * s = "++++"

@@ -18,15 +18,20 @@ public class EasyCode {
         map.remove(0);
         System.out.println(map.keySet().iterator().next());
 
-        int[] res = code.getMinArray(new int[]{1, 2, 3, 4, 1, 6, 3}, 3);
-        System.out.println(Arrays.toString(res));
+        int[] arr = new int[]{1, 2, 3, 4, 4, 6, 3, 7, 8, 9, 10, 102, 32, 1, 3, 43};
+        System.out.println("input " + Arrays.toString(arr));
+        int[] res = code.getMinArray(arr, 10);
+        System.out.println("output " + Arrays.toString(res));
+        int[] res1 = code.getMinArrayII(arr, 10);
+        System.out.println("output " + Arrays.toString(res1));
 
-        ListNode head = initList(9);
-        printList(head);
-        boolean b = code.isPalindrome(head);
-        System.out.println(b);
-        int rec = code.computeArea(0,0,0,0,-1,-1,1,1);
-        System.out.println(rec);
+//        ListNode head = initList(9);
+//        printList(head);
+//        boolean b = code.isPalindrome(head);
+//        System.out.println(b);
+//        int rec = code.computeArea(0, 0, 0, 0, -1, -1, 1, 1);
+//        System.out.println(rec);
+
     }
 
     /**
@@ -231,17 +236,98 @@ public class EasyCode {
     }
 
     /**
-     * 输出每个移动区间内最小值 [堆排序-最大堆]
-     * 构建m大小的最大堆
+     * 输出每个移动区间内最小值 [堆排序-最小堆]
+     * 构建m大小的最小堆
      * 这么简单的问题,当时居然没想出来,确实太挫了
+     * 反复构建最小堆,移除不是堆顶,则记录下来
      *
      * @param arr int[]
-     * @param m int
+     * @param m   int
      * @return int[]
      */
     public int[] getMinArrayII(int[] arr, int m) {
-        // TODO: 16/7/13
-        return null;
+        int len = arr.length;
+        int[] heap = new int[len];
+        int hlen = m;
+        System.arraycopy(arr, 0, heap, 0, m);
+        minHeapMake(heap, m);
+        List<Integer> set = new ArrayList<Integer>();//已移除元素的集合
+        int[] result = new int[len - m + 1];
+        int resi = 0;
+        int i = 0;
+        int j = m - 1;
+        while (j < len) {
+            if (arr[i] != heap[0]) {
+                set.add(arr[i]);
+                while (arr[i] != heap[0] && set.contains(heap[0]) && !set.isEmpty()) {
+                    System.out.println("remove element " + heap[0]);
+                    set.remove((Object)heap[0]);
+                    heap[0] = 0;
+                    minHeapDeleteNumber(heap, hlen);
+                    hlen--;
+                }
+            }
+            result[resi] = heap[0];
+            if (arr[i] == heap[0]) {
+                heap[0] = 0;
+                minHeapDeleteNumber(heap, hlen);
+                hlen--;
+            }
+            resi++;
+            i++;
+            j++;
+            if (j == len) break;
+            //arr[j]加入堆
+            minHeapAddNumber(heap, hlen, arr[j]);
+            hlen++;
+        }
+        return result;
+    }
+
+    private void minHeapFixup(int[] arr, int i) {
+        int j = (i - 1) / 2;
+        int temp = arr[i];
+        while (j >= 0 && i != 0) {
+            if (arr[j] <= temp)
+                break;
+            arr[i] = arr[j];
+            i = j;
+            j = (i - 1) / 2;
+        }
+        arr[i] = temp;
+    }
+
+    private void minHeapAddNumber(int[] arr, int n, int num) {
+        arr[n] = num;
+        minHeapFixup(arr, n);
+    }
+
+    private void minHeapFixDown(int[] arr, int i, int n) {
+        int j = 2 * i + 1;
+        int temp = arr[i];
+        while (j < n) {
+            if ((j + 1) < n && arr[j + 1] < arr[j])
+                j++;
+            if (arr[j] >= temp)
+                break;
+            arr[i] = arr[j];
+            i = j;
+            j = 2 * i + 1;
+        }
+        arr[i] = temp;
+    }
+
+    private void minHeapDeleteNumber(int[] arr, int n) {
+        int temp = arr[0];
+        arr[0] = arr[n - 1];
+        arr[n - 1] = temp;
+        minHeapFixDown(arr, 0, n - 1);
+    }
+
+    void minHeapMake(int[] arr, int n) {
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            minHeapFixDown(arr, i, n);
+        }
     }
 
     /**
@@ -429,28 +515,28 @@ public class EasyCode {
         int area2 = Math.abs((G - E) * (H - F));
         //判断两个矩形是否有重合
         //无重合
-        int left1 = Math.min(A,C);
-        int right1 = Math.max(A,C);
-        int left2 = Math.min(E,G);
-        int right2 = Math.max(E,G);
-        if(right1 <= left2 || left1 >= right2) {
+        int left1 = Math.min(A, C);
+        int right1 = Math.max(A, C);
+        int left2 = Math.min(E, G);
+        int right2 = Math.max(E, G);
+        if (right1 <= left2 || left1 >= right2) {
             return area1 + area2;
         }
-        int top1 = Math.max(B,D);
-        int bom1 = Math.min(B,D);
-        int top2 = Math.max(F,H);
-        int bom2 = Math.min(F,H);
-        if(bom1 >= top2 || top1 <= bom2) {
+        int top1 = Math.max(B, D);
+        int bom1 = Math.min(B, D);
+        int top2 = Math.max(F, H);
+        int bom2 = Math.min(F, H);
+        if (bom1 >= top2 || top1 <= bom2) {
             return area1 + area2;
         }
         //有重合,计算area3
-        int left = Math.max(left1,left2);
-        int right = Math.min(right1,right2);
-        int top = Math.min(top1,top2);
-        int bom = Math.max(bom1,bom2);
+        int left = Math.max(left1, left2);
+        int right = Math.min(right1, right2);
+        int top = Math.min(top1, top2);
+        int bom = Math.max(bom1, bom2);
         //重合部分面积
         int area3 = 0;
-        if(left < right && top > bom) {
+        if (left < right && top > bom) {
             area3 = (right - left) * (top - bom);
         }
         return area1 + area2 - area3;

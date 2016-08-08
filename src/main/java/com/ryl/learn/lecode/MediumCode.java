@@ -37,6 +37,8 @@ public class MediumCode {
                 {'1', '1', '1', '1', '1'},
                 {'1', '0', '1', '1', '1'}};
         System.out.println(code.maximalSquareO1(cmatrix));
+
+        System.out.println(code.superPow(2, new int[]{1,0}));
     }
 
     /**
@@ -83,9 +85,9 @@ public class MediumCode {
             for (int j = 0; j < col; j++) {
                 if (matrix[i][j] != '0' && i != 0 && j != 0) {
                     matrix[i][j] = (char) (Math.min(
-                                            Math.min(matrix[i - 1][j] - '0', matrix[i][j - 1] - '0'),
-                                            matrix[i - 1][j - 1] - '0'
-                                        ) + 1 + '0');
+                            Math.min(matrix[i - 1][j] - '0', matrix[i][j - 1] - '0'),
+                            matrix[i - 1][j - 1] - '0'
+                    ) + 1 + '0');
                 }
                 if (matrix[i][j] > max) {
                     max = matrix[i][j];
@@ -496,7 +498,7 @@ public class MediumCode {
     /**
      * 50. Pow(x, n)
      * <p>
-     * 1 如果y为偶数，直接计算mypow(x, y/2)*mypow(x, y/2)；
+     * 1 如果y为偶数，直接计算mypow(x, y/2) * mypow(x, y/2)；
      * 2 如果y为奇数，则y-1为偶数，回到了第一种情况。
      *
      * @param x double
@@ -526,16 +528,33 @@ public class MediumCode {
 
     /**
      * 372. Super Pow
-     * calculate pow(a,b) mod 1337
-     * a positive integer and b is an extremely large positive integer given in the form of an array.
+     * calculate a^b mod 1337
+     * a is a positive integer and b is an extremely large positive integer given in the form of an array.
+     * <p>
+     * a^b % 1337 = (a%1337)^b % 1337
+     * xy % 1337 = ((x%1337) * (y%1337)) % 1337 其中xy是一个数字,45 98等
      *
      * @param a int
      * @param b int[]
      * @return int
      */
     public int superPow(int a, int[] b) {
-        // TODO: 16/7/14
-        return 0;
+        if (b == null || b.length == 0) return 1;
+        a = a % 1337;
+        int len = b.length;
+        int lastBit = b[len - 1];
+        int[] b2 = new int[len - 1];
+        System.arraycopy(b, 0, b2, 0, len - 1);
+        return (superPow(superPow(a, b2), 10)) * superPow(a, lastBit) % 1337;
+    }
+
+    private int superPow(int a, int k) {
+        if (k == 0) return 1;
+        int ans = 1;
+        for (int i = 1; i <= k; i++) {
+            ans = (ans * a) % 1337;
+        }
+        return ans;
     }
 
     /**

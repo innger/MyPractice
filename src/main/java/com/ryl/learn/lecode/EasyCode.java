@@ -18,11 +18,11 @@ public class EasyCode {
         map.remove(0);
         System.out.println(map.keySet().iterator().next());
 
-        int[] arr = new int[]{1, 2, 3, 4, 4, 6, 3, 7, 8, 9, 10, 102, 32, 1, 3, 43};
+        int[] arr = new int[]{1, 2, 10, 4, 4, 6, 1, 7, 8, 2, 10, 102, 32, 1, 3, 43};
         System.out.println("input " + Arrays.toString(arr));
-        int[] res = code.getMinArray(arr, 10);
+        int[] res = code.getMinArray(arr, 4);
         System.out.println("output " + Arrays.toString(res));
-        int[] res1 = code.getMinArrayII(arr, 10);
+        int[] res1 = code.getMinArrayII(arr, 4);
         System.out.println("output " + Arrays.toString(res1));
 
 //        ListNode head = initList(9);

@@ -3,6 +3,7 @@ package com.ryl.learn.lecode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created on 16/7/29 下午3:51.
@@ -16,6 +17,17 @@ public class MediumImpl {
         System.out.println(c);
         System.out.println(main.grayCode(5));
         System.out.println(main.grayCodeBacktracking(5));
+    }
+
+    /**
+     * 127. Word Ladder
+     * @param beginWord string
+     * @param endWord string
+     * @param wordList set string
+     * @return int
+     */
+    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+        return 0;
     }
 
     /**

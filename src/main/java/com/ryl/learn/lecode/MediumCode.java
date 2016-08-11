@@ -774,7 +774,7 @@ public class MediumCode {
      * 2,超长的循环小数,循环开始位置的判断,使用Map<Integer,List<Integer>>
      * 3,结构正负判断
      * 4,int整数越界,改成long
-     *
+     * 2016-08-11写了一天终于ac,不容易
      * @param numerator1   int 除数
      * @param denominator1 int 被除数
      * @return string 小数表示

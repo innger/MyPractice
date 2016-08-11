@@ -38,7 +38,19 @@ public class MediumCode {
                 {'1', '0', '1', '1', '1'}};
         System.out.println(code.maximalSquareO1(cmatrix));
 
-        System.out.println(code.superPow(2, new int[]{1,0}));
+//        System.out.println("1/3=" + code.fractionToDecimal(1, 3));
+//        System.out.println("1/5=" + code.fractionToDecimal(1, 5));
+//        System.out.println("1/99=" + code.fractionToDecimal(1, 99));
+//        System.out.println("1/17=" + code.fractionToDecimal(1, 17));
+//        System.out.println("1/6=" + code.fractionToDecimal(1, 6));
+//        System.out.println("1/90=" + code.fractionToDecimal(1, 90));
+//        System.out.println("22/7=" + code.fractionToDecimal(22, 7));
+//        System.out.println("-50/8=" + code.fractionToDecimal(-50, 8));
+//        System.out.println("7/-12=" + code.fractionToDecimal(7, -12));
+//        System.out.println("1/214748364=" + code.fractionToDecimal(1, 214748364));
+        System.out.println(Integer.MIN_VALUE + " " + Integer.MAX_VALUE);
+        System.out.println("-1/-2147483648=" + code.fractionToDecimal(-1, -2147483648));
+
     }
 
     /**
@@ -758,15 +770,91 @@ public class MediumCode {
 
     /**
      * 166. Fraction to Recurring Decimal
+     * 1,除法的正确性
+     * 2,超长的循环小数,循环开始位置的判断,使用Map<Integer,List<Integer>>
+     * 3,结构正负判断
+     * 4,int整数越界,改成long
      *
-     * @param numerator   int 除数
-     * @param denominator int 被除数
+     * @param numerator1   int 除数
+     * @param denominator1 int 被除数
      * @return string 小数表示
      */
-    public String fractionToDecimal(int numerator, int denominator) {
-        // TODO: 16/7/12  
-        return null;
+    public String fractionToDecimal(int numerator1, int denominator1) {
+        if (denominator1 == 0) return null;
+        if (numerator1 == 0) return "0";
+        //-2147483648 2147483647 越界
+        long numerator = (long) numerator1;
+        long denominator = (long) denominator1;
+
+        long intPart = numerator / denominator;
+        long remainder = numerator % denominator;
+        if (remainder == 0) {
+            return String.valueOf(intPart);
+        }
+        String flag = "";
+        if ((numerator < 0 && denominator > 0) || (numerator > 0 && denominator < 0)) {
+            flag = "-";
+        }
+        intPart = intPart < 0 ? -intPart : intPart;
+        numerator = numerator < 0 ? -numerator : numerator;
+        denominator = denominator < 0 ? -denominator : denominator;
+        remainder = remainder < 0 ? -remainder : remainder;
+
+        //结果和余数,不同的进位,可能产生相同的余数
+        Map<Long, List<Long>> map = new HashMap<Long, List<Long>>();
+        String decimalPart = "";
+        long begin = 0;
+        int index = 0;
+        boolean isrec = false;
+        while (true) {
+            long divide = remainder * 10;
+            long res = divide / denominator;
+            decimalPart += res;
+            if (res == 0) {
+                remainder = divide;
+                begin = res;
+            } else {
+                remainder = divide % denominator;
+                if (remainder == 0) {
+                    break;
+                }
+                if (remainder == numerator) {
+                    isrec = true;
+                    break;
+                }
+            }
+            if (map.keySet().contains(res)) {
+                List<Long> list = map.get(res);
+                if (list.contains(remainder)) {
+                    isrec = true;
+                    begin = res;
+                    index = list.indexOf(remainder);
+                    //删除最后一位
+                    decimalPart = decimalPart.substring(0, decimalPart.length() - 1);
+                    break;
+                }
+            }
+            updateDecimalMap(res, remainder, map);
+        }
+        if (!isrec) {
+            return flag + intPart + "." + decimalPart;
+        }
+        int i = decimalPart.indexOf("" + begin, index);
+        if (i == -1) i = 0;
+        return flag + intPart + "." + decimalPart.substring(0, i) + "(" + decimalPart.substring(i) + ")";
     }
+
+    private void updateDecimalMap(long res, long remainder, Map<Long, List<Long>> map) {
+        List<Long> set = map.get(res);
+        if (set == null) {
+            set = new ArrayList<Long>();
+            set.add(remainder);
+            map.put(res, set);
+        } else {
+            set.add(remainder);
+        }
+    }
+
 
     /**
      * 306. Additive Number

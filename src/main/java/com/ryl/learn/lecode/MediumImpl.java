@@ -1,9 +1,6 @@
 package com.ryl.learn.lecode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created on 16/7/29 下午3:51.
@@ -17,17 +14,74 @@ public class MediumImpl {
         System.out.println(c);
         System.out.println(main.grayCode(5));
         System.out.println(main.grayCodeBacktracking(5));
+
+        Set<String> set = new HashSet<String>();
+        set.add("hot");
+        set.add("dot");
+        set.add("dog");
+        set.add("lot");
+        set.add("log");
+        System.out.println(main.ladderLength("hit","cog",set));
     }
 
     /**
      * 127. Word Ladder
+     * find the length of shortest transformation sequence from beginWord to endWord
+     * 1.Only one letter can be changed at a time
+     * 2.Each intermediate word must exist in the word list
+     *
      * @param beginWord string
-     * @param endWord string
-     * @param wordList set string
+     * @param endWord   string
+     * @param wordList  set string
      * @return int
      */
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+        Queue<String> queue = new LinkedList<String>();
+        queue.offer(beginWord);
+        wordList.add(endWord);
+        wordList.remove(beginWord);
+        int dis = 1;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int i = 0; i< size;i++) {
+                String str = queue.poll();
+                if(str.equals(endWord)) return dis;
+                for(String neighbor : neighbors(str, wordList)) {
+                    queue.offer(neighbor);
+                }
+            }
+            dis++;
+        }
         return 0;
+    }
+
+    //找出wordList 中与 s distance=1 的单词
+    private List<String> neighbors(String s, Set<String> wordList) {
+        List<String> res = new ArrayList<String>();
+        if(wordList.isEmpty()) return res;
+        for(int i = 0; i < s.length(); i++) {
+            char[] chars = s.toCharArray();
+            for(char ch = 'a'; ch <= 'z'; ch++) {
+                chars[i] = ch;
+                String word = new String(chars);
+                if(wordList.isEmpty()) return res;
+                if(wordList.remove(word)) {
+                    res.add(word);
+                }
+            }
+        }
+        return res;
+    }
+
+    private boolean diff(String s1, String s2) {
+        int diff = 0;
+        int len = s1.length();
+        for (int i = 0; i < len; i++) {
+            char ch1 = s1.charAt(i);
+            char ch2 = s2.charAt(i);
+            diff += (ch1 == ch2) ? 0 : 1;
+        }
+        return diff == 1;
     }
 
     /**

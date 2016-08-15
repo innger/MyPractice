@@ -9,6 +9,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
 /**
+ * Netty Server
  * Created by renyulong on 16/1/18.
  */
 public class NettyServer {
@@ -23,6 +24,7 @@ public class NettyServer {
 }
 
 class Server {
+
     private ServerBootstrap bootstrap;
     private Channel parentChannel;
     private InetSocketAddress localAddress;
@@ -61,6 +63,11 @@ class Server {
         @Override
         public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
             System.out.println("channel connected [" + e + "]");
+        }
+
+        @Override
+        public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+            System.out.println("channel open [" + e + "]");
         }
 
         @Override

@@ -4,13 +4,14 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
 import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -64,9 +65,27 @@ public class TestClient {
         for (int i = 0; i < 1; i++) {
             String tid = StringUtils.remove(UUID.randomUUID().toString(),"-");
             tid = "Vjxy6OdR7KIDANJzIuKS2tX1";
+            tid = "XIAMEN_AUTONAVI_XIAMEN_AUTONAVI";
             logger.info("tid={} i={}", tid, i);
             TestClient client = new TestClient(tid, hostDaily);
             client.init();
+        }
+//        socketConnect();
+    }
+
+    private static void socketConnect() {
+        try {
+            Socket socket = new Socket("127.0.0.1", 1883);
+            InputStream is = socket.getInputStream();
+            while(true) {
+                byte[] bytes = new byte[1024];
+                int n = is.read(bytes);
+                if(n == -1) break;
+                System.out.println(new String(bytes));
+            }
+            System.out.println("end");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -102,7 +121,7 @@ public class TestClient {
             // 设置超时时间 单位为秒
             options.setConnectionTimeout(10);
             // 设置会话心跳时间 单位为秒 服务器会每隔1.5*20秒的时间向客户端发送个消息判断客户端是否在线，但这个方法并没有重连的机制
-            options.setKeepAliveInterval(60);
+            options.setKeepAliveInterval(5);
             //设置回调
             client.setCallback(new MqttCallback() {
 

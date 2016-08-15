@@ -38,6 +38,33 @@ public class EasyImpl {
         TreeNode head = easy.constructTree(list);
         System.out.println(easy.levelOrder(head));
         System.out.println(easy.generatePossibleNextMoves("++++-"));
+        System.out.println(easy.canConstruct("a","b"));
+        System.out.println(easy.canConstruct("aa","ab"));
+        System.out.println(easy.canConstruct("aa","aab"));
+    }
+
+    /**
+     * 383. Ransom Note 赎金
+     * return true if the ransomNote can be constructed from the magazines
+     * otherwise it will return false
+     * Each  letter  in  the  magazine  string  can  only  be  used  once  in  your  ransom  note.
+     * You may assume that both strings contain only lowercase letters.
+     * canConstruct("a", "b") -> false
+     * canConstruct("aa", "ab") -> false
+     * canConstruct("aa", "aab") -> true
+     * bug-free
+     * @param ransomNote String
+     * @param magazine   String
+     * @return true/false
+     */
+    public boolean canConstruct(String ransomNote, String magazine) {
+        if (ransomNote == null || ransomNote.length() == 0) return true;
+        if (magazine == null || magazine.length() == 0) return false;
+        for (int i = 0; i < magazine.length(); i++) {
+            char ch = magazine.charAt(i);
+            ransomNote = ransomNote.replaceFirst("" + ch, "");
+        }
+        return ransomNote.trim().length() == 0;
     }
 
     /**
@@ -46,17 +73,18 @@ public class EasyImpl {
      * 或者
      * 设少的是a，多的是b。扫一遍，求和减（0到999），得到b-a，求平方和然后减去0到999的平方。
      * 得到b^2-a^2，然后可以得到b+a，然后算出来b
+     *
      * @param arr int[]
      * @return int duplicate number
      */
     public int findDuplicate(int[] arr) {
         int i = 0;
         int temp;
-        while(i < arr.length) {
-            if(arr[i] == i) {
+        while (i < arr.length) {
+            if (arr[i] == i) {
                 i++;
             } else {
-                if(arr[i] == arr[arr[i]]) {
+                if (arr[i] == arr[arr[i]]) {
                     return arr[i];
                 } else {
                     temp = arr[i];

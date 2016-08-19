@@ -21,7 +21,38 @@ public class MediumImpl {
         set.add("dog");
         set.add("lot");
         set.add("log");
-        System.out.println(main.ladderLength("hit","cog",set));
+        System.out.println(main.ladderLength("hit", "cog", set));
+        System.out.println(Arrays.toString(main.twoSum(new int[]{2, 7, 11, 15}, 9)));
+    }
+
+    /**
+     * 167. Two Sum II - Input array is sorted
+     * the array is already sorted in ascending order
+     * <p>
+     * Input: numbers={2, 7, 11, 15}, target=9
+     * Output: index1=1, index2=2
+     * Please note that your returned answers (both index1 and index2) are not zero-based.
+     * index 从1开始计数
+     * 这居然是medium,感觉还没有Two Sum I(easy 数组没有排序) difficult
+     *
+     * @param numbers int[]
+     * @param target  int
+     * @return int[]
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        int i = 0;
+        int j = numbers.length - 1;
+        while (i < j) {
+            long sum = numbers[i] + numbers[j];
+            if (sum > target) {
+                j--;
+            } else if (sum < target) {
+                i++;
+            } else {
+                return new int[]{i + 1, j + 1};
+            }
+        }
+        return new int[]{-1, -1};
     }
 
     /**
@@ -41,12 +72,12 @@ public class MediumImpl {
         wordList.add(endWord);
         wordList.remove(beginWord);
         int dis = 1;
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             int size = queue.size();
-            for(int i = 0; i< size;i++) {
+            for (int i = 0; i < size; i++) {
                 String str = queue.poll();
-                if(str.equals(endWord)) return dis;
-                for(String neighbor : neighbors(str, wordList)) {
+                if (str.equals(endWord)) return dis;
+                for (String neighbor : neighbors(str, wordList)) {
                     queue.offer(neighbor);
                 }
             }
@@ -58,14 +89,14 @@ public class MediumImpl {
     //找出wordList 中与 s distance=1 的单词
     private List<String> neighbors(String s, Set<String> wordList) {
         List<String> res = new ArrayList<String>();
-        if(wordList.isEmpty()) return res;
-        for(int i = 0; i < s.length(); i++) {
+        if (wordList.isEmpty()) return res;
+        for (int i = 0; i < s.length(); i++) {
             char[] chars = s.toCharArray();
-            for(char ch = 'a'; ch <= 'z'; ch++) {
+            for (char ch = 'a'; ch <= 'z'; ch++) {
                 chars[i] = ch;
                 String word = new String(chars);
-                if(wordList.isEmpty()) return res;
-                if(wordList.remove(word)) {
+                if (wordList.isEmpty()) return res;
+                if (wordList.remove(word)) {
                     res.add(word);
                 }
             }

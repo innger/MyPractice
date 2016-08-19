@@ -1156,7 +1156,14 @@ public class MediumMain {
         return closest;
     }
 
-
+    /**
+     * 1. Two Sum
+     * Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+     *
+     * @param nums int[]
+     * @param target int
+     * @return int[]
+     */
     public int[] twoSum(int[] nums, int target) {
         int[] res = new int[2];
         Map<Integer, Integer> map = new HashMap<Integer, Integer>();
@@ -1166,6 +1173,7 @@ public class MediumMain {
                 res[0] = map.get(tmp) + 1;
                 res[1] = i + 1;
             } else {
+                //将已遍历数字放入map中 num - index
                 map.put(nums[i], i);
             }
         }

@@ -804,7 +804,9 @@ public class MediumMain {
     }
 
     /**
+     * 39. Combination Sum
      * 从数组中选出序列,和为给定的target值,每个选中的数字不限次数
+     * The same repeated number may be chosen from C unlimited number of times.
      *
      * @param candidates int[]
      * @param target     int sum

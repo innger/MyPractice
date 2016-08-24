@@ -65,7 +65,7 @@ public class TestClient {
         for (int i = 0; i < 1; i++) {
             String tid = StringUtils.remove(UUID.randomUUID().toString(),"-");
             tid = "Vjxy6OdR7KIDANJzIuKS2tX1";
-            tid = "XIAMEN_AUTONAVI_XIAMEN_AUTONAVI";
+//            tid = "XIAMEN_AUTONAVI_XIAMEN_AUTONAVI";
             logger.info("tid={} i={}", tid, i);
             TestClient client = new TestClient(tid, hostDaily);
             client.init();

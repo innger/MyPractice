@@ -23,6 +23,35 @@ public class MediumImpl {
         set.add("log");
         System.out.println(main.ladderLength("hit", "cog", set));
         System.out.println(Arrays.toString(main.twoSum(new int[]{2, 7, 11, 15}, 9)));
+//        System.out.println(main.divide(-2147483648,-1));
+        System.out.println(main.divide(12,2));
+    }
+
+    /**
+     * 29. Divide Two Integers
+     * Divide two integers without using multiplication, division and mod operator.
+     * If it is overflow, return MAX_INT.
+     *
+     * @param dividend int
+     * @param divisor  int
+     * @return int
+     */
+    public int divide(int dividend, int divisor) {
+        if (divisor == 0) return Integer.MAX_VALUE;
+        if (dividend == 0) return 0;
+        int flag = dividend > 0 && divisor < 0 || dividend < 0 && divisor > 0 ? -1 : 1;
+        long did = Math.abs((long)dividend);
+        long dir = Math.abs((long)divisor);
+        long res = 1;
+        while (did >= dir) {
+            res = res << 1;
+            did = did - res;
+        }
+        res = flag == -1 ? -res : res;
+        if(res >= Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        return (int)res;
     }
 
     /**

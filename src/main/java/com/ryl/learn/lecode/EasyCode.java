@@ -25,6 +25,7 @@ public class EasyCode {
         int[] res1 = code.getMinArrayII(arr, 4);
         System.out.println("output " + Arrays.toString(res1));
 
+        System.out.println(code.reverseString("aabbccdd"));
 //        ListNode head = initList(9);
 //        printList(head);
 //        boolean b = code.isPalindrome(head);
@@ -58,8 +59,13 @@ public class EasyCode {
     public int getSum(int a, int b) {
         if (b == 0) return a;
         int sum = a ^ b;
-        int carray = (a & b) << 1;
-        return getSum(sum, carray);
+        int carry = (a & b) << 1;
+        return getSum(sum, carry);
+    }
+
+    public int getSum2(int a, int b) {
+        if((a & b) == 0) return a|b;
+        return getSum2(a^b, (a&b) << 1);
     }
 
     /**
@@ -734,9 +740,12 @@ public class EasyCode {
         int i = 0;
         int j = arr.length - 1;
         while (i < j) {
-            char ch = arr[i];
-            arr[i] = arr[j];
-            arr[j] = ch;
+            arr[i] = (char) (arr[i] ^ arr[j]);
+            arr[j] = (char) (arr[i] ^ arr[j]);
+            arr[i] = (char) (arr[i] ^ arr[j]);
+//            char ch = arr[i];
+//            arr[i] = arr[j];
+//            arr[j] = ch;
             i++;
             j--;
         }

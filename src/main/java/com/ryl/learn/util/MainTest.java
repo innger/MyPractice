@@ -1,15 +1,11 @@
 package com.ryl.learn.util;
 
 import com.google.common.base.Charsets;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.PooledByteBufAllocator;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -70,9 +66,15 @@ public class MainTest {
                 return o2 - o1;
             }
         });
-        System.out.println(list);
 
-        System.out.println(Long.MAX_VALUE);
+        String[] strings = new String[]{"a","b","c"};
+        strings = new String[0];
+        System.out.println(Arrays.toString(Arrays.copyOf(strings, strings.length)));
+
+
+
+
+
     }
 
     public static String getServerIp() {

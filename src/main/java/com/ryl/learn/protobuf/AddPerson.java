@@ -4,6 +4,8 @@ import com.ryl.learn.protobuf.AddressBookProtos.AddressBook;
 import com.ryl.learn.protobuf.AddressBookProtos.Person;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created on 16/8/24 上午11:59.
@@ -11,16 +13,17 @@ import java.io.*;
 public class AddPerson {
 
     public static void main(String[] args) throws IOException {
+        long start = System.currentTimeMillis();
         String file = "/Users/alibaba/protobuf_files/addressbook";
-//        addPerson(file);
-        System.out.println("Read person from file:"+ file);
-        readPerson(file);
+        addPerson(file);
+        System.out.println("Read person from file:" + file + " " + (System.currentTimeMillis() - start) + "ms");
+//        readPerson(file);
     }
 
     static void readPerson(String file) throws IOException {
         AddressBook addressBook = AddressBook.parseFrom(new FileInputStream(file));
         for (Person person : addressBook.getPersonList()) {
-            System.out.println("##################"+person);
+            System.out.println("##################");
             System.out.println("Person ID:" + person.getId());
             System.out.println("Name:" + person.getName());
             if (person.hasEmail()) {
@@ -45,12 +48,29 @@ public class AddPerson {
 
     static void addPerson(String file) throws IOException {
         AddressBook.Builder addressBook = AddressBook.newBuilder();
-        addressBook.mergeFrom(new FileInputStream(file));
-
+//        addressBook.mergeFrom(new FileInputStream(file));
         FileOutputStream output = new FileOutputStream(file);
-        addressBook.addPerson(promptForAddress(new BufferedReader(new InputStreamReader(System.in)), System.out));
-        addressBook.build().writeTo(output);
+//        Person person = promptForAddress(new BufferedReader(new InputStreamReader(System.in)), System.out);
+        for(int i = 0; i < 1;i++) {
+            addressBook.addPerson(generatePerson());
+        }
+        AddressBook book = addressBook.build();
+        book.writeTo(output);
         output.close();
+    }
+
+    static Person generatePerson() {
+        Person.Builder person = Person.newBuilder();
+        person.setId(1);
+        person.setEmail("383192497@qq.com");
+        person.setName("renyulong");
+        Person.PhoneType[] types = new Person.PhoneType[]{Person.PhoneType.MOBILE, Person.PhoneType.HOME, Person.PhoneType.WORK};
+        for (int i = 0; i < 3; i++) {
+            Person.PhoneNumber.Builder phoneNumber = Person.PhoneNumber.newBuilder().setNumber("15210830381");
+            phoneNumber.setType(types[i]);
+            person.addPhone(phoneNumber);
+        }
+        return person.build();
     }
 
     static Person promptForAddress(BufferedReader stdin, PrintStream stdout) throws IOException {
@@ -87,5 +107,41 @@ public class AddPerson {
             person.addPhone(phoneNumber);
         }
         return person.build();
+    }
+
+    class PersonBO {
+        private Integer id;
+        private String name;
+        private String email;
+
+    }
+    enum PhoneNumTypeNum {
+        MOBILE(0),
+        HOME(1),
+        WORK(2);
+        private int type;
+
+        PhoneNumTypeNum(int type) {
+            this.type = type;
+        }
+    }
+
+    class AddressBookBO {
+        private List<PersonBO> persons;
+
+        public AddressBookBO() {
+            this.persons = new ArrayList<PersonBO>();
+        }
+        public void addPerson(PersonBO personBO) {
+            this.persons.add(personBO);
+        }
+
+        public List<PersonBO> getPersons() {
+            return persons;
+        }
+
+        public void setPersons(List<PersonBO> persons) {
+            this.persons = persons;
+        }
     }
 }

@@ -28,14 +28,15 @@ public class ChatClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        String user = Utils.user(ctx.channel());
         if(msg instanceof ChatMessage.ChatResponse) {
             ChatMessage.ChatResponse response = (ChatMessage.ChatResponse) msg;
-            Utils.LOG.info("ChatClientHandler channelRead ChatResponse id={} code={} msg={}",
-                    response.getId(), response.getCode(), response.getMsg());
+            Utils.LOG.info("ChatClientHandler channelRead ChatResponse id={} code={} msg={} user={}",
+                    response.getId(), response.getCode(), response.getMsg(), user);
         }
         if(msg instanceof ChatHeartBeat.HeartBeatPong) {
             ChatHeartBeat.HeartBeatPong pong = (ChatHeartBeat.HeartBeatPong) msg;
-            Utils.LOG.info("ChatClientHandler channelRead ChatHeartBeat pong={}", new String(pong.getPong().toByteArray()));
+            Utils.LOG.info("ChatClientHandler channelRead ChatHeartBeat user={} {}", user, new String(pong.getPong().toByteArray()));
         }
     }
 

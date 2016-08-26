@@ -50,14 +50,14 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
                     .build();
             ctx.channel().writeAndFlush(response);
             Utils.LOG.info("ChatServerHandler channelWrit id={} code={} msg={}", request.getId(), 2, "received");
-        }
-
-        if(msg instanceof ChatHeartBeat.HeartBeatPing) {
+        } else if(msg instanceof ChatHeartBeat.HeartBeatPing) {
             ChatHeartBeat.HeartBeatPing ping = (ChatHeartBeat.HeartBeatPing) msg;
-            Utils.LOG.info("ChatServerHandler channelRead heartbeat user={} ping={}", user, new String(ping.getPing().toByteArray()));
+            Utils.LOG.info("ChatServerHandler channelRead heartbeat user={} {}", user, new String(ping.getPing().toByteArray()));
             ByteString b = ByteString.copyFrom("pong".getBytes());
             ChatHeartBeat.HeartBeatPong pong = ChatHeartBeat.HeartBeatPong.newBuilder().setPong(b).build();
             ctx.channel().writeAndFlush(pong);
+        } else {
+            Utils.LOG.warn("ChatServerHandler channelRead not match message type");
         }
     }
 

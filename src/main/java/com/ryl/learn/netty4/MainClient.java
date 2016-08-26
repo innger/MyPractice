@@ -52,11 +52,11 @@ public class MainClient {
                         }
                     });
 //            b.connect(Utils.LOCAL, Utils.PORT).sync().channel().closeFuture().sync();
-            final Channel ch = b.connect(Utils.LOCAL, Utils.PORT).sync().channel();
+            final Channel ch = b.connect(Utils.localAddress(), Utils.PORT).sync().channel();
             Utils.user(ch, user);
-            service.scheduleAtFixedRate(new HeartBeat(ch), 0, 3, TimeUnit.SECONDS);
+            service.scheduleAtFixedRate(new HeartBeat(ch), 5, 5, TimeUnit.SECONDS);
 
-            Utils.LOG.info("Chat client [{}] connected at {}:{}", user, Utils.LOCAL, Utils.PORT);
+            Utils.LOG.info("Chat client [{}] connected at {}:{}", user, Utils.localAddress(), Utils.PORT);
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             for (; ; ) {
                 String line = in.readLine();
@@ -97,7 +97,7 @@ public class MainClient {
                     .setPing(ByteString.copyFrom("ping".getBytes()))
                     .build();
             channel.writeAndFlush(ping);
-            Utils.LOG.info("Chat client heartbeat ping");
+            Utils.LOG.info("Chat client heartbeat {} ping", Utils.user(channel));
         }
     }
 }

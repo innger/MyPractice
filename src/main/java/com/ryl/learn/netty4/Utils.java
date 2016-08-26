@@ -17,7 +17,7 @@ public class Utils {
 
     public static final AttributeKey<String> ATTR_USER = AttributeKey.valueOf("user");
 
-    public static final String LOCAL = "127.0.0.1";
+    private static final String LOCAL = "127.0.0.1";
     public static final int PORT = 5555;
 
     public static String localAddress () {

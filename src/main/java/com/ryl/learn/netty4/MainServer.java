@@ -1,6 +1,5 @@
 package com.ryl.learn.netty4;
 
-import com.ryl.learn.netty4.pojo.ChatMessage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelInitializer;
@@ -10,10 +9,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.LengthFieldPrepender;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
 
 
 /**
@@ -33,13 +29,20 @@ public class MainServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline p = ch.pipeline();
+                            p.addFirst("IdleHandler", new IdleStateHandler(0, 0, 10)); //netty自带idlehandler监听超时,并不关闭连接
+                            p.addAfter("IdleHandler", "IdleTimeoutHandler", new IdleTimeoutHandler());  //传递给自定义handler处理
                             //decode
-                            p.addLast(new LengthFieldBasedFrameDecoder(1024,0,4,0,4));
-                            p.addLast(new ProtobufDecoder(ChatMessage.ChatRequest.getDefaultInstance()));
-                            //encode
-                            p.addLast(new LengthFieldPrepender(4));
-                            p.addLast(new ProtobufEncoder());
+//                            p.addLast(new LengthFieldBasedFrameDecoder(1024, 0, 4, 0, 4));
+                            p.addLast(new MessageDecoder());
+                            //netty中每个管道仅能注册一个解码和编码的方式
+//                            p.addLast(new ProtobufDecoder(ChatMessage.ChatRequest.getDefaultInstance()));
+//                            p.addLast(new ProtobufDecoder(ChatHeartBeat.HeartBeatPing.getDefaultInstance())); //无效
+                            //业务处理
                             p.addLast(new ChatServerHandler());
+                            //encode
+                            p.addLast(new MessageEncoder());
+//                            p.addLast(new LengthFieldPrepender(4));
+//                            p.addLast(new ProtobufEncoder());
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)

@@ -1,0 +1,13 @@
+package com.ryl.learn.netty4.pojo;
+
+option java_package = "com.ryl.learn.netty4.pojo";
+
+option java_outer_classname = "ChatHeartBeat";
+
+message HeartBeatPing {
+    required bytes ping = 1;
+}
+
+message HeartBeatPong {
+    required bytes pong = 1;
+}

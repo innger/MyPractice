@@ -1,0 +1,19 @@
+package com.ryl.learn.netty4.pojo;
+
+option java_package = "com.ryl.learn.netty4.pojo";
+
+option java_outer_classname = "ChatMessage";
+
+message ChatRequest {
+    required int64 id = 1;
+    required string from = 2;
+    required string touser = 3;
+    required string content = 4;
+    required string date = 5;
+}
+
+message ChatResponse {
+    required int64 id = 1;
+    required int32 code = 2;
+    required string msg = 3;
+}

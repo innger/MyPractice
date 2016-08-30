@@ -24,36 +24,182 @@ public class MediumImpl {
         System.out.println(main.ladderLength("hit", "cog", set));
         System.out.println(Arrays.toString(main.twoSum(new int[]{2, 7, 11, 15}, 9)));
 //        System.out.println(main.divide(-2147483648,-1));
-        System.out.println(main.divide(12,2));
+        System.out.println(main.divide(12, 2));
+        char[][] grid = new char[4][5];
+        grid[0] = new char[]{'1', '1', '0', '0', '0'};
+        grid[1] = new char[]{'1', '1', '0', '0', '0'};
+        grid[2] = new char[]{'0', '0', '1', '0', '0'};
+        grid[3] = new char[]{'0', '0', '0', '1', '1'};
+        System.out.println("##" + main.numIslands(grid));
+    }
+
+    /**
+     * 200. Number of Islands
+     * Given a 2d grid map of '1's (land) and '0's (water), count the number of islands.
+     * You may assume all four edges of the grid are all surrounded by water.
+     * 被0围起来的小岛数
+     * 1的个数,再判断1是否连接
+     * 11110
+     * 11010
+     * 11000
+     * 00000 answer:1
+     * <p>
+     * 11000
+     * 11000
+     * 00100
+     * 00011 answer:3
+     * Depth-first search | Breadth-first search | UnionFind
+     *
+     * @param grid char[][]
+     * @return int
+     */
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        int m = grid.length;
+        int n = grid[0].length;
+        UF uf = new UF(m, n, grid);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '0') continue;
+                int p = i * n + j;
+                int q;
+                if (i > 0 && grid[i - 1][j] == '1') {
+                    q = p - n;
+                    uf.union(p, q);
+                }
+                if (i < m - 1 && grid[i + 1][j] == '1') {
+                    q = p + n;
+                    uf.union(p, q);
+                }
+                if (j > 0 && grid[i][j - 1] == '1') {
+                    q = p - 1;
+                    uf.union(p, q);
+                }
+                if (j < n - 1 && grid[i][j + 1] == '1') {
+                    q = p + 1;
+                    uf.union(p, q);
+                }
+            }
+        }
+        return uf.count;
+    }
+
+    class UF {
+        public int count = 0;
+        public int[] id = null;
+
+        public UF(int m, int n, char[][] grid) {
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (grid[i][j] == '1') count++;
+                }
+            }
+            int len = m * n;
+            id = new int[len];
+            for (int i = 0; i < len; i++) {
+                id[i] = i;
+            }
+        }
+
+        public int find(int p) {
+            while (p != id[p]) {
+                id[p] = id[id[p]];
+                p = id[p];
+            }
+            return p;
+        }
+
+        public boolean isConnected(int p, int q) {
+            int pRoot = find(p);
+            int qRoot = find(q);
+            return pRoot == qRoot;
+        }
+
+        public void union(int p, int q) {
+            int pRoot = find(p);
+            int qRoot = find(q);
+            if (pRoot == qRoot) return;
+            id[pRoot] = qRoot;
+            count--;
+        }
     }
 
 
+    /**
+     * 130. Surrounded Regions
+     * Given a 2D board containing 'X' and 'O' (the letter O), capture all regions surrounded by 'X'.
+     * A region is captured by flipping all 'O's into 'X's in that surrounded region.
+     * 被'X'包围的'0'替换成'X'
+     *
+     * @param board char[][]
+     */
+    public void solve(char[][] board) {
+        // TODO: 16/8/30
+    }
+
+    /**
+     * 91. Decode Ways
+     * A message containing letters from A-Z is being encoded to numbers using the following mapping:
+     * 'A' -> 1
+     * 'B' -> 2
+     * ...
+     * 'Z' -> 26
+     * Given an encoded message containing digits, determine the total number of ways to decode it.
+     * Dynamic Programming
+     *
+     * @param s string
+     * @return int
+     */
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0) return 0;
+        int n = s.length();
+        int[] memo = new int[n + 1];
+        memo[n] = 1;
+        memo[n - 1] = s.charAt(n - 1) != '0' ? 1 : 0;
+        for (int i = n - 2; i >= 0; i--) {
+            if (s.charAt(i) != '0') {
+                memo[i] = (Integer.parseInt(s.substring(i, i + 2)) <= 26) ? memo[i + 1] + memo[i + 2] : memo[i + 1];
+            }
+        }
+        return memo[0];
+    }
 
     /**
      * 29. Divide Two Integers
      * Divide two integers without using multiplication, division and mod operator.
      * If it is overflow, return MAX_INT.
      *
-     * @param dividend int
-     * @param divisor  int
+     * @param dividend int 除数
+     * @param divisor  int 被除数
      * @return int
      */
     public int divide(int dividend, int divisor) {
-        if (divisor == 0) return Integer.MAX_VALUE;
-        if (dividend == 0) return 0;
-        int flag = dividend > 0 && divisor < 0 || dividend < 0 && divisor > 0 ? -1 : 1;
-        long did = Math.abs((long)dividend);
-        long dir = Math.abs((long)divisor);
-        long res = 1;
-        while (did >= dir) {
-            res = res << 1;
-            did = did - res;
+        int sign = dividend > 0 && divisor < 0 || dividend < 0 && divisor > 0 ? -1 : 1;
+        long did = Math.abs((long) dividend);
+        long dir = Math.abs((long) divisor);
+        if (dir == 0) return Integer.MAX_VALUE;
+        if (did == 0 || did < dir) return 0;
+
+        long lans = longDivide(did, dir);
+        int ans;
+        if (lans > Integer.MAX_VALUE) {
+            ans = (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        } else {
+            ans = (int) (sign * lans);
         }
-        res = flag == -1 ? -res : res;
-        if(res >= Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE;
+        return ans;
+    }
+
+    //二分查找递归
+    private long longDivide(long did, long dir) {
+        if (did < dir) return 0L;
+        long sum = dir;
+        long multiple = 1;
+        while ((sum + sum) <= did) {
+            sum += sum;
+            multiple += multiple;
         }
-        return (int)res;
+        return multiple + longDivide(did - sum, dir);
     }
 
     /**

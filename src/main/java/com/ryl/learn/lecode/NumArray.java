@@ -1,6 +1,9 @@
 package com.ryl.learn.lecode;
 
 /**
+ * 303. Range Sum Query - Immutable
+ * Given an integer array nums, find the sum of the elements between indices i and j (i ≤ j), inclusive.
+ *
  * https://leetcode.com/problems/range-sum-query-immutable/
  * 参考 http://my.oschina.net/Tsybius2014/blog/528708
  * Created by renyulong on 16/2/18.
@@ -12,7 +15,7 @@ public class NumArray {
     //在构造函数中提前计算好sum
     public NumArray(int[] nums) {
         if (nums == null) {
-            this.sums = nums;
+            this.sums = null;
         } else if (nums.length == 0) {
             this.sums = new int[0];
         } else {

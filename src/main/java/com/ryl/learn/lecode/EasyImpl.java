@@ -41,6 +41,42 @@ public class EasyImpl {
         System.out.println(easy.canConstruct("a","b"));
         System.out.println(easy.canConstruct("aa","ab"));
         System.out.println(easy.canConstruct("aa","aab"));
+        System.out.println(easy.firstUniqChar("leetcode"));
+        System.out.println(easy.firstUniqChar("loveleetcode"));
+    }
+
+    /**
+     * 387. First Unique Character in a String
+     * 找出字符串中第一个不重复的字符
+     *
+     * Given a string, find the first non-repeating character in it and return it's index.
+     * If it doesn't exist, return -1.
+     * s = "leetcode" return 0
+     * s = "loveleetcode" return 2
+     *
+     * @param s string
+     * @return index int
+     */
+    public int firstUniqChar(String s) {
+        if(s == null || s.length() == 0) return -1;
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        int len = s.length();
+        for(int i = 0 ; i < len; i++) {
+            char ch = s.charAt(i);
+            Integer cnt = map.get(ch);
+            if(cnt == null) {
+                map.put(ch, 1);
+            } else {
+                map.put(ch, cnt + 1);
+            }
+        }
+        for(int i = 0; i < len; i++) {
+            char ch = s.charAt(i);
+            if(map.get(ch) == 1) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

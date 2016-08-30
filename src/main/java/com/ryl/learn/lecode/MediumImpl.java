@@ -27,6 +27,8 @@ public class MediumImpl {
         System.out.println(main.divide(12,2));
     }
 
+
+
     /**
      * 29. Divide Two Integers
      * Divide two integers without using multiplication, division and mod operator.

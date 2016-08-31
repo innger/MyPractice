@@ -118,8 +118,41 @@ public class MediumCode {
      * @return ListNode
      */
     public ListNode sortList(ListNode head) {
-        // TODO: 16/7/25  
-        return null;
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode f = head.next.next;
+        ListNode p = head;
+        while (f != null && f.next != null) {
+            p = p.next;
+            f = f.next.next;
+        }
+        //快慢指针找到中间节点p
+        ListNode l2 = sortList(p.next);
+        p.next = null;
+        return merge(sortList(head), l2);
+    }
+
+    private ListNode merge(ListNode l1, ListNode l2) {
+        ListNode ln = new ListNode(Integer.MIN_VALUE);
+        ListNode c = ln;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                c.next = l1;
+                l1 = l1.next;
+            } else {
+                c.next = l2;
+                l2 = l2.next;
+            }
+            c = c.next;
+        }
+        if (l1 != null) {
+            c.next = l1;
+        }
+        if (l2 != null) {
+            c.next = l2;
+        }
+        return ln.next;
     }
 
     /**
@@ -134,8 +167,7 @@ public class MediumCode {
      */
     public boolean canMeasureWater(int x, int y, int z) {
         int total = x + y;
-        if (total < z) return false;
-        return z == 0 || z % gcd(x, y) == 0;
+        return total >= z && (z == 0 || z % gcd(x, y) == 0);
     }
 
     //辗转相除法求最大公约数
@@ -648,25 +680,69 @@ public class MediumCode {
 
     /**
      * 144. Binary Tree Preorder Traversal
+     * Given a binary tree, return the preorder traversal of its nodes' values.
+     * Morris traversal
      *
      * @param root TreeNode
      * @return 二叉树的先序遍历
      */
     public List<Integer> preorderTraversal(TreeNode root) {
-        // TODO: 16/7/13
-        return null;
+        List<Integer> list = new ArrayList<Integer>();
+        TreeNode cur = root;
+        while (cur != null) {
+            if (cur.left == null) {
+                list.add(cur.val);
+                cur = cur.right;
+            } else {
+                TreeNode predecessor = cur.left;
+                while (predecessor.right != null && predecessor.right != cur) {
+                    predecessor = predecessor.right;
+                }
+                if (predecessor.right == null) {
+                    predecessor.right = cur;
+                    list.add(cur.val);
+                    cur = cur.left;
+                } else {
+                    predecessor.right = null;
+                    cur = cur.right;
+                }
+            }
+        }
+        return list;
     }
 
     /**
      * 94. Binary Tree Inorder Traversal
      * Note: Recursive solution is trivial[微不足道的], could you do it iteratively?
+     * Morris traversal
      *
      * @param root TreeNode
      * @return List[Integer] 二叉树中序遍历
      */
     public List<Integer> inorderTraversal(TreeNode root) {
-        // TODO: 16/7/13
-        return null;
+        List<Integer> list = new ArrayList<Integer>();
+        if (root == null) return list;
+        TreeNode cur = root;
+        while (cur != null) {
+            if (cur.left == null) {
+                list.add(cur.val);
+                cur = cur.right;
+            } else {
+                TreeNode predecessor = cur.left;
+                while(predecessor.right != null && predecessor.right != cur) {
+                    predecessor = predecessor.right;
+                }
+                if(predecessor.right == null) {
+                    predecessor.right = cur;
+                    cur = cur.left;
+                } else {
+                    predecessor.right = null;
+                    list.add(cur.val);
+                    cur = cur.right;
+                }
+            }
+        }
+        return list;
     }
 
     /**
@@ -775,6 +851,7 @@ public class MediumCode {
      * 3,结构正负判断
      * 4,int整数越界,改成long
      * 2016-08-11写了一天终于ac,不容易
+     *
      * @param numerator1   int 除数
      * @param denominator1 int 被除数
      * @return string 小数表示

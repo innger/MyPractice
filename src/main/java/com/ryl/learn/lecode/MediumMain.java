@@ -98,37 +98,38 @@ public class MediumMain {
      * <p>
      * Note that 1 is typically treated as an ugly number.
      * 剑指offer上好像有类似题目
+     *
      * @param n int
      * @return the Nth
      */
     public int nthUglyNumber(int n) {
-        if(n < 1) return 0;
-        if(n <= 6) return n;
+        if (n < 1) return 0;
+        if (n <= 6) return n;
         List<Integer> l2 = new ArrayList<Integer>();
         l2.add(2);
         List<Integer> l3 = new ArrayList<Integer>();
         l3.add(3);
         List<Integer> l5 = new ArrayList<Integer>();
         l5.add(5);
-        int i2 = 0,i3 = 0,i5 = 0;
+        int i2 = 0, i3 = 0, i5 = 0;
 
         int ugly = 0;
-        for(int i = 1; i < n; i++) {
+        for (int i = 1; i < n; i++) {
             int u2 = l2.get(i2);
             int u3 = l3.get(i3);
             int u5 = l5.get(i5);
-            ugly = Math.min(Math.min(u2,u3),u5);
-            System.out.println(ugly + " "+ l2 + " " + l3 + " "+ l5);
+            ugly = Math.min(Math.min(u2, u3), u5);
+            System.out.println(ugly + " " + l2 + " " + l3 + " " + l5);
             l2.add(ugly * 2);
             l3.add(ugly * 3);
             l5.add(ugly * 5);
-            if(ugly == u2) {
+            if (ugly == u2) {
                 i2++;
             }
-            if(ugly == u3) {
+            if (ugly == u3) {
                 i3++;
             }
-            if(ugly == u5) {
+            if (ugly == u5) {
                 i5++;
             }
         }
@@ -205,12 +206,13 @@ public class MediumMain {
     /**
      * https://discuss.leetcode.com/topic/2031/challenge-me-thx
      * 很惊艳的算法 This solution is awesome !
+     *
      * @param nums int[]
      * @return int
      */
     public int singleNumberIIBuggy(int[] nums) {
         int ones = 0, twos = 0;
-        for(int i = 0; i < nums.length; i++){
+        for (int i = 0; i < nums.length; i++) {
             ones = (ones ^ nums[i]) & ~twos;
             twos = (twos ^ nums[i]) & ~ones;
         }
@@ -807,14 +809,32 @@ public class MediumMain {
      * 39. Combination Sum
      * 从数组中选出序列,和为给定的target值,每个选中的数字不限次数
      * The same repeated number may be chosen from C unlimited number of times.
+     * All numbers (including target) will be positive integers.
      *
      * @param candidates int[]
      * @param target     int sum
      * @return all combination
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        //Todo
-        return null;
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        List<Integer> cur = new ArrayList<Integer>();
+        dfs(target, 0, candidates, ans, cur);
+        return ans;
+    }
+
+    private void dfs(int target, int bd, int[] cand, List<List<Integer>> ans, List<Integer> cur) {
+        if (target == 0) {
+            ans.add(new ArrayList<Integer>(cur));
+            return;
+        }
+        //Use bd (boundary) to avoid repeating cases.
+        for (int i : cand) {
+            if (i >= bd && (i == target || target - i >= bd)) {
+                cur.add(i);
+                dfs(target - i, i, cand, ans, cur);
+                cur.remove(cur.size() - 1);
+            }
+        }
     }
 
     /**
@@ -1162,7 +1182,7 @@ public class MediumMain {
      * 1. Two Sum
      * Given an array of integers, return indices of the two numbers such that they add up to a specific target.
      *
-     * @param nums int[]
+     * @param nums   int[]
      * @param target int
      * @return int[]
      */

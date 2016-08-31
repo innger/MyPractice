@@ -47,6 +47,199 @@ public class MediumImpl {
         System.out.println(wordDict);
         System.out.println(main.wordBreak("bccdbacdbdacddabbaaaadababadad", wordDict));
         System.out.println(main.wordBreak2("bccdbacdbdacddabbaaaadababadad", wordDict));
+//        System.out.println(main.majorityElement(new int[]{3,3,4}));
+//        System.out.println(main.majorityElement(new int[]{3,2,3}));
+//        System.out.println(main.majorityElement(new int[]{1,2}));
+        System.out.println(main.majorityElement(new int[]{1, 1, 1, 3, 3, 2, 2, 2}));
+
+        System.out.println(main.searchInsert(new int[]{1, 3, 5, 6}, 5));
+        System.out.println(main.searchInsert(new int[]{1, 3, 5, 6}, 2));
+        System.out.println(main.searchInsert(new int[]{1, 3, 5, 6}, 7));
+        System.out.println(main.searchInsert(new int[]{1, 3, 5, 6}, 0));
+        System.out.println(main.searchInsert(new int[]{1, 3}, 2));
+        System.out.println(main.searchInsert(new int[]{1, 2, 3, 4, 5, 10}, 2));
+        System.out.println(main.searchInsert(new int[]{1, 3, 5}, 2));
+
+        System.out.println(Arrays.toString(main.searchRange(new int[]{5, 7, 7, 8, 8, 10}, 8)));
+        System.out.println(Arrays.toString(main.searchRange(new int[]{2, 2}, 2)));
+        System.out.println(Arrays.toString(main.searchRange(new int[]{1}, 1)));
+
+        System.out.println(main.hIndexI(new int[]{3, 0, 6, 1, 5}));
+    }
+
+    /**
+     * 275. H-Index II
+     *
+     * @param citations int[]
+     * @return int
+     */
+    public int hIndexII(int[] citations) {
+        // TODO: 16/8/31
+        return 0;
+    }
+
+    /**
+     * 274. H-Index
+     * Given an array of citations (each citation(引用因子) is a non-negative integer) of a researcher
+     * write a function to compute the researcher's h-index.
+     * A scientist has index h if h of his/her N papers have at least h citations each, and the other N − h papers have no more than h citations each
+     *
+     * @param citations int[]
+     * @return int
+     */
+    public int hIndexI(int[] citations) {
+        if (citations == null || citations.length == 0) return 0;
+        Arrays.sort(citations);
+        int len = citations.length;
+        for (int i = 0; i < citations.length; i++) {
+            if (len <= citations[i]) {
+                return len;
+            } else {
+                len--;
+            }
+        }
+        return len;
+    }
+
+    /**
+     * 34. Search for a Range
+     * Given a sorted array of integers, find the starting and ending position of a given target value.
+     * O(log n)
+     * If the target is not found in the array, return [-1, -1].
+     * [5, 7, 7, 8, 8, 10] 8 return [3,4]
+     *
+     * @param nums   int[]
+     * @param target int
+     * @return int[]
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int[] res = new int[]{-1, -1};
+        if (nums == null || nums.length == 0 || target < nums[0] || target > nums[nums.length - 1]) {
+            return res;
+        }
+        int i = 0;
+        int j = nums.length - 1;
+        int n = -1;
+        while (i <= j) {
+            int mid = i + (j - i) / 2;
+            if (nums[mid] < target) {
+                i = mid + 1;
+            } else if (nums[mid] > target) {
+                j = mid - 1;
+            } else {
+                n = mid;
+                break;
+            }
+        }
+        if (n == -1) return res;
+        int begin = n;
+        if (begin > 0) {
+            while (begin >= 0 && nums[begin] == target) {
+                begin--;
+            }
+            begin++;
+        }
+        int end = n;
+        if (end < nums.length) {
+            while (end < nums.length && nums[end] == target) {
+                end++;
+            }
+            end--;
+        }
+        res[0] = begin;
+        res[1] = end;
+        return res;
+    }
+
+    /**
+     * 35. Search Insert Position
+     * Given a sorted array and a target value, return the index if the target is found.
+     * If not, return the index where it would be if it were inserted in order.
+     * [1,3,5,6], 5 → 2
+     * [1,3,5,6], 2 → 1
+     * [1,3,5,6], 7 → 4
+     * [1,3,5,6], 0 → 0
+     *
+     * @param nums   int[]
+     * @param target int
+     * @return int
+     */
+    public int searchInsert(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return 0;
+        if (target <= nums[0]) return 0;
+        if (target > nums[nums.length - 1]) return nums.length;
+        int i = 0;
+        int j = nums.length - 1;
+        while (i < j) {
+            int mid = i + (j - i) / 2;
+            if (nums[mid] < target) {
+                i = mid + 1;
+            } else if (nums[mid] > target) {
+                j = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return nums[i] < target ? i + 1 : i;
+    }
+
+    /**
+     * 229. Majority Element II
+     * Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times.
+     * The algorithm should run in linear time and in O(1) space.
+     * 找出出现次数超过n/3次的元素 最多有两个
+     * <p>
+     * Boyer-Moore Majority Vote algorithm
+     *
+     * @param nums int[]
+     * @return list
+     */
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> result = new ArrayList<Integer>();
+        if (nums == null || nums.length == 0) return result;
+        if (nums.length == 1) {
+            result.add(nums[0]);
+            return result;
+        }
+        int count = nums.length / 3;
+        int m = nums[0], mc = 1;
+        int j = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == m) {
+                mc++;
+            } else {
+                j = i;
+                break;
+            }
+        }
+        int n = nums[j], nc = 1;
+        for (int i = j + 1; i < nums.length; i++) {
+            int num = nums[i];
+            if (num == m) {
+                mc++;
+            } else if (num == n) {
+                nc++;
+            } else if (mc == 0) {
+                m = num;
+                mc = 1;
+            } else if (nc == 0) {
+                n = num;
+                nc = 1;
+            } else {
+                mc--;
+                nc--;
+            }
+        }
+        //mc nc 需要在nums中重新统计
+        mc = 0;
+        nc = 0;
+        for (int num : nums) {
+            if (num == m) mc++;
+            else if (num == n) nc++;
+        }
+        if (mc > count) result.add(m);
+        if (nc > count) result.add(n);
+        return result;
     }
 
     /**

@@ -69,13 +69,22 @@ public class MediumImpl {
 
     /**
      * 275. H-Index II
+     * if the citations array is sorted in ascending order
      *
      * @param citations int[]
      * @return int
      */
     public int hIndexII(int[] citations) {
-        // TODO: 16/8/31
-        return 0;
+        if (citations == null || citations.length == 0) return 0;
+        int len = citations.length;
+        for (int citation : citations) {
+            if (len <= citation) {
+                return len;
+            } else {
+                len--;
+            }
+        }
+        return len;
     }
 
     /**
@@ -88,17 +97,23 @@ public class MediumImpl {
      * @return int
      */
     public int hIndexI(int[] citations) {
-        if (citations == null || citations.length == 0) return 0;
-        Arrays.sort(citations);
+        if(citations == null || citations.length == 0) return 0;
         int len = citations.length;
-        for (int i = 0; i < citations.length; i++) {
-            if (len <= citations[i]) {
-                return len;
+        int[] count = new int[len + 1];
+        for(int c : citations) {
+            if(c > len) {
+                count[len]++;
             } else {
-                len--;
+                count[c]++;
             }
         }
-        return len;
+        int total = 0;
+        for(int i = len; i >= 0; i--) {
+            total += count[i];
+            if(total >= i)
+                return i;
+        }
+        return 0;
     }
 
     /**

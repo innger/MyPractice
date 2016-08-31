@@ -1,5 +1,7 @@
 package com.ryl.learn.lecode;
 
+import com.google.common.collect.Lists;
+
 import java.util.*;
 
 /**
@@ -23,7 +25,7 @@ public class MediumImpl {
         set.add("log");
         System.out.println(main.ladderLength("hit", "cog", set));
         System.out.println(Arrays.toString(main.twoSum(new int[]{2, 7, 11, 15}, 9)));
-//        System.out.println(main.divide(-2147483648,-1));
+        System.out.println(main.divide(-2147483648, -1));
         System.out.println(main.divide(12, 2));
         char[][] grid = new char[4][5];
         grid[0] = new char[]{'1', '1', '0', '0', '0'};
@@ -31,6 +33,137 @@ public class MediumImpl {
         grid[2] = new char[]{'0', '0', '1', '0', '0'};
         grid[3] = new char[]{'0', '0', '0', '1', '1'};
         System.out.println("##" + main.numIslands(grid));
+
+        System.out.println(main.restoreIpAddresses("25525511135"));
+
+        System.out.println(main.simplifyPath("/../"));
+        System.out.println(main.simplifyPath("/home/"));
+        System.out.println(main.simplifyPath("/home//foo/"));
+        System.out.println(main.simplifyPath("/a/./b/../../c/"));
+
+        Set<String> wordDict = new HashSet<String>();
+        String[] arr = new String[]{"cbc", "bcda", "adb", "ddca", "bad", "bbb", "dad", "dac", "ba", "aa", "bd", "abab", "bb", "dbda", "cb", "caccc", "d", "dd", "aadb", "cc", "b", "bcc", "bcd", "cd", "cbca", "bbd", "ddd", "dabb", "ab", "acd", "a", "bbcc", "cdcbd", "cada", "dbca", "ac", "abacd", "cba", "cdb", "dbac", "aada", "cdcda", "cdc", "dbc", "dbcb", "bdb", "ddbdd", "cadaa", "ddbc", "babb"};
+        wordDict.addAll(Lists.newArrayList(arr));
+        System.out.println(wordDict);
+        System.out.println(main.wordBreak("bccdbacdbdacddabbaaaadababadad", wordDict));
+        System.out.println(main.wordBreak2("bccdbacdbdacddabbaaaadababadad", wordDict));
+    }
+
+    /**
+     * 139. Word Break
+     * Given a string s and a dictionary of words dict,
+     * determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+     * DP
+     *
+     * @param s        string
+     * @param wordDict set
+     * @return boolen
+     */
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        if (s == null || s.length() == 0) return true;
+        if (wordDict == null || wordDict.size() == 0) return false;
+        boolean[] flag = new boolean[s.length() + 1];
+        flag[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (String word : wordDict) {
+                if (word.length() <= i) {
+                    if (flag[i - word.length()]) {
+                        if (s.substring(i - word.length(), i).equals(word)) {
+                            flag[i] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return flag[s.length()];
+    }
+
+    private boolean wordBreak2(String s, Set<String> wordDict) {
+        boolean[] flag = new boolean[s.length() + 1];
+        flag[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (flag[j] && wordDict.contains(s.substring(j, i))) {
+                    flag[i] = true;
+                    break;
+                }
+            }
+        }
+        return flag[s.length()];
+    }
+
+    /**
+     * 71. Simplify Path
+     * Given an absolute path for a file (Unix-style), simplify it.
+     * Linux cd命令,到正确的路径
+     * path = "/home/", => "/home"
+     * path = "/a/./b/../../c/", => "/c"
+     * bug-free
+     *
+     * @param path string
+     * @return string
+     */
+    public String simplifyPath(String path) {
+        if (path == null || path.length() == 0) return null;
+        Stack<String> stack = new Stack<String>();
+        String res = "";
+        String[] arr = path.split("/+");
+        for (String str : arr) {
+            if ("".equals(str) || ".".equals(str)) {
+                continue;
+            }
+            if ("..".equals(str)) {
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+            } else {
+                stack.push(str);
+            }
+        }
+        while (!stack.isEmpty()) {
+            res = stack.pop() + "/" + res;
+        }
+        if (res.endsWith("/")) res = res.substring(0, res.length() - 1);
+        return "/" + res;
+    }
+
+    /**
+     * 93. Restore IP Addresses
+     * Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+     * Given "25525511135",
+     * return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
+     *
+     * @param s string
+     * @return list
+     */
+    public List<String> restoreIpAddresses(String s) {
+        List<String> result = new ArrayList<String>();
+        if (s == null || s.length() < 4) {
+            return result;
+        }
+        int len = s.length();
+        //3-loop divides the string s into 4 substring: s1, s2, s3, s4.
+        for (int i = 1; i < 4 && i < len - 2; i++) {
+            for (int j = i + 1; j < i + 4 && j < len - 1; j++) {
+                for (int k = j + 1; k < j + 4 && k < len; k++) {
+                    String s1 = s.substring(0, i);
+                    String s2 = s.substring(i, j);
+                    String s3 = s.substring(j, k);
+                    String s4 = s.substring(k, len);
+                    if (isValid(s1) && isValid(s2) && isValid(s3) && isValid(s4)) {
+                        //Check if each substring is valid.
+                        result.add(s1 + "." + s2 + "." + s3 + "." + s4);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean isValid(String s) {
+        //ip每个字段是 0 - 255
+        return !(s.length() > 3 || s.length() == 0 || (s.charAt(0) == '0' && s.length() > 1) || Integer.parseInt(s) > 255);
     }
 
     /**
@@ -122,6 +255,7 @@ public class MediumImpl {
             id[pRoot] = qRoot;
             count--;
         }
+
     }
 
 

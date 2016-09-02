@@ -21,18 +21,21 @@ import java.util.regex.Pattern;
  */
 public class MainTest {
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        /*for (int i = 0; i < 10; i++) {
+    public static void main(String[] args) throws Exception {
+        commonTest();
+    }
+
+    public static void commonTest() throws UnsupportedEncodingException {
+        for (int i = 0; i < 10; i++) {
             System.out.println(UUID.randomUUID().toString());
             System.out.println(Integer.parseInt("b80cbec", 16));
-        }*/
+        }
 
         System.out.println(getServerIp());
 
         String[] arr = "182.92.253.18".split(",");
 
         System.out.println(arr[0]);
-//        System.out.println(arr[1].trim());
 
         System.out.println(Charsets.UTF_8.displayName(Locale.TRADITIONAL_CHINESE));
         System.out.println("京A456221".substring(0, 2));
@@ -70,11 +73,6 @@ public class MainTest {
         String[] strings = new String[]{"a","b","c"};
         strings = new String[0];
         System.out.println(Arrays.toString(Arrays.copyOf(strings, strings.length)));
-
-
-
-
-
     }
 
     public static String getServerIp() {

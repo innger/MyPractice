@@ -65,21 +65,124 @@ public class MediumImpl {
         System.out.println(Arrays.toString(main.searchRange(new int[]{1}, 1)));
 
         System.out.println(main.hIndexI(new int[]{3, 0, 6, 1, 5}));
+        int[][] matrix = new int[3][3];
+        matrix[0] = new int[]{1, 5, 9};
+        matrix[1] = new int[]{10, 11, 13};
+        matrix[2] = new int[]{12, 13, 15};
+        System.out.println(main.kthSmallest(matrix, 8));
+        int[] nums1 = new int[]{1, 1, 2};
+        int[] nums2 = new int[]{1, 2, 3};
+        for (int[] p : main.kSmallestPairs(nums1, nums2, 9)) {
+            System.out.println(Arrays.toString(p));
+        }
     }
+
+    /**
+     * 230. Kth Smallest Element in a BST
+     *
+     * @param root TreeNode
+     * @param k    int
+     * @return int
+     */
+    public int kthSmallest(TreeNode root, int k) {
+        // TODO: 16/9/2
+        return 0;
+    }
+
+    /**
+     * 373. Find K Pairs with Smallest Sums
+     * You are given two integer arrays nums1 and nums2 sorted in ascending order and an integer k.
+     * 从nums1 nums2 找出k对sum最小的组合列表 按顺序排列
+     *
+     * @param nums1 int[]
+     * @param nums2 int[]
+     * @param k     int
+     * @return List
+     */
+    public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<int[]> list = new ArrayList<int[]>();
+        if (nums1 == null || nums2 == null || nums1.length == 0 || nums2.length == 0)
+            return list;
+        PriorityQueue<IntPair> pq = new PriorityQueue<IntPair>();
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        for (int j = 0; j < n2; j++) pq.offer(new IntPair(0, j, nums1[0] + nums2[j]));
+        for (int i = 0; i < Math.min(k, n1 * n2); i++) {
+            IntPair pair = pq.poll();
+            list.add(new int[]{nums1[pair.x], nums2[pair.y]});
+            if (pair.x == n1 - 1) continue;
+            pq.offer(new IntPair(pair.x + 1, pair.y, nums1[pair.x + 1] + nums2[pair.y]));
+        }
+        return list;
+    }
+
+    class IntPair implements Comparable<IntPair> {
+        int x, y, sum;
+
+        public IntPair(int x, int y, int sum) {
+            this.x = x;
+            this.y = y;
+            this.sum = sum;
+        }
+
+        @Override
+        public int compareTo(IntPair pair) {
+            return this.sum - pair.sum;
+        }
+    }
+
 
     /**
      * 378. Kth Smallest Element in a Sorted Matrix
      * Given a n x n matrix where each of the rows and columns are sorted in ascending order,
      * find the kth smallest element in the matrix.
      * Note that it is the kth smallest element in the sorted order, not the kth distinct element.
+     * 最无脑的解法居然ac,矩阵转换成数组,再排序,取第k-1
+     * 矩阵是行/列递增,有更高效的解法 Binary-Search
      *
      * @param matrix int[][]
-     * @param k int
+     * @param k      int
      * @return int
      */
     public int kthSmallest(int[][] matrix, int k) {
-        // TODO: 16/9/1
-        return 0;
+        int len = matrix.length;
+        PriorityQueue<Tuple> pq = new PriorityQueue<Tuple>();
+        for (int j = 0; j < len; j++) pq.offer(new Tuple(0, j, matrix[0][j]));
+        for (int i = 0; i < k - 1; i++) {
+            Tuple t = pq.poll();
+            if (t.x == len - 1) continue;
+            pq.offer(new Tuple(t.x + 1, t.y, matrix[t.x + 1][t.y]));
+        }
+        return pq.poll().val;
+    }
+
+    class Tuple implements Comparable<Tuple> {
+        int x, y, val;
+
+        public Tuple(int x, int y, int val) {
+            this.x = x;
+            this.y = y;
+            this.val = val;
+        }
+
+        @Override
+        public int compareTo(Tuple o) {
+            return this.val - o.val;
+        }
+    }
+
+    public int kthSmallestEasy(int[][] matrix, int k) {
+        if (k <= 0) return 0;
+        int len = matrix.length;
+        int[] array = new int[len * len];
+        int index = 0;
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < len; j++) {
+                array[index++] = matrix[i][j];
+            }
+        }
+        Arrays.sort(array);
+        return array[k - 1];
     }
 
     /**
@@ -112,20 +215,20 @@ public class MediumImpl {
      * @return int
      */
     public int hIndexI(int[] citations) {
-        if(citations == null || citations.length == 0) return 0;
+        if (citations == null || citations.length == 0) return 0;
         int len = citations.length;
         int[] count = new int[len + 1];
-        for(int c : citations) {
-            if(c > len) {
+        for (int c : citations) {
+            if (c > len) {
                 count[len]++;
             } else {
                 count[c]++;
             }
         }
         int total = 0;
-        for(int i = len; i >= 0; i--) {
+        for (int i = len; i >= 0; i--) {
             total += count[i];
-            if(total >= i)
+            if (total >= i)
                 return i;
         }
         return 0;
@@ -754,6 +857,16 @@ public class MediumImpl {
             } else if (newCount >= total - 1) {
                 break;
             }
+        }
+    }
+
+    class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int x) {
+            val = x;
         }
     }
 

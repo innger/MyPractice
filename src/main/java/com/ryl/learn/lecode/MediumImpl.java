@@ -106,11 +106,13 @@ public class MediumImpl {
         PriorityQueue<IntPair> pq = new PriorityQueue<IntPair>();
         int n1 = nums1.length;
         int n2 = nums2.length;
+        //从nums1取出最小的组合,数组递增
         for (int j = 0; j < n2; j++) pq.offer(new IntPair(0, j, nums1[0] + nums2[j]));
         for (int i = 0; i < Math.min(k, n1 * n2); i++) {
             IntPair pair = pq.poll();
             list.add(new int[]{nums1[pair.x], nums2[pair.y]});
             if (pair.x == n1 - 1) continue;
+            //y在初始化时,已遍历完成
             pq.offer(new IntPair(pair.x + 1, pair.y, nums1[pair.x + 1] + nums2[pair.y]));
         }
         return list;

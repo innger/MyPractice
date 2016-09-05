@@ -22,7 +22,9 @@ import java.util.regex.Pattern;
 public class MainTest {
 
     public static void main(String[] args) throws Exception {
-        commonTest();
+        for(int i = 0; i < 1000;i++) {
+            System.out.println(new Random().nextInt(10000));
+        }
     }
 
     public static void commonTest() throws UnsupportedEncodingException {

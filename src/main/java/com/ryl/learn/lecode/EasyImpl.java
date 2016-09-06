@@ -57,6 +57,174 @@ public class EasyImpl {
         words.add("makes");
         System.out.println(easy.shortestDistance(words, "coding", "practice"));
         System.out.println(easy.shortestDistance(words, "makes", "coding"));
+
+        List<Interval> intervals = new ArrayList<Interval>();
+        intervals.add(new Interval(0, 30));
+        intervals.add(new Interval(5, 10));
+        intervals.add(new Interval(15, 20));
+        System.out.println(easy.canAttendMeetings(intervals));
+
+        System.out.println(easy.isStrobogrammatic("69"));
+        System.out.println(easy.isStrobogrammatic("881"));
+        System.out.println(easy.isStrobogrammatic("818"));
+
+        List<String> strings = new ArrayList<String>();
+        strings.add("abc");
+        strings.add("bcd");
+        strings.add("acef");
+        strings.add("xyz");
+        strings.add("az");
+        strings.add("ba");
+        strings.add("a");
+        strings.add("z");
+        easy.groupStrings(strings).forEach(System.out::println);
+    }
+
+    /**
+     * 276. Paint Fence
+     * There is a fence with n posts, each post can be painted with one of the k colors.
+     * You have to paint all the posts such that no more than two adjacent fence posts have the same color.
+     * 最多有两个相邻柱子颜色相同
+     * 所以在染一个柱子的时候, 要考虑是否和上一个柱子颜色相同.
+     * 如果和上一个相同的话,那么上一个有多少种和上上次不同的染色方案, 那么当前柱子也有多少种染色方案.
+     * 如果和上一个不同的话,那么染色方案就为(k-1)*(之前总共多少染色方案).
+     * O(n) time O(1) space
+     * https://discuss.leetcode.com/topic/36580/complete-explanation-o-n-time-o-1-space
+     *
+     * @param n int n个柱子
+     * @param k int k种颜色 n k are non-negative integers.
+     * @return int
+     */
+    public int numWays(int n, int k) {
+        if (n == 0 || k == 0 || (k == 1 && n > 2)) return 0;
+        int same = 0, diff = k, total = k;
+        for (int i = 2; i <= n; i++) {
+            same = diff;
+            diff = (k - 1) * total;
+            total = same + diff;
+        }
+        return total;
+    }
+
+    /**
+     * 249. Group Shifted Strings
+     * Given a string, we can "shift" each of its letter to its successive letter, for example: "abc" -> "bcd".
+     * We can keep "shifting" which forms the sequence: "abc" -> "bcd" -> ... -> "xyz"
+     * Given a list of strings which contains only lowercase alphabets, group all strings that belong to the same shifting sequence.
+     * 将每个字符串都转换成减去字符串首字符之后的字符串，这样可以相互转换的字符串就转化成了一个key
+     *
+     * @param strings list
+     * @return list.list
+     */
+    public List<List<String>> groupStrings(List<String> strings) {
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        for (String str : strings) {
+            String key = "";
+            for (int i = 0; i < str.length(); i++) {
+                key += (str.charAt(i) - str.charAt(0) + 26) % 26 + 'a';
+            }
+            List<String> list = map.get(key);
+            if (list == null) {
+                list = new ArrayList<String>();
+                list.add(str);
+                map.put(key, list);
+            } else {
+                list.add(str);
+            }
+        }
+        List<List<String>> result = new ArrayList<List<String>>();
+        for (List<String> value : map.values()) {
+            Collections.sort(value);
+            result.add(value);
+        }
+        return result;
+    }
+
+    /**
+     * 270. Closest Binary Search Tree Value
+     * Given a non-empty binary search tree and a target value, find the value in the BST that is closest to the target.
+     *
+     * @param root   TreeNode
+     * @param target double
+     * @return int
+     */
+    public int closestValue(TreeNode root, double target) {
+        long ans = root.val, val = Long.MAX_VALUE;
+        if (target > ans && root.right != null)
+            val = closestValue(root.right, target);
+        else if (target <= ans && root.left != null)
+            val = closestValue(root.left, target);
+        if (Math.abs(val - target) < Math.abs(ans - target))
+            ans = val;
+        return (int) ans;
+    }
+
+    /**
+     * 246. Strobogrammatic Number
+     * A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down).
+     * the numbers "69", "88", and "818" are all strobogrammatic.
+     *
+     * @param num string
+     * @return boolean
+     */
+    public boolean isStrobogrammatic(String num) {
+        Map<Character, Character> map = new HashMap<Character, Character>();
+        map.put('6', '9');
+        map.put('9', '6');
+        map.put('8', '8');
+        map.put('1', '1');
+        map.put('0', '0');
+        int len = num.length();
+        for (int i = 0; i <= (len + 1) / 2; i++) {
+            char c1 = num.charAt(i);
+            char c2 = num.charAt(len - i - 1);
+            if (map.get(c1) != c2) return false;
+        }
+        return true;
+    }
+
+    /**
+     * 252. Meeting Rooms
+     * Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei),
+     * determine if a person could attend all meetings.
+     * [[0, 30],[5, 10],[15, 20]] return false
+     * 查区间是否有重合,先按照start排个序，然后查看是否每个会议的的开始时间都比前一个结束时间大
+     *
+     * @param intervals list
+     * @return boolean
+     */
+    public boolean canAttendMeetings(List<Interval> intervals) {
+        if (intervals == null || intervals.size() == 0) return false;
+        Collections.sort(intervals, new Comparator<Interval>() {
+            @Override
+            public int compare(Interval o1, Interval o2) {
+                return o1.start - o2.start;
+            }
+        });
+        for (int i = 1; i < intervals.size(); i++) {
+            if (intervals.get(i).start > intervals.get(i - 1).end) return false;
+        }
+        return true;
+    }
+
+    static class Interval {
+        private int start;
+        private int end;
+
+        public Interval() {
+            this.start = 0;
+            this.end = 0;
+        }
+
+        public Interval(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + start + "," + end + "]";
+        }
     }
 
     /**

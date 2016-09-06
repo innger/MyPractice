@@ -29,12 +29,14 @@ public class Trie {
     public boolean startsWith(String prefix) {
         return true;
     }
-}
 
+    class TrieNode {
+        // Initialize your data structure here.
+        public TrieNode() {
 
-class TrieNode {
-    // Initialize your data structure here.
-    public TrieNode() {
-
+        }
     }
 }
+
+
+

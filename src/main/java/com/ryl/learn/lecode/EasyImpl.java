@@ -38,12 +38,12 @@ public class EasyImpl {
         TreeNode head = easy.constructTree(list);
         System.out.println(easy.levelOrder(head));
         System.out.println(easy.generatePossibleNextMoves("++++-"));
-        System.out.println(easy.canConstruct("a","b"));
-        System.out.println(easy.canConstruct("aa","ab"));
-        System.out.println(easy.canConstruct("aa","aab"));
+        System.out.println(easy.canConstruct("a", "b"));
+        System.out.println(easy.canConstruct("aa", "ab"));
+        System.out.println(easy.canConstruct("aa", "aab"));
         System.out.println(easy.firstUniqChar("leetcode"));
         System.out.println(easy.firstUniqChar("loveleetcode"));
-        System.out.println(easy.findTheDifference("abcd","abcde"));
+        System.out.println(easy.findTheDifference("abcd", "abcde"));
     }
 
     /**
@@ -58,20 +58,20 @@ public class EasyImpl {
      */
     public char findTheDifference(String s, String t) {
         int sums = 0;
-        for(int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < s.length(); i++) {
             sums += s.charAt(i);
         }
         int sumt = 0;
-        for(int i = 0;i < t.length();i++) {
+        for (int i = 0; i < t.length(); i++) {
             sumt += t.charAt(i);
         }
-        return (char)(sumt - sums);
+        return (char) (sumt - sums);
     }
 
     /**
      * 387. First Unique Character in a String
      * 找出字符串中第一个不重复的字符
-     *
+     * <p>
      * Given a string, find the first non-repeating character in it and return it's index.
      * If it doesn't exist, return -1.
      * s = "leetcode" return 0
@@ -81,21 +81,21 @@ public class EasyImpl {
      * @return index int
      */
     public int firstUniqChar(String s) {
-        if(s == null || s.length() == 0) return -1;
+        if (s == null || s.length() == 0) return -1;
         Map<Character, Integer> map = new HashMap<Character, Integer>();
         int len = s.length();
-        for(int i = 0 ; i < len; i++) {
+        for (int i = 0; i < len; i++) {
             char ch = s.charAt(i);
             Integer cnt = map.get(ch);
-            if(cnt == null) {
+            if (cnt == null) {
                 map.put(ch, 1);
             } else {
                 map.put(ch, cnt + 1);
             }
         }
-        for(int i = 0; i < len; i++) {
+        for (int i = 0; i < len; i++) {
             char ch = s.charAt(i);
-            if(map.get(ch) == 1) {
+            if (map.get(ch) == 1) {
                 return i;
             }
         }
@@ -112,6 +112,7 @@ public class EasyImpl {
      * canConstruct("aa", "ab") -> false
      * canConstruct("aa", "aab") -> true
      * bug-free
+     *
      * @param ransomNote String
      * @param magazine   String
      * @return true/false
@@ -355,7 +356,7 @@ public class EasyImpl {
      * Given a binary tree, return all root-to-leaf paths.
      *
      * @param root TreeNode
-     * @return List<String>
+     * @return List String
      */
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> paths = new ArrayList<String>();

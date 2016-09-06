@@ -42,9 +42,10 @@ public class EasyCode {
      * 按层打印二叉树 left -> right
      *
      * @param root TreeNode
-     * @return List<List>
+     * @return List List Integer
      */
     public List<List<Integer>> levelOrder(TreeNode root) {
+        // TODO: 16/9/5
         return null;
     }
 
@@ -64,8 +65,8 @@ public class EasyCode {
     }
 
     public int getSum2(int a, int b) {
-        if((a & b) == 0) return a|b;
-        return getSum2(a^b, (a&b) << 1);
+        if ((a & b) == 0) return a | b;
+        return getSum2(a ^ b, (a & b) << 1);
     }
 
     /**
@@ -267,7 +268,7 @@ public class EasyCode {
                 set.add(arr[i]);
                 while (arr[i] != heap[0] && set.contains(heap[0]) && !set.isEmpty()) {
                     System.out.println("remove element " + heap[0]);
-                    set.remove((Object)heap[0]);
+                    set.remove((Object) heap[0]);
                     heap[0] = 0;
                     minHeapDeleteNumber(heap, hlen);
                     hlen--;
@@ -350,9 +351,9 @@ public class EasyCode {
         if (m >= arr.length) {
             //窗口不移动,及arr中的最小值
             int min = Integer.MAX_VALUE;
-            for (int i = 0; i < arr.length; i++) {
-                if (min > arr[i]) {
-                    min = arr[i];
+            for (int num : arr) {
+                if (min > num) {
+                    min = num;
                 }
             }
             return new int[]{min};

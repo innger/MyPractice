@@ -75,6 +75,108 @@ public class MediumImpl {
         for (int[] p : main.kSmallestPairs(nums1, nums2, 9)) {
             System.out.println(Arrays.toString(p));
         }
+
+        System.out.println(main.findMin(new int[]{4, 5, 6, 7, 0, 1, 2}));
+        System.out.println(main.findMin(new int[]{4, 5, 6, 7, 8, 2, 3}));
+        System.out.println(main.findMin(new int[]{4, 5, 6, 7, 8, 9, 3}));
+        System.out.println(main.findMin(new int[]{1, 2}));
+        System.out.println(main.findMin(new int[]{2, 1}));
+
+        System.out.println(main.increasingTriplet(new int[]{1, 0, 0, 0, 0, 0, 10, 0, 0, 0, 1000000}));
+
+        System.out.println(main.lengthOfLIS(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
+    }
+
+    /**
+     * 334. Increasing Triplet Subsequence
+     * Given an unsorted array return whether an increasing subsequence of length 3 exists or not in the array.
+     * Return true if there exists i, j, k such that arr[i] < arr[j] < arr[k] given 0 ≤ i < j < k ≤ n-1 else return false.
+     * <p>
+     * O(n) time complexity and O(1) space complexity.
+     *
+     * @param nums int[]
+     * @return boolean
+     */
+    public boolean increasingTriplet(int[] nums) {
+        if (nums == null || nums.length < 3) return false;
+        int i = 0;
+        int j = 1;
+        int k = 2;
+        while (k < nums.length) {
+            if (nums[i] < nums[j] && nums[j] < nums[k]) {
+                return true;
+            }
+            while (nums[i] >= nums[j] && i < j) {
+                i++;
+            }
+            if (i == j) j++;
+            while (nums[j] >= nums[k] && j < k) {
+                j++;
+            }
+            if (j == k) k++;
+            while (k < nums.length - 1 && nums[k + 1] <= nums[j]) {
+                k++;
+            }
+            if (k < nums.length - 1 && nums[k + 1] > nums[j]) {
+                k++;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 300. Longest Increasing Subsequence
+     * Given an unsorted array of integers, find the length of longest increasing subsequence.
+     * [10, 9, 2, 5, 3, 7, 101, 18]
+     * The longest increasing subsequence is [2, 3, 7, 101], therefore the length is 4.
+     * Note that there may be more than one LIS combination, it is only necessary for you to return the length.
+     * 求最长子序列
+     *
+     * @param nums int[]
+     * @return int
+     */
+    public int lengthOfLIS(int[] nums) {
+        //dp 没看懂
+        int[] dp = new int[nums.length];
+        int len = 0;
+        for (int n : nums) {
+            int i = Arrays.binarySearch(dp, 0, len, n);
+            if (i < 0) i = -(i + 1);
+            dp[i] = n;
+            if (i == len) len++;
+        }
+        return len;
+    }
+
+
+    /**
+     * 153. Find Minimum in Rotated Sorted Array
+     * Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+     * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+     * Find the minimum element.
+     *
+     * @param nums int[]
+     * @return int
+     */
+    public int findMin(int[] nums) {
+        int i = 0;
+        int j = nums.length - 1;
+        while (i < j) {
+            int mid = i + (j - i) / 2;
+            if (nums[mid] >= nums[i]) {
+                if (mid + 1 < nums.length && nums[mid] > nums[mid + 1]) {
+                    return nums[mid + 1];
+                }
+                i = mid + 1;
+            }
+            if (nums[mid] <= nums[j]) {
+                if (mid - 1 >= 0 && nums[mid] < nums[mid - 1]) {
+                    return nums[mid];
+                }
+                j = mid - 1;
+            }
+        }
+        return i == j ? nums[i] : nums[0];
     }
 
     /**

@@ -44,6 +44,80 @@ public class EasyImpl {
         System.out.println(easy.firstUniqChar("leetcode"));
         System.out.println(easy.firstUniqChar("loveleetcode"));
         System.out.println(easy.findTheDifference("abcd", "abcde"));
+
+        System.out.println(easy.canPermutePalindrome("code"));
+        System.out.println(easy.canPermutePalindrome("aab"));
+        System.out.println(easy.canPermutePalindrome("carerac"));
+
+        List<String> words = new ArrayList<String>();
+        words.add("practice");
+        words.add("makes");
+        words.add("perfect");
+        words.add("coding");
+        words.add("makes");
+        System.out.println(easy.shortestDistance(words, "coding", "practice"));
+        System.out.println(easy.shortestDistance(words, "makes", "coding"));
+    }
+
+    /**
+     * 243. Shortest Word Distance
+     * Given a list of words and two words word1 and word2, return the shortest distance between these two words in the list.
+     * ["practice", "makes", "perfect", "coding", "makes"]
+     * "coding" "practice" return 3
+     * "makes" "coding" return 1
+     *
+     * @param words list
+     * @param word1 string
+     * @param word2 string
+     * @return int
+     */
+    public int shortestDistance(List<String> words, String word1, String word2) {
+        List<Integer> list1 = new ArrayList<Integer>();
+        List<Integer> list2 = new ArrayList<Integer>();
+        for (int i = 0; i < words.size(); i++) {
+            if (words.get(i).equals(word1)) {
+                list1.add(i);
+            } else if (words.get(i).equals(word2)) {
+                list2.add(i);
+            }
+        }
+        int i = 0;
+        int j = 0;
+        int ans = Integer.MAX_VALUE;
+        while (i < list1.size() && j < list2.size()) {
+            ans = Math.min(ans, Math.abs(list1.get(i) - list2.get(j)));
+            //一个小小的技巧将时间复杂度由O(m*n)降为O(m+n).
+            if (list1.get(i) < list2.get(j))
+                i++;
+            else
+                j++;
+        }
+        return ans;
+    }
+
+    /**
+     * 266. Palindrome Permutation
+     * Given a string, determine if a permutation of the string could form a palindrome.
+     * "code" -> False, "aab" -> True, "carerac" -> True.
+     * 判断一个字符串的组合是否能组成回文
+     * 出现的字符全部是偶数次,或者只有一个字符出现奇数次
+     *
+     * @param s string
+     * @return boolean
+     */
+    public boolean canPermutePalindrome(String s) {
+        if (s == null || s.length() == 0) return false;
+        if (s.length() == 1) return true;
+        int[] arr = new int[256];
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            arr[ch]++;
+        }
+        int count = 0;
+        for (int n : arr) {
+            if ((n & 1) == 1) count++;
+        }
+        return count <= 1;
     }
 
     /**

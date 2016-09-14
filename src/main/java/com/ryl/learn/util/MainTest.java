@@ -1,6 +1,7 @@
 package com.ryl.learn.util;
 
 import com.google.common.base.Charsets;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,9 +23,40 @@ import java.util.regex.Pattern;
 public class MainTest {
 
     public static void main(String[] args) throws Exception {
-        for(int i = 0; i < 1000;i++) {
-            System.out.println(new Random().nextInt(10000));
+        long start = System.currentTimeMillis();
+        String str = "renyulong";
+        for (int i = 0; i < 1000000; i++) {
+            if (str.toUpperCase().equals("RENYULONG")) {
+
+            }
         }
+        System.out.println(System.currentTimeMillis() - start);
+        start = System.currentTimeMillis();
+        str = str.toUpperCase();
+        for (int i = 0; i < 1000000; i++) {
+            if (str.equals("RENYULONG")) {
+            }
+        }
+        System.out.println(System.currentTimeMillis() - start);
+
+        int numPartitions = 3;
+        for (int i = 0; i < 100; i++) {
+            String key = RandomStringUtils.randomAlphanumeric(24);
+            System.out.println(key + " " + Math.abs(key.hashCode()) % numPartitions);
+            System.out.println("==============");
+        }
+
+        System.out.println(Math.abs("C81F662B8ADDC81F662B8ADD".hashCode() % numPartitions));
+
+        System.out.println(Math.abs(Integer.MIN_VALUE) % numPartitions);
+        System.out.println("polygenelubricants".hashCode());
+        System.out.println(hash("polygenelubricants"));
+        System.out.println(1 >>> 16);
+    }
+
+    static int hash(Object key) {
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
     }
 
     public static void commonTest() throws UnsupportedEncodingException {
@@ -43,7 +75,7 @@ public class MainTest {
         System.out.println("京A456221".substring(0, 2));
         for (int i = 0; i < 1; i++) {
             Integer msgId = new Random().nextInt(65535);
-            int msgId2  = RandomUtils.nextInt(1, 65535);
+            int msgId2 = RandomUtils.nextInt(1, 65535);
             System.out.println(msgId + msgId2);
         }
 
@@ -51,14 +83,14 @@ public class MainTest {
         Pattern pattern = Pattern.compile("actionUrl=(.*?)(&|$)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(str);
         if (matcher.find()) {
-            System.out.println(URLDecoder.decode(matcher.group(1),"UTF-8"));
+            System.out.println(URLDecoder.decode(matcher.group(1), "UTF-8"));
         }
         String url = "http://www.baidu.com?a=1&a=v";
         System.out.println(URLEncoder.encode(url, Charsets.UTF_8.name()));
 
         //bigdecimal 四舍五入
         BigDecimal decimal = new BigDecimal(12.005);
-        System.out.println(decimal.setScale(0,BigDecimal.ROUND_HALF_UP));
+        System.out.println(decimal.setScale(0, BigDecimal.ROUND_HALF_UP));
 
         List<Integer> list = new ArrayList<>();
         list.add(1);
@@ -72,7 +104,7 @@ public class MainTest {
             }
         });
 
-        String[] strings = new String[]{"a","b","c"};
+        String[] strings = new String[]{"a", "b", "c"};
         strings = new String[0];
         System.out.println(Arrays.toString(Arrays.copyOf(strings, strings.length)));
     }

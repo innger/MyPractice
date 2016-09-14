@@ -29,7 +29,7 @@ public class BasicUtils {
     @Test
     public void preconditions() {
         String s = Preconditions.checkNotNull("123");
-        String ss = Preconditions.checkNotNull(null,"username must not null");
+        String ss = Preconditions.checkNotNull(null, "username must not null");
         logger.info("{} {}", s, ss);
         logger.info("{}", Preconditions.checkPositionIndex(11, 10));
         Preconditions.checkArgument(10 % 2 == 0);
@@ -40,7 +40,7 @@ public class BasicUtils {
         String name = "";
         Objects.isNull(name);
         Objects.requireNonNull(name);
-
     }
+
 
 }

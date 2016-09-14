@@ -63,9 +63,8 @@ public class TestClient {
         }*/
 
         for (int i = 0; i < 1; i++) {
-            String tid = StringUtils.remove(UUID.randomUUID().toString(),"-");
+            String tid = StringUtils.remove(UUID.randomUUID().toString(), "-");
             tid = "Vjxy6OdR7KIDANJzIuKS2tX1";
-//            tid = "XIAMEN_AUTONAVI_XIAMEN_AUTONAVI";
             logger.info("tid={} i={}", tid, i);
             TestClient client = new TestClient(tid, hostDaily);
             client.init();
@@ -77,10 +76,10 @@ public class TestClient {
         try {
             Socket socket = new Socket("127.0.0.1", 1883);
             InputStream is = socket.getInputStream();
-            while(true) {
+            while (true) {
                 byte[] bytes = new byte[1024];
                 int n = is.read(bytes);
-                if(n == -1) break;
+                if (n == -1) break;
                 System.out.println(new String(bytes));
             }
             System.out.println("end");

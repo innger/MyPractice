@@ -52,8 +52,26 @@ public class MainTest {
         System.out.println("polygenelubricants".hashCode());
         System.out.println(hash("polygenelubricants"));
         System.out.println(1 >>> 16);
+	
+		System.out.println(randomString(-229985452)+' '+randomString(-147909649));
     }
-
+	
+	/**
+	 * hello world
+	 * @param seed
+	 * @return
+	 */
+	public static String randomString(int seed) {
+		Random rand = new Random(seed);
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0;;i++) {
+			int n = rand.nextInt(27);
+			if (n == 0) break;
+			sb.append((char) ('`' + n));
+		}
+		return sb.toString();
+	}
+	
     static int hash(Object key) {
         int h;
         return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);

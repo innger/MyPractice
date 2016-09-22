@@ -40,7 +40,7 @@ public class AllMethods {
 
     @OnMethod(
 //            clazz = "/javax\\.swing\\..*/",
-            clazz = "/com\\.ryl\\.learn\\.mqtt\\.TestClient/",
+            clazz = "/com\\.autonavi\\.aos\\.pns\\.manage\\..*/",
             method = "/.*/"
     )
     public static void m(@Self Object o, @ProbeClassName String probeClass, @ProbeMethodName String probeMethod) {

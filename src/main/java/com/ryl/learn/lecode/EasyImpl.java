@@ -82,6 +82,18 @@ public class EasyImpl {
 		
 		System.out.println(easy.integerReplacement(8));
 		System.out.println(easy.integerReplacement(7));
+		
+		System.out.println(easy.findNthDigit(1000));
+		System.out.println(easy.findNthDigit(3));
+		System.out.println(easy.findNthDigit(10));
+		System.out.println(easy.findNthDigit(11));
+		System.out.println(easy.findNthDigit(12));
+		System.out.println(easy.findNthDigit(13));
+		System.out.println(easy.findNthDigit(14));
+		System.out.println(easy.findNthDigit(15));
+		System.out.println(easy.findNthDigit(16));
+		System.out.println(easy.findNthDigit(17));
+		
 	}
 	
 	/**
@@ -98,8 +110,11 @@ public class EasyImpl {
 		int c = 0;
 		while (n != 1) {
 			if ((n & 1) == 0) {
+				//偶数,除2 >>> unsigned shift 高位用0补上
 				n >>>= 1;
 			} else if (n == 3 || ((n >>> 1) & 1) == 0) {
+				//判断 +1 -1 的条件
+				//n低第二位为0
 				--n;
 			} else {
 				++n;
@@ -145,15 +160,51 @@ public class EasyImpl {
 	 * Find the nth digit of the infinite integer sequence 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...
 	 * n is positive and will fit within the range of a 32-bit signed integer (n < 2^31).
 	 * 3 - 3
-	 * 11 - 0
+	 * 11 - 1,2,3,4,5,6,7,8,9,1[0],11
 	 * 1 - n 序列,找出第n个数字,10是两个数字
+	 * 生成digit个数的数组,定位到区间段,在根据 除数/余数定位到数字
+	 * [9, 180, 2700, 36000, 450000, 5400000, 63000000, 720000000, 8100000000]
 	 *
 	 * @param n int
 	 * @return int
 	 */
 	public int findNthDigit(int n) {
-		// TODO: 16/9/22 
-		return 0;
+		List<Long> list = new ArrayList<Long>();
+		long b = 9;
+		for (int i = 1; i < 10; i++) {
+			list.add(i * b);
+			b = b * 10;
+		}
+		long total = 0;
+		int index = 0;
+		long diff = 0;
+		for (int i = 0; i < list.size(); i++) {
+			total += list.get(i);
+			if (total > n) {
+				index = i;
+				if (i > 0) {
+					diff = n - (total - list.get(i));
+				} else {
+					diff = n;
+				}
+				break;
+			}
+		}
+		int begin = (int) Math.pow(10, index);
+		index++;
+		long cnt = diff / index;
+		long mod = diff % index;
+		long result = begin + cnt;
+		String str;
+		int digit;
+		if (mod == 0) {
+			str = String.valueOf(result - 1);
+			digit = str.charAt(str.length() - 1) - '0';
+		} else {
+			str = String.valueOf(result);
+			digit = str.charAt((int) (mod - 1)) - '0';
+		}
+		return digit;
 	}
 	
 	/**

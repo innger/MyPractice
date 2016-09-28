@@ -94,6 +94,94 @@ public class EasyImpl {
 		System.out.println(easy.findNthDigit(16));
 		System.out.println(easy.findNthDigit(17));
 		
+		root = new TreeNode(3);
+		root.left = new TreeNode(9);
+		root.right = new TreeNode(20);
+		
+		root.right.left = new TreeNode(15);
+		root.right.right = new TreeNode(7);
+		System.out.println(easy.sumOfLeftLeaves(root));
+		
+		System.out.println(easy.toHex(26));
+		System.out.println(easy.toHex(-1));
+	}
+	
+	/**
+	 * 405. Convert a Number to Hexadecimal
+	 * 将32-bit signed integer 转换成16进制表示
+	 * 负数需要用补码
+	 * 
+	 * @param num int
+	 * @return string
+	 */
+	public String toHex(int num) {
+		if(num == 0) {
+			
+		}
+		
+		int mag = Integer.SIZE - Integer.numberOfLeadingZeros(num);
+		int chars = Math.max(((mag + (4 - 1)) / 4), 1);
+		char[] buf = new char[chars];
+		formatUnsignedInt(num, 4, buf, 0, chars);
+		return new String(buf);
+	}
+	
+	private int formatUnsignedInt(int val, int shift, char[] buf, int offset, int len) {
+		char[] digits = {
+				'0' , '1' , '2' , '3' , '4' , '5' ,
+				'6' , '7' , '8' , '9' , 'a' , 'b' ,
+				'c' , 'd' , 'e' , 'f' , 'g' , 'h' ,
+				'i' , 'j' , 'k' , 'l' , 'm' , 'n' ,
+				'o' , 'p' , 'q' , 'r' , 's' , 't' ,
+				'u' , 'v' , 'w' , 'x' , 'y' , 'z'
+		};
+		int charPos = len;
+		int radix = 1 << shift;
+		int mask = radix - 1;
+		do {
+			buf[offset + --charPos] = digits[val & mask];
+			val >>>= shift;
+		} while (val != 0 && charPos > 0);
+		return charPos;
+	}
+	
+	/**
+	 * 404. Sum of Left Leaves
+	 * Find the sum of all left leaves in a given binary tree.
+	 * 求树中所有左叶子节点之和,将树放入list中,对奇数index判断,都是左节点,判断是否是叶子即可
+	 *
+	 * @param root TreeNode
+	 * @return int
+	 */
+	public int sumOfLeftLeaves(TreeNode root) {
+		if (root == null || (root.left == null && root.right == null)) {
+			return 0;
+		}
+		int sum = 0;
+		List<TreeNode> list = new ArrayList<TreeNode>();
+		list.add(root);
+		int i = 0;
+		while (true) {
+			if (i >= list.size()) {
+				break;
+			}
+			TreeNode node = list.get(i);
+			if (node == null || (node.left == null && node.right == null)) {
+				i++;
+				continue;
+			}
+			list.add(node.left);
+			list.add(node.right);
+			i++;
+		}
+//		System.out.println(list);
+		for (i = 1; i < list.size(); i += 2) {
+			TreeNode node = list.get(i);
+			if (node != null && (node.left == null && node.right == null)) {
+				sum += node.val;
+			}
+		}
+		return sum;
 	}
 	
 	/**
@@ -1122,6 +1210,11 @@ public class EasyImpl {
 		
 		TreeNode(int x) {
 			val = x;
+		}
+		
+		@Override
+		public String toString() {
+			return String.valueOf(val);
 		}
 	}
 	

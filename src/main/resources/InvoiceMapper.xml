@@ -208,4 +208,8 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where invoice_id = #{invoiceId,jdbcType=VARCHAR}
   </update>
+    
+    <select id = "getAllInvoice" resultType="com.ryl.learn.mybatis.pojo.Invoice">
+        select * from invoice order by create_time desc 
+    </select>
 </mapper>

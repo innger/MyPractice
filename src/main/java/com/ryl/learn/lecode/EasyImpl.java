@@ -103,6 +103,8 @@ public class EasyImpl {
 		System.out.println(easy.sumOfLeftLeaves(root));
 		
 		System.out.println(easy.toHex(26));
+		System.out.println(easy.toHex(37));
+		System.out.println(easy.toHex(123));
 		System.out.println(easy.toHex(-1));
 	}
 	
@@ -116,14 +118,26 @@ public class EasyImpl {
 	 */
 	public String toHex(int num) {
 		if(num == 0) {
-			
+			return "0";
 		}
-		
-		int mag = Integer.SIZE - Integer.numberOfLeadingZeros(num);
+		int mag = 32 - numberOfLeadingZeros(num);
 		int chars = Math.max(((mag + (4 - 1)) / 4), 1);
 		char[] buf = new char[chars];
 		formatUnsignedInt(num, 4, buf, 0, chars);
 		return new String(buf);
+	}
+	
+	private int numberOfLeadingZeros(int i) {
+		// HD, Figure 5-6
+		if (i == 0)
+			return 32;
+		int n = 1;
+		if (i >>> 16 == 0) { n += 16; i <<= 16; }
+		if (i >>> 24 == 0) { n +=  8; i <<=  8; }
+		if (i >>> 28 == 0) { n +=  4; i <<=  4; }
+		if (i >>> 30 == 0) { n +=  2; i <<=  2; }
+		n -= i >>> 31;
+		return n;
 	}
 	
 	private int formatUnsignedInt(int val, int shift, char[] buf, int offset, int len) {

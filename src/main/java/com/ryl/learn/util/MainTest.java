@@ -55,12 +55,13 @@ public class MainTest {
 	
 		System.out.println(randomString(-229985452)+' '+randomString(-147909649));
 		System.out.println(RandomStringUtils.randomAlphanumeric(32).toUpperCase());
+		
 	}
 	
 	/**
 	 * hello world
-	 * @param seed
-	 * @return
+	 * @param seed int
+	 * @return string
 	 */
 	public static String randomString(int seed) {
 		Random rand = new Random(seed);

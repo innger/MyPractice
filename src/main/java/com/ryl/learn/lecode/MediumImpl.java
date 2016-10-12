@@ -85,7 +85,46 @@ public class MediumImpl {
         System.out.println(main.increasingTriplet(new int[]{1, 0, 0, 0, 0, 0, 10, 0, 0, 0, 1000000}));
 
         System.out.println(main.lengthOfLIS(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
-    }
+	
+		System.out.println(main.isSubsequence("abc","ahbgdc"));
+		System.out.println(main.isSubsequence("axc","ahbgdc"));
+	}
+	
+	/**
+	 * 392. Is Subsequence
+	 * Given a string s and a string t, check if s is subsequence of t.
+	 * abc - ahbgdc true
+	 * axc - ahbgdc false
+	 * 
+	 * @param s string
+	 * @param t string
+	 * @return boolean
+	 */
+	public boolean isSubsequence(String s, String t) {
+		if(s == null || s.length() == 0) 
+			return true;
+		if(t == null || t.length() == 0) 
+			return false;
+		int len1 = s.length();
+		int len2 = t.length();
+		char[] arr1 = s.toCharArray();
+		char[] arr2 = t.toCharArray();
+		int i = 0;
+		int j = 0;
+		while(true) {
+			if(i == len1) return true;
+			if(j == len2) break;
+			char ch1 = arr1[i];
+			char ch2 = arr2[j];
+			if(ch1 == ch2) {
+				i++;
+				j++;
+			} else {
+				j++;
+			}
+		}
+		return false;
+	}
 
     /**
      * 334. Increasing Triplet Subsequence

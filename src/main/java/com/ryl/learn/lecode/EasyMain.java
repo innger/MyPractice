@@ -7,7 +7,7 @@ import java.util.*;
  * Created by renyulong on 16/1/25.
  */
 public class EasyMain {
-
+    
     public static void main(String[] args) {
         EasyMain easy = new EasyMain();
         ListNode head = new ListNode(1);
@@ -17,16 +17,126 @@ public class EasyMain {
             node = node.next;
         }
         easy.printListNode(head);
-
-        System.out.println(easy.zigZag2("abcdefghijkl", 4));
+        System.out.println(easy.thirdMax(new int[]{1, 2, 3}));
+        
     }
-
+    
+    /**
+     * 414. Third Maximum Number
+     * 求数组中第三大的数,如果不存在,则返回最大的数字
+     *
+     * @param nums int[] non-empty Array of Integers
+     * @return int
+     */
+    public int thirdMax(int[] nums) {
+        int len = nums.length;
+        Set<Integer> set = new TreeSet<Integer>();
+        for (int i = 0; i < len; i++) {
+            set.add(nums[i]);
+        }
+        int size = set.size();
+        Integer[] arr = new Integer[size];
+        set.toArray(arr);
+        if (size < 3) {
+            //返回最大值
+            return arr[size - 1];
+        }
+        return arr[size - 3];
+    }
+    
+    /**
+     * 438. Find All Anagrams in a String
+     * find all the start indices of p's anagrams in s.
+     * anagrams 重组排列组合
+     * 所有字符均为小写,s和p的长度不超过20100
+     * 动态更改smap
+     *
+     * @param s string
+     * @param p string non-empty
+     * @return list.integer
+     */
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new LinkedList<Integer>();
+        if (s == null || s.length() == 0 || s.length() < p.length()) {
+            return result;
+        }
+        int len = p.length();
+        int index = 0;
+        Map<Character, Integer> pmap = buildMap(p, index, len);
+        Map<Character, Integer> smap = buildMap(s, index, len);
+        if (pmap.equals(smap)) {
+            result.add(index);
+        }
+        int begin = index;
+        int end = begin + len;
+        int slen = s.length();
+        while (end < slen) {
+            char char1 = s.charAt(begin);
+            char char2 = s.charAt(end);
+            Integer count = smap.get(char1);
+            if (count == 1) smap.remove(char1);
+            else smap.put(char1, count - 1);
+            count = smap.get(char2);
+            if (count == null) count = 0;
+            smap.put(char2, count + 1);
+            if (pmap.equals(smap)) {
+                result.add(begin + 1);
+            }
+            begin++;
+            end++;
+        }
+        return result;
+    }
+    
+    private Map<Character, Integer> buildMap(String s, int b, int e) {
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        int len = s.length();
+        for (int i = b; i < e; i++) {
+            char ch = s.charAt(i);
+            Integer count = map.get(ch);
+            if (count == null) {
+                count = 0;
+            }
+            map.put(ch, count + 1);
+        }
+        return map;
+    }
+    
+    
+    /**
+     * 412. Fizz Buzz
+     * 根据输入的数字n,输出1-n代表的string list
+     * 3的倍数输出Fizz,5的倍数输出Buzz,既是3的倍数,也是5的倍数,输出FizzBuzz
+     * Is this problem a joke?
+     *
+     * @param n int
+     * @return list.string
+     */
+    public List<String> fizzBuzz(int n) {
+        List<String> list = new LinkedList<String>();
+        if (n < 1) {
+            return list;
+        }
+        for (int i = 1; i <= n; i++) {
+            if (i % 15 == 0) {
+                list.add("FizzBuzz");
+            } else if (i % 5 == 0) {
+                list.add("Buzz");
+            } else if (i % 3 == 0) {
+                list.add("Fizz");
+            } else {
+                list.add(String.valueOf(i));
+            }
+        }
+        return list;
+    }
+    
     //判断一个数独是否合法
     public boolean isValidSudoku(char[][] board) {
         int rowValid[] = new int[10];
         int colValid[][] = new int[9][10];
         int subValid[][] = new int[9][10];
-
+        
         for (int i = 0; i < 9; i++) {
             Arrays.fill(rowValid, 0);
             for (int j = 0; j < 9; j++) {
@@ -39,13 +149,13 @@ public class EasyMain {
         }
         return true;
     }
-
+    
     private boolean checkValid(int[] vec, int val) {
         if (vec[val] == 1) return false;
         vec[val] = 1;
         return true;
     }
-
+    
     public int strStr(String haystack, String needle) {
         if (haystack.length() < needle.length()) {
             return -1;
@@ -53,7 +163,7 @@ public class EasyMain {
         if (haystack.length() == 0 && needle.length() == 0) {
             return 0;
         }
-
+        
         if (needle.length() == 0) {
             return 0;
         }
@@ -81,12 +191,12 @@ public class EasyMain {
 //        }
 //        return -1;
     }
-
+    
     public String longestCommonPrefix(String[] strs) {
         if (strs == null || strs.length < 1) {
             return "";
         }
-
+        
         String res = "";
         for (int i = 0; i < strs[0].length(); i++) {
             boolean flag = true;
@@ -110,7 +220,7 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     //http://www.cnblogs.com/ganganloveu/p/4193373.html
     // n!尾部0的个数 5的幂次
     public int trailingZeroes(int n) {
@@ -121,7 +231,7 @@ public class EasyMain {
         }
         return ret;
     }
-
+    
     //A-Z 1-26 进制转换
     public String convertToTitle(int n) {
         String res = "";
@@ -139,7 +249,7 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     public int titleToNumber(String s) {
         int res = 0;
         for (int i = 0; i < s.length(); i++) {
@@ -149,7 +259,7 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     public String getHint(String secret, String guess) {
         Map<Character, Integer> map1 = new HashMap<Character, Integer>();
         Map<Character, Integer> map2 = new HashMap<Character, Integer>();
@@ -168,7 +278,7 @@ public class EasyMain {
                 } else {
                     map1.put(c1, tmp + 1);
                 }
-
+                
                 tmp = map2.get(c2);
                 if (tmp == null) {
                     map2.put(c2, 1);
@@ -185,15 +295,15 @@ public class EasyMain {
             }
         }
         return bull + "A" + cows + "B";
-
+        
     }
-
+    
     //单链表反转
     public ListNode reverseListLoop(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
-
+        
         ListNode node = head;
         ListNode pre = null;
         ListNode reverseHead = null;
@@ -206,23 +316,23 @@ public class EasyMain {
             pre = node;
             node = next;
         }
-
+        
         return reverseHead;
     }
-
+    
     //递归方式
     public ListNode reverseList(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
-
+        
         ListNode reversHead = reverseList(head.next);
         head.next.next = head;
         head.next = null;
-
+        
         return reversHead;
     }
-
+    
     //查找 <= n 的质数个数 The Sieve of Eratosthenes
     public int countPrimes(int n) {
         boolean[] isPrime = new boolean[n];
@@ -243,8 +353,8 @@ public class EasyMain {
         }
         return count;
     }
-
-
+    
+    
     //出现无限循环,用set判断之前是否重复出现过
     public boolean isHappy(int n) {
         int s = 0;
@@ -265,8 +375,8 @@ public class EasyMain {
         }
         return s == 1;
     }
-
-
+    
+    
     //二分查找 找mid值溢出问题考虑
     public int firstBadVersion(int n) {
         int i = 1;
@@ -282,7 +392,7 @@ public class EasyMain {
         }
         return i;
     }
-
+    
     boolean isBadVersion(int version) {
 //        return new Random().nextInt() % 2 == 0;
         if (version >= 2) {
@@ -290,7 +400,7 @@ public class EasyMain {
         }
         return false;
     }
-
+    
     public int addDigits(int num) {
         while (num >= 10) {
             int sum = 0;
@@ -304,7 +414,7 @@ public class EasyMain {
         }
         return num;
     }
-
+    
     public boolean isUgly(int num) {
         if (num <= 0) {
             return false;
@@ -320,11 +430,11 @@ public class EasyMain {
         }
         return num == 1;
     }
-
+    
     public boolean canWinNim(int n) {
         return n % 4 != 0;
     }
-
+    
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode p = head;
         ListNode q = head;
@@ -345,7 +455,7 @@ public class EasyMain {
         }
         return head;
     }
-
+    
     //http://blog.csdn.net/ljiabin/article/details/39968583
     public int romanToInt(String s) {
         int res = romanChar2Number(s.charAt(0));
@@ -360,7 +470,7 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     private int romanChar2Number(char ch) {
         switch (ch) {
             case 'I':
@@ -381,7 +491,7 @@ public class EasyMain {
                 return 1;
         }
     }
-
+    
     public boolean isPalindrome(int x) {
         int origin = x;
         if (x < 0) origin = -x;
@@ -393,7 +503,7 @@ public class EasyMain {
         }
         return origin == re;
     }
-
+    
     public int hammingWeight(int n) {
         int cnt = 0;
         while (n > 0) {
@@ -402,7 +512,7 @@ public class EasyMain {
         }
         return cnt;
     }
-
+    
     public boolean isPowerOfTwo(int n) {
         //二进制表示中只有一个1
         if (n < 2 && n != 1) return false;
@@ -417,7 +527,7 @@ public class EasyMain {
         }
         return cnt == 1;
     }
-
+    
     public boolean isPowerOfThree(int n) {
         if (n < 3 && n != 1) return false;
         int tmp = n;
@@ -430,7 +540,7 @@ public class EasyMain {
         }
         return true;
     }
-
+    
     /**
      * 328. Odd Even Linked List
      * You should try to do it in place. The program should run in O(1) space complexity and O(nodes) time complexity.
@@ -463,7 +573,7 @@ public class EasyMain {
         }
         return head;
     }
-
+    
     //byr上看到另外的解法,调试一下
     public ListNode oddEvenList2(ListNode head) {
         if (head == null || head.next == null) return head;
@@ -485,8 +595,8 @@ public class EasyMain {
         cur.next = second;
         return head;
     }
-
-
+    
+    
     private void printListNode(ListNode head) {
         ListNode tmp = head;
         while (tmp != null) {
@@ -495,7 +605,7 @@ public class EasyMain {
         }
         System.out.println("null");
     }
-
+    
     public String countAndSay(int n) {
         String res = "1";
         for (int k = 0; k < n - 1; k++) {
@@ -516,7 +626,7 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     public int compareVersion(String version1, String version2) {
         String[] arr1 = version1.split("\\.");
         String[] arr2 = version2.split("\\.");
@@ -552,7 +662,7 @@ public class EasyMain {
         }
         return 0;
     }
-
+    
     public String addBinary(String a, String b) {
         int i = a.length() - 1;
         int j = b.length() - 1;
@@ -574,7 +684,7 @@ public class EasyMain {
             } else {
                 c = 0;
             }
-
+            
             i--;
             j--;
         }
@@ -583,7 +693,7 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     public int myAtoi(String str) {
         str = str.trim();
         String newStr = "";
@@ -627,7 +737,7 @@ public class EasyMain {
         }
         return res.intValue();
     }
-
+    
     public int majorityElement(int[] nums) {
         int m = nums[0];
         int cnt = 1;
@@ -637,7 +747,7 @@ public class EasyMain {
             } else {
                 cnt--;
             }
-
+            
             if (cnt <= 0) {
                 m = nums[i];
                 cnt = 1;
@@ -645,7 +755,7 @@ public class EasyMain {
         }
         return m;
     }
-
+    
     public void merge(int[] nums1, int m, int[] nums2, int n) {
         int[] tmpArr = new int[m + n];
         int i = 0;
@@ -658,7 +768,7 @@ public class EasyMain {
                 tmpArr[k++] = nums2[j++];
             }
         }
-
+        
         while (i < m) {
             tmpArr[k++] = nums1[i++];
         }
@@ -666,9 +776,9 @@ public class EasyMain {
             tmpArr[k++] = nums2[j++];
         }
         System.arraycopy(tmpArr, 0, nums1, 0, m + n);
-
+        
     }
-
+    
     public void moveZeroes(int[] nums) {
         for (int i = 0; i < nums.length; i++) {
             while (nums[i] == 0) {
@@ -688,16 +798,16 @@ public class EasyMain {
                 }
             }
         }
-
+        
         System.out.println(Arrays.toString(nums));
     }
-
+    
     public List<Integer> getRow(int rowIndex) {
         if (rowIndex < 0) return new ArrayList<Integer>();
         List<List<Integer>> list = generate(rowIndex + 1);
         return list.get(rowIndex);
     }
-
+    
     public List<List<Integer>> generate(int numRows) {
         if (numRows <= 0) return new ArrayList<List<Integer>>();
         List<List<Integer>> list = new ArrayList<List<Integer>>(numRows);
@@ -725,7 +835,7 @@ public class EasyMain {
         }
         return list;
     }
-
+    
     public int[] plusOne(int[] digits) {
         int len = digits.length;
         int[] res;
@@ -753,7 +863,7 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     public int removeDuplicates(int[] nums) {
         int len = nums.length;
         int i = 0;
@@ -769,7 +879,7 @@ public class EasyMain {
         }
         return len;
     }
-
+    
     public int removeElement(int[] nums, int val) {
         int len = nums.length;
         int i = 0;
@@ -785,7 +895,7 @@ public class EasyMain {
         }
         return len;
     }
-
+    
     public int reverse(int x) {
         String tmp = String.valueOf(x);
         String prefix = null;
@@ -806,9 +916,9 @@ public class EasyMain {
         } catch (Exception e) {
             return 0;
         }
-
+        
     }
-
+    
     public void rotate(int[] nums, int k) {
         k = k % nums.length;
         int[] arr = new int[k];
@@ -822,16 +932,16 @@ public class EasyMain {
             nums[i] = arr[i];
         }
         printArray(nums);
-
+        
     }
-
+    
     private void printArray(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + " ");
         }
         System.out.println();
     }
-
+    
     public List<String> summaryRanges(int[] nums) {
         List<String> res = new ArrayList<String>();
         if (nums == null || nums.length < 1) {
@@ -841,7 +951,7 @@ public class EasyMain {
             res.add(nums[0] + "");
             return res;
         }
-
+        
         int i = 0;
         int j = i + 1;
         while (i < nums.length && j <= nums.length) {
@@ -859,7 +969,7 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     public boolean containsNearbyDuplicate(int[] nums, int k) {
         if (nums == null || nums.length < 1) {
             return false;
@@ -875,10 +985,10 @@ public class EasyMain {
             map.put(t, i);
         }
         return false;
-
-
+        
+        
     }
-
+    
     public boolean containsDuplicate(int[] nums) {
         if (nums == null || nums.length < 1) {
             return false;
@@ -892,7 +1002,7 @@ public class EasyMain {
         }
         return false;
     }
-
+    
     public boolean isIsomorphic(String s, String t) {
         if (s == null || t == null || s.length() != t.length()) {
             return false;
@@ -912,7 +1022,7 @@ public class EasyMain {
         }
         return true;
     }
-
+    
     public boolean isPalindrome(String s) {
         if (s == null || s.length() <= 1) {
             return true;
@@ -922,20 +1032,20 @@ public class EasyMain {
         while (i < j) {
             char a = s.charAt(i);
             if ((a >= '0' && a <= '9') || (a >= 'A' && a <= 'Z') || (a >= 'a' && a <= 'z')) {
-
+                
             } else {
                 i++;
                 continue;
             }
-
+            
             char b = s.charAt(j);
             if ((b >= '0' && b <= '9') || (b >= 'A' && b <= 'Z' || (b >= 'a') && b <= 'z')) {
-
+                
             } else {
                 j--;
                 continue;
             }
-
+            
             if (a >= '0' && a <= '9') {
                 if (a != b) {
                     return false;
@@ -944,7 +1054,7 @@ public class EasyMain {
                     j--;
                     continue;
                 }
-
+                
             } else {
                 if (a == b || (a + 32) == b || (a - 32) == b) {
                     i++;
@@ -957,7 +1067,7 @@ public class EasyMain {
         }
         return true;
     }
-
+    
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<Character>();
         for (int i = 0; i < s.length(); i++) {
@@ -986,15 +1096,16 @@ public class EasyMain {
             return true;
         }
         return false;
-
+        
     }
-
+    
     /**
      * 不构造二维数组,直接拼字符串
      * easy and clear ( interesting approach )
      * really nice solution
+     *
      * @param str string
-     * @param n int
+     * @param n   int
      * @return string
      */
     public String zigZag2(String str, int n) {
@@ -1021,30 +1132,30 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     /**
      * a   e   i
      * b d f h j
      * c   g   k
-     *
+     * <p>
      * 构造一个zigZag二维数组,在顺序拼起来
      *
      * @param str string
      * @param n   int
      * @return string
      */
-
+    
     public String zigZag(String str, int n) {
         if (n == 1) {
             return str;
         }
-
+        
         int x = 0, y = 0;
         int step = 2 * (n - 1);
         boolean s2 = false;
         int max = str.length();
         char[][] matrix = new char[max][n];
-
+        
         for (int i = 0; i < str.length(); i++) {
             int k = i % step;
             if (k < n) {
@@ -1079,11 +1190,11 @@ public class EasyMain {
         }
         return res;
     }
-
+    
     public static class ListNode {
         int val;
         ListNode next;
-
+        
         ListNode(int x) {
             this.val = x;
         }

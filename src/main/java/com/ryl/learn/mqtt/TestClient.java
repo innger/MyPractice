@@ -61,11 +61,9 @@ public class TestClient {
                 client01.init();
             });
         }*/
-
-        for (int i = 0; i < 1; i++) {
-            String tid = StringUtils.remove(UUID.randomUUID().toString(), "-");
-            tid = "Vjxy6OdR7KIDANJzIuKS2tX1";
-            logger.info("tid={} i={}", tid, i);
+		String[] tids = new String[]{"C81F662B8ADDC81F662B8ADD","VR47gRd8UGUDAAW8KIIQn8T812","VR47gRd8UGUDAAW8KIIQn8T813", "Vjxy6OdR7KIDANJzIuKS2tX1"};
+        for (String tid : tids) {
+            logger.info("tid={}", tid);
             TestClient client = new TestClient(tid, hostDaily);
             client.init();
         }

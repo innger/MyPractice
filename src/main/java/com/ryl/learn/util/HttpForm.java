@@ -1,11 +1,14 @@
 package com.ryl.learn.util;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -13,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,28 +26,62 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created on 16/6/21 上午10:39.
  */
 public class HttpForm {
-
+    
     private static final String[] prefix = new String[]{"134", "135", "136", "137", "138", "139", "147", "150", "151", "152", "157", "158",
             "159", "182", "187", "188", "130", "131", "132", "155", "156", "185", "186", "133", "153", "180", "189"};
     private static final int len = prefix.length;
-
+    
     private static AtomicInteger count = new AtomicInteger(0);
-
+    
     public static void main(String[] args) throws Exception {
-        ExecutorService service = Executors.newFixedThreadPool(1);
-        String url = "http://wan.sogou.com/payconfirm.do?x=v";
-        for (int i = 0; i < 1; i++) {
-            service.submit(new PayWorker(url));
-        }
+//        ExecutorService service = Executors.newFixedThreadPool(1);
+//        String url = "http://wan.sogou.com/payconfirm.do?x=v";
+//        for (int i = 0; i < 1; i++) {
+//            service.submit(new PayWorker(url));
+//        }
+        wxHttpGet();
     }
-
+    
+    private static void wxHttpGet() throws IOException {
+        String accessToken = "yMa9BxJJq_wmdtBLRfiyEUtDccJKtCL3uwaLG4d2yVV0DC4uZ2sw2VQPxyytdakoPlTkfI-SRLGngd1iuCo_lHsoQRq0A9VUs1E4zBHihtMMIz7EsAO8k0O-GLoI_sHUORBcAAABEO";
+        String url = "https://api.weixin.qq.com/device/authorize_device?access_token=" + accessToken;
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost post = new HttpPost(url);
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("device_num", 1);
+        map.put("op_type", "1");
+        Map<String, String> device = Maps.newHashMap();
+        device.put("id", "gh_8a0e23244f50_c26c918a5c41f7fe");
+        device.put("mac", "1234567890AB");
+        device.put("connect_protocol", "3");
+        device.put("auth_key", "1234567890ABCDEF1234567890ABCDEF");
+        device.put("close_strategy", "1");
+        device.put("conn_strategy", "1");
+        device.put("crypt_method", "1");
+        device.put("auth_ver", "1");
+        device.put("manu_mac_pos", "-1");
+        device.put("ser_mac_pos", "-2");
+        device.put("ble_simple_protocol", "0");
+        List<Map<String, String>> deviceList = Lists.newArrayList();
+        deviceList.add(device);
+        map.put("device_list", deviceList);
+        
+        StringEntity entity = new StringEntity(JSON.toJSONString(map), "utf-8");
+        post.setEntity(entity);
+    
+        HttpResponse result = client.execute(post);
+        String resData = EntityUtils.toString(result.getEntity());
+        System.out.println(resData);
+    }
+    
+    
     public static class PayWorker implements Runnable {
         private String url;
-
+        
         public PayWorker(String url) {
             this.url = url;
         }
-
+        
         @Override
         public void run() {
             HttpClient client = HttpClientBuilder.create().build();
@@ -57,7 +95,7 @@ public class HttpForm {
                     formParams.add(new BasicNameValuePair("sid", "138"));
                     formParams.add(new BasicNameValuePair("amount", "10"));
                     post.setEntity(new UrlEncodedFormEntity(formParams, "UTF-8"));
-
+                    
                     HttpResponse response = client.execute(post);
                     System.out.println(count.incrementAndGet() + " " + Thread.currentThread().getName() + " " + EntityUtils.toString(response.getEntity()));
                     System.out.println("#################################################################################");
@@ -69,8 +107,8 @@ public class HttpForm {
             }
         }
     }
-
-
+    
+    
     public static void login() throws Exception {
         HttpPost post = new HttpPost("http://www.gc-home.com/index.php/Login/Index/login");
         post.setHeader("Accept", "*/*");
@@ -84,14 +122,14 @@ public class HttpForm {
         post.setHeader("Referer", "http://www.gc-home.com/index.php");
         post.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
         post.setHeader("X-Requested-With", "XMLHttpRequest");
-
+        
         HttpClient client = HttpClientBuilder.create().build();
         int num = 0;
         while (true) {
             String mobile = prefix[num % len] + RandomStringUtils.randomNumeric(8);
             List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
             formParams.add(new BasicNameValuePair("serialize", "username=" + mobile + "&password=123123&captcha=1234"));
-
+            
             post.setEntity(new UrlEncodedFormEntity(formParams, "UTF-8"));
             HttpResponse response = client.execute(post);
             String respStr = EntityUtils.toString(response.getEntity(), "UTF-8");
@@ -99,31 +137,31 @@ public class HttpForm {
             System.out.println(num + " " + mobile + " " + respStr);
         }
     }
-
+    
     public static void sendMobile() throws Exception {
         ExecutorService service = Executors.newFixedThreadPool(20);
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost("http://www.gc-home.com/index.php/User/Register/get_ajax_userName");
         post.setHeader("Cookie", "PHPSESSID=ibiflhni9f04fn0vb7ia2tbou1; incap_ses_222_826927=YSGdI1rN+g0A2S7nEbUUA4/uaFcAAAAAxA9pjtgmdvYmWS/hh2A3nQ==; incap_ses_401_826927=gJdJW7/9tlCK6MCylaOQBR0AaVcAAAAAVokAy8yKJEhS+6uWVo9ILg==; visid_incap_826927=56gpyh9IQ4KK7Ze/Zge7wSGfaFcAAAAAQUIPAAAAAACPoV/SFbekgYfNaSuz9XbT; incap_ses_406_826927=b8wzOZti1wcFrPeld2eiBeoAaVcAAAAAE/gJ/TFDFjpPSL9B2niXng==");
-
+        
         for (int i = 0; i < 10; i++) {
             service.submit(new SendMobileWorker(client, post, i));
         }
     }
-
+    
     static class SendMobileWorker implements Runnable {
-
+        
         private static AtomicInteger num = new AtomicInteger(0);
         private HttpClient client;
         private HttpPost post;
         private Integer thread;
-
+        
         public SendMobileWorker(HttpClient client, HttpPost post, Integer thread) {
             this.client = client;
             this.post = post;
             this.thread = thread;
         }
-
+        
         @Override
         public void run() {
             while (true) {
@@ -141,17 +179,17 @@ public class HttpForm {
 
                     UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, "UTF-8");
                     post.setEntity(entity);*/
-
+                    
                     HttpResponse response = client.execute(post);
                     String result = EntityUtils.toString(response.getEntity(), "UTF-8");
                     System.out.println(Thread.currentThread().getName() + " " + num.getAndIncrement() + " " + result);
-
+                    
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         }
     }
-
-
+    
+    
 }

@@ -61,7 +61,7 @@ public class TestClient {
                 client01.init();
             });
         }*/
-		String[] tids = new String[]{"C81F662B8ADDC81F662B8AAA","VR47gRd8UGUDAAW8KIIQn8T812","VR47gRd8UGUDAAW8KIIQn8T813", "Vjxy6OdR7KIDANJzIuKS2tX1"};
+		String[] tids = new String[]{"C81F662B8ADDC81F662B8AAA"}; //"VqliqZ8RCeIDAGoFiWoeic+Z" "VR47gRd8UGUDAAW8KIIQn8T812","VR47gRd8UGUDAAW8KIIQn8T813", "Vjxy6OdR7KIDANJzIuKS2tX1"
         for (String tid : tids) {
             logger.info("tid={}", tid);
             TestClient client = new TestClient(tid, hostDaily);

@@ -43,7 +43,7 @@ public class HttpForm {
     }
     
     private static void wxHttpGet() throws IOException {
-        String accessToken = "B9hBNFvnvx_8gfvUnEHIyOv9pQmTZL608zUiMTff11SIO6A4HsRUgjO0Kqi1K1D7FvbEkQwYxlVmL7dZgJXwUUH-yPZ7x9ClMz8ReyHUwgHY-QZCd-ZnHSkskyW5F89zBCKjABAFGO";
+        String accessToken = "RgjjBtptyn5k7Bm_0yZQSXSb5QY-s_QmjxshZSr6uAcqOt84heW91VWZcRded2ULP4X4mu7spfYcnz4U2fxwKJzpybZROzH-PRh3JGQ7CBcqOWNfl55Wa2lzJxTk8twDDDDgAEASSS";
         String url = "https://api.weixin.qq.com/device/authorize_device?access_token=" + accessToken;
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(url);
@@ -51,7 +51,7 @@ public class HttpForm {
         map.put("device_num", 1);
         map.put("op_type", "1");
         Map<String, String> device = Maps.newHashMap();
-        device.put("id", "gh_8a0e23244f50_39da6abdb4752aae");
+        device.put("id", "gh_8a0e23244f50_485cee832262f761");
         device.put("mac", "1234567890AB");
         device.put("connect_protocol", "3");
         device.put("auth_key", "1234567890ABCDEF1234567890ABCDEF");

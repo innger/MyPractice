@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * mqtt client示例代码
- * Created by renyulong on 16/2/22.
+ * Created on 16/2/22.
  */
 public class TestClient {
     
@@ -63,7 +63,7 @@ public class TestClient {
             });
         }*/
         //"C81F662B8ADDC81F662B8AAA" "VqliqZ8RCeIDAGoFiWoeic+Z" "VR47gRd8UGUDAAW8KIIQn8T812","VR47gRd8UGUDAAW8KIIQn8T813", "Vjxy6OdR7KIDANJzIuKS2tX1"
-        String[] tids = new String[]{"C81F662B8ADDC81F662B8AAA"}; 
+        String[] tids = new String[]{"C81F662B8ADDC81F662B8AAA"};
         for (String tid : tids) {
             logger.info("tid={}", tid);
             TestClient client = new TestClient(tid, hostDaily);
@@ -114,8 +114,8 @@ public class TestClient {
             options.setCleanSession(false);
             //设置连接的用户名
             options.setUserName(username);
-            //设置连接的密码s
-            password = DigestUtils.md5Hex(username + "@" + "E4fMLkiLJeHdBhlK3AFxTLoZSc1bBjtG");
+            //设置连接的密码  E4fMLkiLJeHdBhlK3AFxTLoZSc1bBjtG
+            password = DigestUtils.md5Hex(username + "@" + "xDgLf9ARoS1HN1QEvnWAdstAD8HKy1jR"); 
             options.setPassword(password.toCharArray());
             // 设置超时时间 单位为秒
             options.setConnectionTimeout(10);
@@ -127,10 +127,11 @@ public class TestClient {
             will.put("dip", 17020);
             will.put("dic", "C04020001234");
             will.put("diu", "fdajkfdklafdndjfdjkl2r49djfaj4kjj");
-            will.put("uid", 1234);
-            will.put("sessionid", "1234");
+            will.put("uid", 30885752); //1699077
+            will.put("sessionid", "19jfrqyajzm9dvccc68ebkdh01vthz4i");
+            will.put("deviceid", "aaaa");
             will.put("autodiv", "ANDA0203000");
-//            options.setWill("user", JSON.toJSONBytes(will), 1, false);
+            options.setWill("user", JSON.toJSONBytes(will), 1, false);
             //设置回调
             client.setCallback(new MqttCallback() {
                 
@@ -151,11 +152,11 @@ public class TestClient {
 //                    String str = new String(message.getPayload(), CharsetUtil.UTF_8);
 //                    LoginMessage login = new LoginMessage();
 //                    login.readFromByteArr(message.getPayload());
-                    
                     logger.info("{} messageArrived topic={} message={}", clientID, topicName, message);
                 }
             });
             logger.info("{} connect to server {}", clientID, host);
+            logger.info("will message={}", JSON.toJSONString(will));
             client.connect(options);
         } catch (Exception e) {
             e.printStackTrace();

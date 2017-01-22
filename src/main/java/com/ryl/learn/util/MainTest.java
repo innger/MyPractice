@@ -55,8 +55,9 @@ public class MainTest {
 	
 		System.out.println(randomString(-229985452)+' '+randomString(-147909649));
 		System.out.println(RandomStringUtils.randomAlphanumeric(32).toUpperCase());
-		
-	}
+        System.out.println(RandomStringUtils.randomAlphanumeric(16));
+    
+    }
 	
 	/**
 	 * hello world

@@ -8,15 +8,15 @@ import java.util.*;
  * Created on 16/7/29 下午3:51.
  */
 public class MediumImpl {
-
-
+    
+    
     public static void main(String[] args) {
         MediumImpl main = new MediumImpl();
         int c = main.coinChange(new int[]{1, 2, 4}, 11);
         System.out.println(c);
         System.out.println(main.grayCode(5));
         System.out.println(main.grayCodeBacktracking(5));
-
+        
         Set<String> set = new HashSet<String>();
         set.add("hot");
         set.add("dot");
@@ -33,14 +33,14 @@ public class MediumImpl {
         grid[2] = new char[]{'0', '0', '1', '0', '0'};
         grid[3] = new char[]{'0', '0', '0', '1', '1'};
         System.out.println("##" + main.numIslands(grid));
-
+        
         System.out.println(main.restoreIpAddresses("25525511135"));
-
+        
         System.out.println(main.simplifyPath("/../"));
         System.out.println(main.simplifyPath("/home/"));
         System.out.println(main.simplifyPath("/home//foo/"));
         System.out.println(main.simplifyPath("/a/./b/../../c/"));
-
+        
         Set<String> wordDict = new HashSet<String>();
         String[] arr = new String[]{"cbc", "bcda", "adb", "ddca", "bad", "bbb", "dad", "dac", "ba", "aa", "bd", "abab", "bb", "dbda", "cb", "caccc", "d", "dd", "aadb", "cc", "b", "bcc", "bcd", "cd", "cbca", "bbd", "ddd", "dabb", "ab", "acd", "a", "bbcc", "cdcbd", "cada", "dbca", "ac", "abacd", "cba", "cdb", "dbac", "aada", "cdcda", "cdc", "dbc", "dbcb", "bdb", "ddbdd", "cadaa", "ddbc", "babb"};
         wordDict.addAll(Lists.newArrayList(arr));
@@ -51,7 +51,7 @@ public class MediumImpl {
 //        System.out.println(main.majorityElement(new int[]{3,2,3}));
 //        System.out.println(main.majorityElement(new int[]{1,2}));
         System.out.println(main.majorityElement(new int[]{1, 1, 1, 3, 3, 2, 2, 2}));
-
+        
         System.out.println(main.searchInsert(new int[]{1, 3, 5, 6}, 5));
         System.out.println(main.searchInsert(new int[]{1, 3, 5, 6}, 2));
         System.out.println(main.searchInsert(new int[]{1, 3, 5, 6}, 7));
@@ -59,11 +59,11 @@ public class MediumImpl {
         System.out.println(main.searchInsert(new int[]{1, 3}, 2));
         System.out.println(main.searchInsert(new int[]{1, 2, 3, 4, 5, 10}, 2));
         System.out.println(main.searchInsert(new int[]{1, 3, 5}, 2));
-
+        
         System.out.println(Arrays.toString(main.searchRange(new int[]{5, 7, 7, 8, 8, 10}, 8)));
         System.out.println(Arrays.toString(main.searchRange(new int[]{2, 2}, 2)));
         System.out.println(Arrays.toString(main.searchRange(new int[]{1}, 1)));
-
+        
         System.out.println(main.hIndexI(new int[]{3, 0, 6, 1, 5}));
         int[][] matrix = new int[3][3];
         matrix[0] = new int[]{1, 5, 9};
@@ -75,57 +75,103 @@ public class MediumImpl {
         for (int[] p : main.kSmallestPairs(nums1, nums2, 9)) {
             System.out.println(Arrays.toString(p));
         }
-
+        
         System.out.println(main.findMin(new int[]{4, 5, 6, 7, 0, 1, 2}));
         System.out.println(main.findMin(new int[]{4, 5, 6, 7, 8, 2, 3}));
         System.out.println(main.findMin(new int[]{4, 5, 6, 7, 8, 9, 3}));
         System.out.println(main.findMin(new int[]{1, 2}));
         System.out.println(main.findMin(new int[]{2, 1}));
-
+        
         System.out.println(main.increasingTriplet(new int[]{1, 0, 0, 0, 0, 0, 10, 0, 0, 0, 1000000}));
-
+        
         System.out.println(main.lengthOfLIS(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
-	
-		System.out.println(main.isSubsequence("abc","ahbgdc"));
-		System.out.println(main.isSubsequence("axc","ahbgdc"));
-	}
-	
-	/**
-	 * 392. Is Subsequence
-	 * Given a string s and a string t, check if s is subsequence of t.
-	 * abc - ahbgdc true
-	 * axc - ahbgdc false
-	 * 
-	 * @param s string
-	 * @param t string
-	 * @return boolean
-	 */
-	public boolean isSubsequence(String s, String t) {
-		if(s == null || s.length() == 0) 
-			return true;
-		if(t == null || t.length() == 0) 
-			return false;
-		int len1 = s.length();
-		int len2 = t.length();
-		char[] arr1 = s.toCharArray();
-		char[] arr2 = t.toCharArray();
-		int i = 0;
-		int j = 0;
-		while(true) {
-			if(i == len1) return true;
-			if(j == len2) break;
-			char ch1 = arr1[i];
-			char ch2 = arr2[j];
-			if(ch1 == ch2) {
-				i++;
-				j++;
-			} else {
-				j++;
-			}
-		}
-		return false;
-	}
-
+        
+        System.out.println(main.isSubsequence("abc", "ahbgdc"));
+        System.out.println(main.isSubsequence("axc", "ahbgdc"));
+        System.out.println(main.magicalString(6));
+    }
+    
+    
+    /**
+     * 481. Magical String
+     * 魔法字符串 只包含1和2,并且有如下规则:
+     * S = "1221121221221121122……"
+     * 1 22 11 2 1 22 1 22 11 2 11 22 ......
+     * 分组中,1和2出现的次数,又组成字符串本身
+     * 1 2	2 1 1 2 1 2 2 1 2 2 ......
+     * 使用string charAt time limit
+     * 字符串操作规则技巧问题,根据当前状态,确定下一个字符
+     * 
+     * @param n int 不大于100,000
+     * @return int 范围长度n magicalString中1的个数
+     */
+    public int magicalString(int n) {
+        if (n == 0) return 0;
+        char[] arr = new char[1000000];
+        arr[0] = '1';
+        int i = 0;
+        int j = 0;
+        int res = 1;
+        while (i < n) {
+            char ch1 = arr[i];
+            char ch2 = arr[j];
+            if (ch2 == '1') {
+                arr[i + 1] = (ch1 == '1' ? '2' : '1');
+                i++;
+                j++;
+            } else if (ch2 == '2') {
+                if (i > 1) {
+                    if (arr[i - 1] == arr[i]) {
+                        ch1 = ch1 == '1' ? '2' : '1';
+                        j++;
+                    }
+                }
+                arr[i + 1] = ch1;
+                i++;
+            }
+            if (i > 1 && arr[i - 1] == '1') {
+                res++;
+            }
+        }
+        return res;
+    }
+    
+    /**
+     * 392. Is Subsequence
+     * Given a string s and a string t, check if s is subsequence of t.
+     * abc - ahbgdc true
+     * axc - ahbgdc false
+     *
+     * @param s string
+     * @param t string
+     * @return boolean
+     */
+    public boolean isSubsequence(String s, String t) {
+        if (s == null || s.length() == 0)
+            return true;
+        if (t == null || t.length() == 0)
+            return false;
+        int len1 = s.length();
+        int len2 = t.length();
+        char[] arr1 = s.toCharArray();
+        char[] arr2 = t.toCharArray();
+        int i = 0;
+        int j = 0;
+        while (true) {
+            if (i == len1) return true;
+            if (j == len2) break;
+            char ch1 = arr1[i];
+            char ch2 = arr2[j];
+            if (ch1 == ch2) {
+                i++;
+                j++;
+            } else {
+                j++;
+            }
+        }
+        return false;
+    }
+    
     /**
      * 334. Increasing Triplet Subsequence
      * Given an unsorted array return whether an increasing subsequence of length 3 exists or not in the array.
@@ -162,7 +208,7 @@ public class MediumImpl {
         }
         return false;
     }
-
+    
     /**
      * 300. Longest Increasing Subsequence
      * Given an unsorted array of integers, find the length of longest increasing subsequence.
@@ -186,8 +232,8 @@ public class MediumImpl {
         }
         return len;
     }
-
-
+    
+    
     /**
      * 153. Find Minimum in Rotated Sorted Array
      * Suppose a sorted array is rotated at some pivot unknown to you beforehand.
@@ -217,7 +263,7 @@ public class MediumImpl {
         }
         return i == j ? nums[i] : nums[0];
     }
-
+    
     /**
      * 230. Kth Smallest Element in a BST
      *
@@ -229,7 +275,7 @@ public class MediumImpl {
         // TODO: 16/9/2
         return 0;
     }
-
+    
     /**
      * 373. Find K Pairs with Smallest Sums
      * You are given two integer arrays nums1 and nums2 sorted in ascending order and an integer k.
@@ -258,23 +304,23 @@ public class MediumImpl {
         }
         return list;
     }
-
+    
     class IntPair implements Comparable<IntPair> {
         int x, y, sum;
-
+        
         public IntPair(int x, int y, int sum) {
             this.x = x;
             this.y = y;
             this.sum = sum;
         }
-
+        
         @Override
         public int compareTo(IntPair pair) {
             return this.sum - pair.sum;
         }
     }
-
-
+    
+    
     /**
      * 378. Kth Smallest Element in a Sorted Matrix
      * Given a n x n matrix where each of the rows and columns are sorted in ascending order,
@@ -298,22 +344,22 @@ public class MediumImpl {
         }
         return pq.poll().val;
     }
-
+    
     class Tuple implements Comparable<Tuple> {
         int x, y, val;
-
+        
         public Tuple(int x, int y, int val) {
             this.x = x;
             this.y = y;
             this.val = val;
         }
-
+        
         @Override
         public int compareTo(Tuple o) {
             return this.val - o.val;
         }
     }
-
+    
     public int kthSmallestEasy(int[][] matrix, int k) {
         if (k <= 0) return 0;
         int len = matrix.length;
@@ -327,7 +373,7 @@ public class MediumImpl {
         Arrays.sort(array);
         return array[k - 1];
     }
-
+    
     /**
      * 275. H-Index II
      * if the citations array is sorted in ascending order
@@ -347,7 +393,7 @@ public class MediumImpl {
         }
         return len;
     }
-
+    
     /**
      * 274. H-Index
      * Given an array of citations (each citation(引用因子) is a non-negative integer) of a researcher
@@ -376,7 +422,7 @@ public class MediumImpl {
         }
         return 0;
     }
-
+    
     /**
      * 34. Search for a Range
      * Given a sorted array of integers, find the starting and ending position of a given target value.
@@ -426,7 +472,7 @@ public class MediumImpl {
         res[1] = end;
         return res;
     }
-
+    
     /**
      * 35. Search Insert Position
      * Given a sorted array and a target value, return the index if the target is found.
@@ -458,7 +504,7 @@ public class MediumImpl {
         }
         return nums[i] < target ? i + 1 : i;
     }
-
+    
     /**
      * 229. Majority Element II
      * Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times.
@@ -517,7 +563,7 @@ public class MediumImpl {
         if (nc > count) result.add(n);
         return result;
     }
-
+    
     /**
      * 139. Word Break
      * Given a string s and a dictionary of words dict,
@@ -547,7 +593,7 @@ public class MediumImpl {
         }
         return flag[s.length()];
     }
-
+    
     private boolean wordBreak2(String s, Set<String> wordDict) {
         boolean[] flag = new boolean[s.length() + 1];
         flag[0] = true;
@@ -561,7 +607,7 @@ public class MediumImpl {
         }
         return flag[s.length()];
     }
-
+    
     /**
      * 71. Simplify Path
      * Given an absolute path for a file (Unix-style), simplify it.
@@ -596,7 +642,7 @@ public class MediumImpl {
         if (res.endsWith("/")) res = res.substring(0, res.length() - 1);
         return "/" + res;
     }
-
+    
     /**
      * 93. Restore IP Addresses
      * Given a string containing only digits, restore it by returning all possible valid IP address combinations.
@@ -629,12 +675,12 @@ public class MediumImpl {
         }
         return result;
     }
-
+    
     private boolean isValid(String s) {
         //ip每个字段是 0 - 255
         return !(s.length() > 3 || s.length() == 0 || (s.charAt(0) == '0' && s.length() > 1) || Integer.parseInt(s) > 255);
     }
-
+    
     /**
      * 200. Number of Islands
      * Given a 2d grid map of '1's (land) and '0's (water), count the number of islands.
@@ -685,11 +731,11 @@ public class MediumImpl {
         }
         return uf.count;
     }
-
+    
     class UF {
         public int count = 0;
         public int[] id = null;
-
+        
         public UF(int m, int n, char[][] grid) {
             for (int i = 0; i < m; i++) {
                 for (int j = 0; j < n; j++) {
@@ -702,7 +748,7 @@ public class MediumImpl {
                 id[i] = i;
             }
         }
-
+        
         public int find(int p) {
             while (p != id[p]) {
                 id[p] = id[id[p]];
@@ -710,13 +756,13 @@ public class MediumImpl {
             }
             return p;
         }
-
+        
         public boolean isConnected(int p, int q) {
             int pRoot = find(p);
             int qRoot = find(q);
             return pRoot == qRoot;
         }
-
+        
         public void union(int p, int q) {
             int pRoot = find(p);
             int qRoot = find(q);
@@ -724,10 +770,10 @@ public class MediumImpl {
             id[pRoot] = qRoot;
             count--;
         }
-
+        
     }
-
-
+    
+    
     /**
      * 130. Surrounded Regions
      * Given a 2D board containing 'X' and 'O' (the letter O), capture all regions surrounded by 'X'.
@@ -739,7 +785,7 @@ public class MediumImpl {
     public void solve(char[][] board) {
         // TODO: 16/8/30
     }
-
+    
     /**
      * 91. Decode Ways
      * A message containing letters from A-Z is being encoded to numbers using the following mapping:
@@ -766,7 +812,7 @@ public class MediumImpl {
         }
         return memo[0];
     }
-
+    
     /**
      * 29. Divide Two Integers
      * Divide two integers without using multiplication, division and mod operator.
@@ -782,7 +828,7 @@ public class MediumImpl {
         long dir = Math.abs((long) divisor);
         if (dir == 0) return Integer.MAX_VALUE;
         if (did == 0 || did < dir) return 0;
-
+        
         long lans = longDivide(did, dir);
         int ans;
         if (lans > Integer.MAX_VALUE) {
@@ -792,7 +838,7 @@ public class MediumImpl {
         }
         return ans;
     }
-
+    
     //二分查找递归
     private long longDivide(long did, long dir) {
         if (did < dir) return 0L;
@@ -804,7 +850,7 @@ public class MediumImpl {
         }
         return multiple + longDivide(did - sum, dir);
     }
-
+    
     /**
      * 167. Two Sum II - Input array is sorted
      * the array is already sorted in ascending order
@@ -834,7 +880,7 @@ public class MediumImpl {
         }
         return new int[]{-1, -1};
     }
-
+    
     /**
      * 127. Word Ladder
      * find the length of shortest transformation sequence from beginWord to endWord
@@ -865,7 +911,7 @@ public class MediumImpl {
         }
         return 0;
     }
-
+    
     //找出wordList 中与 s distance=1 的单词
     private List<String> neighbors(String s, Set<String> wordList) {
         List<String> res = new ArrayList<String>();
@@ -883,7 +929,7 @@ public class MediumImpl {
         }
         return res;
     }
-
+    
     private boolean diff(String s1, String s2) {
         int diff = 0;
         int len = s1.length();
@@ -894,7 +940,7 @@ public class MediumImpl {
         }
         return diff == 1;
     }
-
+    
     /**
      * 89. Gray Code
      * The gray code is a binary numeral system where two successive values differ in only one bit.
@@ -915,14 +961,14 @@ public class MediumImpl {
         for (int i = 0; i < 1 << n; i++) list.add(i ^ i >> 1);
         return list;
     }
-
+    
     //Java 1ms Backtracking Solution
     public List<Integer> grayCodeBacktracking(int n) {
         List<Integer> res = new ArrayList<>();
         helper(new int[1], n - 1, res);
         return res;
     }
-
+    
     private void helper(int[] val, int index, List<Integer> res) {
         if (index == -1) {
             res.add(val[0]);
@@ -932,18 +978,18 @@ public class MediumImpl {
         val[0] ^= (1 << index);
         helper(val, index - 1, res);
     }
-
+    
     /**
      * The purpose of this function is to convert an unsigned
      * binary number to reflected binary Gray code.
      * <p>
      * The operator >> is shift right. The operator ^ is exclusive or.
      */
-
+    
     int binaryToGray(int num) {
         return (num >> 1) ^ num;
     }
-
+    
     /**
      * The purpose of this function is to convert a reflected binary
      * Gray code number to a binary number.
@@ -955,7 +1001,7 @@ public class MediumImpl {
         }
         return num;
     }
-
+    
     private int bit2int(int[] bits) {
         if (bits == null || bits.length == 0) return 0;
         int res = 0;
@@ -967,7 +1013,7 @@ public class MediumImpl {
         }
         return res;
     }
-
+    
     /**
      * 322. Coin Change
      * Write a function to compute the fewest number of coins that you need to make up that amount.
@@ -984,9 +1030,9 @@ public class MediumImpl {
         coinCount(amount, coins.length - 1, coins, 0);
         return total == Integer.MAX_VALUE ? -1 : total;
     }
-
+    
     private int total = Integer.MAX_VALUE;
-
+    
     private void coinCount(int amount, int index, int[] coins, int count) {
         if (index < 0 || count >= total - 1) return;
         int c = amount / coins[index];
@@ -1002,15 +1048,15 @@ public class MediumImpl {
             }
         }
     }
-
+    
     class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
-
+        
         TreeNode(int x) {
             val = x;
         }
     }
-
+    
 }

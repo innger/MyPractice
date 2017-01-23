@@ -22,12 +22,26 @@ public class EasyNew {
         
     }
     
+    
+    /**
+     * 455. Assign Cookies
+     * 数组s与g对比,满足s中数字大于等于g中数字的最多个数
+     * 
+     * @param g int[] 
+     * @param s int[]
+     * @return int
+     */
+    public int findContentChildren(int[] g, int[] s) {
+        // TODO: 17/1/23  
+        return 1;
+    }
+    
     /**
      * 448. Find All Numbers Disappeared in an Array
      * 数组中某些数字出现两次,或者一次
-     * 找出未在数组中出现的全部数字
+     * 找出未在数组中出现的全部数字,数组中数字本身也是index
      * Input:
-     * [4,3,2,7,8,2,3,1]
+     * [4,3,2,7,8,2,3,1] 
      * Output:
      * [5,6]
      *

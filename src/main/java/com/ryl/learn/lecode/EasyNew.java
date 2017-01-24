@@ -20,14 +20,96 @@ public class EasyNew {
         System.out.println(easyNew.findDisappearedNumbers(new int[]{4, 3, 2, 7, 8, 2, 3, 1}));
         System.out.println(easyNew.findDisappearedNumbers(new int[]{1, 1}));
         
+        int[][] grid = new int[][]{
+                {0, 1, 0, 0},
+                {1, 1, 1, 0},
+                {0, 1, 0, 0},
+                {1, 1, 0, 0}
+        };
+        System.out.println(easyNew.islandPerimeter(grid));
     }
     
+    /**
+     * 463. Island Perimeter 求岛的周长
+     * [[0,1,0,0],
+     * [1,1,1,0],
+     * [0,1,0,0],
+     * [1,1,0,0]]
+     * return 16, 两个1相邻,周长=2*4 - 2
+     *
+     * @param grid int[][]
+     * @return int
+     */
+    public int islandPerimeter(int[][] grid) {
+        //一共多少个1,有多少相邻
+        int numberOf1 = 0;
+        int neighbor = 0;
+        int width = grid[0].length;
+        int height = grid.length;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                int value = grid[i][j];
+                if (value == 1) {
+                    numberOf1++;
+                    int x = i;
+                    int y = j - 1;
+                    if (y >= 0 && grid[x][y] == 1) neighbor++;
+                    
+                    x = i;
+                    y = j + 1;
+                    if (y < width && grid[x][y] == 1) neighbor++;
+                    
+                    x = i - 1;
+                    y = j;
+                    if (x >= 0 && grid[x][y] == 1) neighbor++;
+                    
+                    x = i + 1;
+                    y = j;
+                    if (x < height && grid[x][y] == 1) neighbor++;
+                }
+            }
+        }
+        return numberOf1 * 4 - neighbor;
+    }
+    
+    static class Point {
+        private int x;
+        private int y;
+        private int v;
+        
+        public Point(int x, int y, int v) {
+            this.x = x;
+            this.y = y;
+            this.v = v;
+        }
+        
+        public int getX() {
+            return x;
+        }
+        
+        public int getY() {
+            return y;
+        }
+        
+        public int getV() {
+            return v;
+        }
+        
+        @Override
+        public String toString() {
+            return "Point{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    ", v=" + v +
+                    '}';
+        }
+    }
     
     /**
      * 455. Assign Cookies
      * 数组s与g对比,满足s中数字大于等于g中数字的最多个数
-     * 
-     * @param g int[] 
+     *
+     * @param g int[]
      * @param s int[]
      * @return int
      */
@@ -41,7 +123,7 @@ public class EasyNew {
      * 数组中某些数字出现两次,或者一次
      * 找出未在数组中出现的全部数字,数组中数字本身也是index
      * Input:
-     * [4,3,2,7,8,2,3,1] 
+     * [4,3,2,7,8,2,3,1]
      * Output:
      * [5,6]
      *

@@ -98,6 +98,7 @@ public class MediumImpl {
      * 451. Sort Characters By Frequency
      * 字符串重新排序,按照字符出现的频率,出现次数多的排在前面
      * 一个Treemap 两个map,空间换时间
+     * string直接+连接,效率比StringBuilder低好多
      * 
      * @param s string
      * @return string

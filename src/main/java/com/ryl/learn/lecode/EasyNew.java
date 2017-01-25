@@ -32,14 +32,76 @@ public class EasyNew {
         System.out.println(easyNew.numberOfBoomerangs(new int[][]{
                 {0, 0}, {1, 0}, {2, 0}
         }));
-
-//        System.out.println(easyNew.repeatedSubstringPattern("abab"));
-//        System.out.println(easyNew.repeatedSubstringPattern("aba"));
-//        System.out.println(easyNew.repeatedSubstringPattern("abcabcabcabc"));
-//        System.out.println(easyNew.repeatedSubstringPattern("bb"));
+        
+        System.out.println(easyNew.repeatedSubstringPattern("abab"));
+        System.out.println(easyNew.repeatedSubstringPattern("aba"));
+        System.out.println(easyNew.repeatedSubstringPattern("abcabcabcabc"));
+        System.out.println(easyNew.repeatedSubstringPattern("bb"));
+        
         System.out.println(easyNew.countSegments("     "));
         
         System.out.println(easyNew.findRadius(new int[]{1, 2, 3, 4}, new int[]{1, 4}));
+
+//        System.out.println(easyNew.arrangeCoins(3));
+        System.out.println(easyNew.arrangeCoins(1804289383));
+        
+        System.out.println(easyNew.minMoves2(new int[]{1, 1, 2147483647}));
+        System.out.println(easyNew.minMoves2(new int[]{1, 2, 3}));
+        System.out.println(easyNew.minMoves2(new int[]{-100, 0, 100}));
+        System.out.println(easyNew.minMoves2(new int[]{0, 0, 100}));
+    }
+    
+    /**
+     * 453. Minimum Moves to Equal Array Elements
+     * 移动数组元素,使数组中元素都相等
+     * a move is incrementing n - 1 elements by 1
+     * 每次使数组中n-1个元素+1,最终使全部元素相等
+     * 数组中每个元素与最小值差值 之和
+     * 每次n-1个元素加1,最后数组中值全等,补上所有值与最小值差值之和
+     *
+     * @param nums int[]
+     * @return int
+     */
+    public int minMoves(int[] nums) {
+        if (nums.length <= 1) return 0;
+        int min = nums[0];
+        for (int n : nums) min = Math.min(n, min);
+        int res = 0;
+        for (int n : nums) res += n - min;
+        return res;
+    }
+    
+    public int minMoves2(int[] nums) {
+        int min = nums[0];
+        int moves = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if(nums[i] < min) {
+                moves += (min - nums[i]) * i;
+                min = nums[i];
+            } else {
+                moves += nums[i] - min;
+            }
+        }
+        return moves;
+    }
+    
+    /**
+     * 441. Arranging Coins
+     * n个硬币,组成楼梯形状 第k层有k个硬币
+     * <p>
+     * 1+2+3+...+x < n 的最大的x x*(x+1)/2
+     *
+     * @param n int 非负整数,32位有符号数
+     * @return int 返回完整楼梯的行数
+     */
+    public int arrangeCoins(int n) {
+        if (n == 0) return 0;
+        long x = (long) Math.sqrt(2 * (long) n);
+        if (x < 1) return 1;
+        while (x * (x + 1) / 2 <= n) {
+            x++;
+        }
+        return (int) (--x);
     }
     
     /**
@@ -91,7 +153,7 @@ public class EasyNew {
                 if (j < size) {
                     tmpR = list.get(j).getNum() - num;
                 }
-                int tmp = Math.min(tmpL, tmpR);
+                int tmp = Math.min(tmpL, tmpR); //前后的最短距离
                 if (radius < tmp) radius = tmp;
             }
         }

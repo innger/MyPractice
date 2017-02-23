@@ -1,9 +1,14 @@
 package com.ryl.learn.util;
 
-import com.google.common.base.Charsets;
+import com.ali.com.google.common.base.Charsets;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.autonavi.aos.cmg.common.pojo.ConnectBean;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -257,5 +262,28 @@ public class MainTest {
             }
         }
         return true;
+    }
+    
+    @Test
+    public void testJson() {
+        Map<String, Object> will = Maps.newHashMap();
+        will.put("tid", "123");
+        will.put("channel", "auto_amap");
+        will.put("dip", 17020);
+        will.put("dic", "C04020001234");
+        will.put("diu", "fdajkfdklafdndjfdjkl2r49djfaj4kjj");
+        will.put("uid", 4179619);
+        will.put("sessionid", "19jfrqyajzm9dvccc68ebkdh01vthz4i");
+        will.put("deviceid", "aaaa");
+        will.put("autodiv", "ANDA0203000");
+        
+        String[] arr = new String[]{"[{}]"};
+        
+        byte[] bytes = JSON.toJSONBytes(will);
+        System.out.println(bytes.length);
+        ConnectBean connectBean = new ConnectBean();
+        connectBean.setWillMessage(bytes);
+//        System.out.println(JSON.parseObject(bytes, JSONObject.class).toString());
+        System.out.println(new String(connectBean.getWillMessage(), Charsets.UTF_8));
     }
 }

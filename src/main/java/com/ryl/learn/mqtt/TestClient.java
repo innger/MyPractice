@@ -63,7 +63,7 @@ public class TestClient {
             });
         }*/
         //"C81F662B8ADDC81F662B8AAA" "VqliqZ8RCeIDAGoFiWoeic+Z" "VR47gRd8UGUDAAW8KIIQn8T812","VR47gRd8UGUDAAW8KIIQn8T813", "Vjxy6OdR7KIDANJzIuKS2tX1"
-        String[] tids = new String[]{"C81F662B8ADDC81F662B8AAA"};
+        String[] tids = new String[]{"C81F662B8ADDC81F662B8BBB"};
         for (String tid : tids) {
             logger.info("tid={}", tid);
             TestClient client = new TestClient(tid, hostDaily);
@@ -127,7 +127,7 @@ public class TestClient {
             will.put("dip", 17020);
             will.put("dic", "C04020001234");
             will.put("diu", "fdajkfdklafdndjfdjkl2r49djfaj4kjj");
-            will.put("uid", 30885752); //1699077
+            will.put("uid", 4179619); //1699077
             will.put("sessionid", "19jfrqyajzm9dvccc68ebkdh01vthz4i");
             will.put("deviceid", "aaaa");
             will.put("autodiv", "ANDA0203000");

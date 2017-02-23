@@ -9,6 +9,19 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.autonavi.aos.cmg</groupId>
+            <artifactId>cmg-common</artifactId>
+            <version>0.0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava.hsf</artifactId>
+            <version>18.0</version>
+        </dependency>
+        
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty</artifactId>

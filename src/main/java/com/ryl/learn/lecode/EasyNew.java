@@ -70,8 +70,77 @@ public class EasyNew {
         System.out.println(easyNew.convertToBase7(100));
         System.out.println(easyNew.convertToBase7(-7));
         
+        
+        TreeNode root = new TreeNode(1);
+        root.right = new TreeNode(3);
+        root.right.left = new TreeNode(2);
+        System.out.println(easyNew.getMinimumDifference(root));
+        
+        root = new TreeNode(5);
+        root.left = new TreeNode(4);
+        root.right = new TreeNode(7);
+        System.out.println(easyNew.getMinimumDifference(root));
+        
+        
     }
     
+    /**
+     * 530. Minimum Absolute Difference in BST
+     * 非负整数,找出最小绝对值差
+     * 中序遍历数组是升序的,比较相邻的最小值即可
+     *
+     * @param root TreeNode
+     * @return int
+     */
+    public int getMinimumDifference(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        inOrder(root, list);
+        System.out.println(list);
+        int min = Integer.MAX_VALUE;
+        for(int i = 0; i < list.size() - 1; i++) {
+            min = Math.min(min, list.get(i+1) - list.get(i));
+        }
+        return min;
+    }
+    
+    private void inOrder(TreeNode root, List<Integer> list) {
+        if (root == null) return;
+        inOrder(root.left, list);
+        list.add(root.val);
+        inOrder(root.right, list);
+    }
+    
+    
+    /**
+     * 108. Convert Sorted Array to Binary Search Tree
+     * 将递增数组转换成[平衡二叉搜索树]
+     *
+     * @param nums int[] 递增数组
+     * @return TreeNode
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length == 0) return null;
+        return sortedArrayToBST(nums, 0, nums.length - 1);
+    }
+    
+    private TreeNode sortedArrayToBST(int[] nums, int low, int high) {
+        if (low > high) return null;
+        int mid = (low + high) / 2;
+        TreeNode node = new TreeNode(nums[mid]);
+        node.left = sortedArrayToBST(nums, low, mid - 1);
+        node.right = sortedArrayToBST(nums, mid + 1, high);
+        return node;
+    }
+    
+    private static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        
+        TreeNode(int x) {
+            val = x;
+        }
+    }
     
     /**
      * 504. Base 7
@@ -215,6 +284,7 @@ public class EasyNew {
      * @return int[]
      */
     public int[] nextGreaterElement(int[] findNums, int[] nums) {
+        //nums中每个数字 : nextGreater
         Map<Integer, Integer> map = new HashMap<>();
         int len = nums.length;
         for (int i = 0; i < len; i++) {

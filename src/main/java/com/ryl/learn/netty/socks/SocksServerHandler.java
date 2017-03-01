@@ -8,6 +8,7 @@ import org.jboss.netty.channel.socket.ClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.socks.*;
 
 /**
+ * SocksServerHandler
  * Created by renyulong on 16/1/26.
  */
 public class SocksServerHandler extends SimpleChannelUpstreamHandler {

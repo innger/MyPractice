@@ -85,6 +85,51 @@ public class EasyNew {
     }
     
     /**
+     * 437. Path Sum III
+     * 二叉树,找出所有和等于给定sum的路径数
+     * 路径不需要是从root到叶子节点,其中任意一段即可
+     * 
+     * @param root TreeNode
+     * @param sum int
+     * @return int
+     */
+    public int pathSum(TreeNode root, int sum) {
+        //// TODO: 17/3/1  
+        return 0;
+    }
+    
+    /**
+     * 501. Find Mode in Binary Search Tree
+     * 二叉搜索树,中有重复的元素,找出重复最多的元素
+     * 先中序遍历成升序数组,再求重复最多元素
+     * 
+     * @param root TreeNode
+     * @return int[]
+     */
+    public int[] findMode(TreeNode root) {
+        List<Integer> nums = new ArrayList<>();
+        inOrder(root, nums);
+        Map<Integer, Integer> map = new TreeMap<>();
+        int dup = 1;
+        for (Integer n : nums) {
+            if (map.containsKey(n)) {
+                int t = map.get(n);
+                map.put(n, t + 1);
+                dup = Math.max(dup, t + 1);
+            } else {
+                map.put(n, 1);
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == dup) {
+                res.add(entry.getKey());
+            }
+        }
+        return res.stream().mapToInt(i -> i).toArray();
+    }
+    
+    /**
      * 530. Minimum Absolute Difference in BST
      * 非负整数,找出最小绝对值差
      * 中序遍历数组是升序的,比较相邻的最小值即可
@@ -97,8 +142,8 @@ public class EasyNew {
         inOrder(root, list);
         System.out.println(list);
         int min = Integer.MAX_VALUE;
-        for(int i = 0; i < list.size() - 1; i++) {
-            min = Math.min(min, list.get(i+1) - list.get(i));
+        for (int i = 0; i < list.size() - 1; i++) {
+            min = Math.min(min, list.get(i + 1) - list.get(i));
         }
         return min;
     }

@@ -7,18 +7,18 @@ import java.util.*;
  * Created by renyulong on 16/2/3.
  */
 public class MediumMain {
-
+    
     public static void main(String[] args) {
         MediumMain main = new MediumMain();
         int[] arr = new int[]{1, 1, 1, 1, 3, 3};
         arr = new int[]{1, 1, 1, 1, 2, 2, 3};
         int len = main.removeDuplicates(arr);
         System.out.println(len + " " + Arrays.toString(arr));
-
+        
         int ugly = main.nthUglyNumber(7);
         System.out.println(ugly);
     }
-
+    
     /**
      * a1, a2, ..., an,  (i, ai) and (i, 0) and x-axis 组成的四边形,contains the most water
      * You may not slant the container.
@@ -39,7 +39,7 @@ public class MediumMain {
             int w = j - i;
             int a = h * w;
             max = Math.max(max, a);
-
+            
             if (i + 1 < j && Math.min(height[i + 1], height[j]) > h) {
                 i++;
             } else if (j - 1 > i && Math.min(height[i], height[j - 1]) > h) {
@@ -55,7 +55,7 @@ public class MediumMain {
         }
         return max;
     }
-
+    
     /**
      * 优化方案,内部嵌套while循环,取消无用的面积计算
      *
@@ -88,7 +88,7 @@ public class MediumMain {
         }
         return max;
     }
-
+    
     /**
      * 264. Ugly Number II
      * Write a program to find the n-th ugly number.
@@ -112,7 +112,7 @@ public class MediumMain {
         List<Integer> l5 = new ArrayList<Integer>();
         l5.add(5);
         int i2 = 0, i3 = 0, i5 = 0;
-
+        
         int ugly = 0;
         for (int i = 1; i < n; i++) {
             int u2 = l2.get(i2);
@@ -135,7 +135,7 @@ public class MediumMain {
         }
         return ugly;
     }
-
+    
     /**
      * 异或法
      *
@@ -149,7 +149,7 @@ public class MediumMain {
         }
         return res;
     }
-
+    
     /**
      * 整个数列的数加起来取3的余数,就是那个特殊数在该位上的值
      * http://www.raychase.net/2573
@@ -174,7 +174,7 @@ public class MediumMain {
         }
         return ret;
     }
-
+    
     /**
      * 137. Single Number II
      * every element appears three times except for one.
@@ -202,7 +202,7 @@ public class MediumMain {
         }
         return map.keySet().iterator().next();
     }
-
+    
     /**
      * https://discuss.leetcode.com/topic/2031/challenge-me-thx
      * 很惊艳的算法 This solution is awesome !
@@ -218,7 +218,7 @@ public class MediumMain {
         }
         return ones;
     }
-
+    
     /**
      * 数组中有两个数出现一次,其他都是两次,找出这两个数
      * 先全部异或,根据结果,某位为1划分成两组
@@ -260,7 +260,7 @@ public class MediumMain {
         System.out.println(Arrays.toString(res));
         return res;
     }
-
+    
     /**
      * 数字n bits 最右出现1的index
      *
@@ -280,7 +280,7 @@ public class MediumMain {
             n = n >> 1;
         }
     }
-
+    
     /**
      * n bits 第i位是否是1
      *
@@ -295,7 +295,7 @@ public class MediumMain {
         }
         return (n & 1) == 1;
     }
-
+    
     //奇数变偶数
     public int[] countBits(int num) {
         int[] res = new int[num + 1];
@@ -325,7 +325,7 @@ public class MediumMain {
         }
         return res;
     }
-
+    
     /**
      * 汉明权重 数字n bits中1的个数
      *
@@ -340,8 +340,8 @@ public class MediumMain {
         }
         return cnt;
     }
-
-
+    
+    
     /**
      * n = a + b + c, maximize the product of those integers n >= 2 找3
      * There is a simple O(n) solution to this problem.
@@ -366,7 +366,7 @@ public class MediumMain {
         max *= n;
         return max;
     }
-
+    
     public void sortColors(int[] nums) {
         int i0 = 0;
         int i1 = 0;
@@ -389,10 +389,10 @@ public class MediumMain {
             nums[index] = 2;
             index++;
         }
-
+        
         System.out.println(Arrays.toString(nums));
     }
-
+    
     /**
      * Given an unsorted array nums, reorder it such that nums[0] < nums[1] > nums[2] < nums[3] > nums[4]....
      * 奇偶有序
@@ -416,11 +416,11 @@ public class MediumMain {
         for (int i = 0; i < len; i += 2, j--) {
             nums[i] = list.get(j);
         }
-
-
+        
+        
         System.out.println(Arrays.toString(nums));
     }
-
+    
     public int findKthLargestHeap(int[] nums, int k) {
         initHeap(nums, nums.length);
         for (int i = nums.length - 1; i >= 1; i--) {
@@ -432,13 +432,13 @@ public class MediumMain {
         System.out.println(Arrays.toString(nums));
         return nums[k - 1];
     }
-
+    
     private void initHeap(int[] a, int n) {
         for (int i = n / 2 - 1; i >= 0; i--) {
             minHeapFixdown(a, i, n);
         }
     }
-
+    
     private void minHeapFixdown(int a[], int i, int n) {
         int j = 2 * i + 1;
         int temp = a[i];
@@ -451,7 +451,7 @@ public class MediumMain {
         }
         a[i] = temp;
     }
-
+    
     //另:topk 堆排序
     public int findKthLargest(int[] nums, int k) {
         if (nums == null || nums.length == 0) {
@@ -469,7 +469,7 @@ public class MediumMain {
         });
         return list.get(k - 1);
     }
-
+    
     //treemap 按照值排序
     public List<Integer> topKFrequent(int[] nums, int k) {
         TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
@@ -494,7 +494,7 @@ public class MediumMain {
         }
         return result;
     }
-
+    
     /**
      * 输入号码,输出所有的字母组合
      *
@@ -533,7 +533,7 @@ public class MediumMain {
         System.out.println(list);
         return list;
     }
-
+    
     /**
      * 最长回文
      *
@@ -560,7 +560,7 @@ public class MediumMain {
         }
         return longest;
     }
-
+    
     private String getPalindrome(String s, int begin, int end) {
         while (begin >= 0 && end <= s.length() - 1 && s.charAt(begin) == s.charAt(end)) {
             begin--;
@@ -568,7 +568,7 @@ public class MediumMain {
         }
         return s.substring(begin + 1, end);
     }
-
+    
     /**
      * 模拟大正整数相乘
      *
@@ -626,7 +626,7 @@ public class MediumMain {
         }
         return result;
     }
-
+    
     public int lengthOfLongestSubstring(String s) {
         if (s == null || s.isEmpty()) {
             return 0;
@@ -654,17 +654,17 @@ public class MediumMain {
         }
         return max;
     }
-
-
+    
+    
     public class ListNode {
         int val;
         ListNode next;
-
+        
         ListNode(int x) {
             val = x;
         }
     }
-
+    
     private ListNode createListNode(int[] arr) {
         if (arr == null || arr.length < 1) {
             return null;
@@ -678,7 +678,7 @@ public class MediumMain {
         }
         return head;
     }
-
+    
     private void printListNode(ListNode head) {
         while (head != null) {
             System.out.print(head.val);
@@ -689,13 +689,14 @@ public class MediumMain {
         }
         System.out.println();
     }
-
+    
     /**
+     * 2. Add Two Numbers
      * 链表模拟大数相加
      *
-     * @param l1 node
-     * @param l2 node
-     * @return node
+     * @param l1 ListNode
+     * @param l2 ListNode
+     * @return ListNode
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         if (l1 == null || l2 == null) {
@@ -707,7 +708,7 @@ public class MediumMain {
             }
             return null;
         }
-
+        
         ListNode head = null;
         ListNode node = null;
         int carry = 0;
@@ -733,7 +734,7 @@ public class MediumMain {
             node = next;
             l1 = l1.next;
         }
-
+        
         while (l2 != null) {
             int sum = (l2.val + carry) % 10;
             carry = (l2.val + carry) / 10;
@@ -742,15 +743,13 @@ public class MediumMain {
             node = next;
             l2 = l2.next;
         }
-
+        
         if (carry > 0) {
-            ListNode next = new ListNode(carry);
-            node.next = next;
+            node.next = new ListNode(carry);
         }
-
         return head;
     }
-
+    
     /**
      * 80. Remove Duplicates from Sorted Array II
      * What if duplicates are allowed at most twice?
@@ -787,7 +786,7 @@ public class MediumMain {
         }
         return i1 + 1;
     }
-
+    
     public void rotate(int[][] matrix) {
         int n = matrix.length;
         for (int row = 0; row < n / 2; row++) {
@@ -804,7 +803,7 @@ public class MediumMain {
             }
         }
     }
-
+    
     /**
      * 39. Combination Sum
      * 从数组中选出序列,和为给定的target值,每个选中的数字不限次数
@@ -821,7 +820,7 @@ public class MediumMain {
         dfs(target, 0, candidates, ans, cur);
         return ans;
     }
-
+    
     private void dfs(int target, int bd, int[] cand, List<List<Integer>> ans, List<Integer> cur) {
         if (target == 0) {
             ans.add(new ArrayList<Integer>(cur));
@@ -836,7 +835,7 @@ public class MediumMain {
             }
         }
     }
-
+    
     /**
      * 动态规划，从下往上走
      *
@@ -857,7 +856,7 @@ public class MediumMain {
         }
         return dp[0];
     }
-
+    
     //triangle数组可改变,直接在原数组上操作
     public int minimumTotal2(List<List<Integer>> triangle) {
         int m = triangle.size();
@@ -873,8 +872,8 @@ public class MediumMain {
         }
         return triangle.get(0).get(0);
     }
-
-
+    
+    
     //Best Time to Buy and Sell Stock
     public int maxProfit2(int[] prices) {
         if (prices == null || prices.length == 0) {
@@ -890,7 +889,7 @@ public class MediumMain {
         }
         return profit;
     }
-
+    
     public int maxProfit1(int[] prices) {
         if (prices == null || prices.length == 0) {
             return 0;
@@ -908,7 +907,7 @@ public class MediumMain {
         }
         return profit;
     }
-
+    
     //双数组解法
     //http://blog.csdn.net/xudli/article/details/46911603
     public int[] productExceptSelf(int[] nums) {
@@ -924,7 +923,7 @@ public class MediumMain {
         }
         return arr;
     }
-
+    
     public int[] productExceptSelf1(int[] nums) {
         int[] arr = new int[nums.length];
         Arrays.fill(arr, 1);
@@ -937,36 +936,36 @@ public class MediumMain {
         }
         return arr;
     }
-
+    
     //Solve it without division and in O(n).
     public int[] productExceptSelf2(int[] nums) {
         int all = 1;
         for (int i = 0; i < nums.length; i++) {
             all = all * nums[i];
         }
-
+        
         int[] arr = new int[nums.length];
         for (int i = 0; i < nums.length; i++) {
             arr[i] = all / nums[i];
         }
         return arr;
     }
-
+    
     public List<List<Integer>> fourSum(int[] nums, int target) {
         List<List<Integer>> list = new ArrayList<List<Integer>>();
-
+        
         Arrays.sort(nums);
-
+        
         for (int i = 0; i <= nums.length - 4; i++) {
             if (i > 0 && nums[i] == nums[i - 1]) {
                 continue;
             }
-
+            
             for (int j = i + 1; j <= nums.length - 3; j++) {
                 if (j > i + 1 && nums[j] == nums[j - 1]) {
                     continue;
                 }
-
+                
                 int p = j + 1;
                 int q = nums.length - 1;
                 while (p < q) {
@@ -984,7 +983,7 @@ public class MediumMain {
                         list.add(tmpList);
                         p++;
                         q--;
-
+                        
                         while (p < q && nums[p] == nums[p - 1]) {
                             p++;
                         }
@@ -995,11 +994,11 @@ public class MediumMain {
                 }
             }
         }
-
+        
         return list;
     }
-
-
+    
+    
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> list = new ArrayList<List<Integer>>();
         Arrays.sort(nums);
@@ -1011,7 +1010,7 @@ public class MediumMain {
         }
         return list;
     }
-
+    
     private void judgeAndPut(int[] num, int i, int p, int q, List<List<Integer>> list) {
         while (p < q) {
             if (num[p] + num[q] + num[i] < 0) {
@@ -1035,7 +1034,7 @@ public class MediumMain {
             }
         }
     }
-
+    
     private void judgeAndPutWrong(int[] num, int i, int p, int q, List<List<Integer>> list) {
         while (p < q) {
             if (num[p] + num[q] + num[i] < 0) {
@@ -1062,7 +1061,7 @@ public class MediumMain {
             }
         }
     }
-
+    
     //http://blog.csdn.net/li4951/article/details/8693212
     public List<List<Integer>> threeSumWrong(int[] nums) {
         List<List<Integer>> res = new ArrayList<List<Integer>>();
@@ -1071,15 +1070,15 @@ public class MediumMain {
             for (int j = i + 1; j < nums.length; j++) {
                 for (int k = j + 1; k < nums.length; k++) {
                     if (nums[i] + nums[j] + nums[k] == 0) {
-
+                        
                         int max = nums[i] > nums[j] ? nums[k] > nums[i] ? nums[k] : nums[i] : nums[k] > nums[j] ? nums[k] : nums[j];
                         int min = nums[i] < nums[j] ? nums[k] < nums[i] ? nums[k] : nums[i] : nums[k] < nums[j] ? nums[k] : nums[j];
                         int mid = 0 - max - min;
-
+                        
                         if (set.contains(min - mid - max)) {
                             break;
                         }
-
+                        
                         List<Integer> subList = new ArrayList<Integer>(3);
                         subList.add(min);
                         subList.add(mid);
@@ -1092,7 +1091,7 @@ public class MediumMain {
         }
         return res;
     }
-
+    
     //http://blog.csdn.net/ljiabin/article/details/39968583
     public String int2Roman(int num) {
         String[][] roman = {{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"},
@@ -1109,7 +1108,7 @@ public class MediumMain {
         }
         return res;
     }
-
+    
     //http://blog.csdn.net/havenoidea/article/details/11848921
     public String intToRoman(int num) {
         String str = "";
@@ -1123,7 +1122,7 @@ public class MediumMain {
         }
         return str;
     }
-
+    
     //三层循环最原始的方法居然都AC
     public int threeSumClosest(int[] nums, int target) {
         int res = Integer.MAX_VALUE;
@@ -1145,7 +1144,7 @@ public class MediumMain {
         }
         return res;
     }
-
+    
     public int threeSumClosestNew(int[] num, int target) {
         int closest = 0;
         boolean needInit = true;
@@ -1177,7 +1176,7 @@ public class MediumMain {
         }
         return closest;
     }
-
+    
     /**
      * 1. Two Sum
      * Given an array of integers, return indices of the two numbers such that they add up to a specific target.
@@ -1201,7 +1200,7 @@ public class MediumMain {
         }
         return res;
     }
-
+    
     /**
      * 先排序,从两头查找,再循环原始数组找到索引 效率比较低
      * 不如上面用Hashmap的方式直接查询索引
@@ -1238,7 +1237,7 @@ public class MediumMain {
                 res[1] = n;
             }
         }
-
+        
         return res;
     }
 }

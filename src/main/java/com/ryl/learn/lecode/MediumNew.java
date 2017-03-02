@@ -80,7 +80,7 @@ public class MediumNew {
         root.left.left = new TreeNode(5);
         root.left.right = new TreeNode(3);
         root.right.right = new TreeNode(9);
-        System.out.println(main.largestValues(root));
+        System.out.println(main.findBottomLeftValue(root));
         
         System.out.println(main.findDiagonalOrder(new int[][]{
                 {1, 2, 3, 4, 6, 7},
@@ -96,23 +96,62 @@ public class MediumNew {
                 {6, 10, 13},
                 {7, 11, 15}
         }));
-    
+        
         System.out.println(main.findDiagonalOrder(new int[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 0},
         }));
+        ListNode l1 = new ListNode(1);
+//        l1.next = new ListNode(2);
+//        l1.next.next = new ListNode(4);
+//        l1.next.next.next = new ListNode(3);
+        
+        ListNode l2 = new ListNode(9);
+        l2.next = new ListNode(9);
+//        l2.next.next = new ListNode(4);
+        
+        ListNode l = main.addTwoNumbers(l1, l2);
+        while (l != null) {
+            System.out.print(l.val + "->");
+            l = l.next;
+        }
     }
     
     /**
      * 513. Find Bottom Left Tree Value
-     * 找出最后一行的最左数字
-     * 
+     * 找出最底行的最左数字
+     *
      * @param root TreeNode
      * @return int
      */
     public int findBottomLeftValue(TreeNode root) {
-        return 0;
+        if (root == null) return 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        Integer result;
+        while (true) {
+            Integer left = null;
+            Queue<TreeNode> tmpQ = new LinkedList<>();
+            while (!queue.isEmpty()) {
+                TreeNode node = queue.remove();
+                if (left == null) {
+                    left = node.val;
+                }
+                if (node.left != null) {
+                    tmpQ.add(node.left);
+                }
+                if (node.right != null) {
+                    tmpQ.add(node.right);
+                }
+            }
+            if (tmpQ.isEmpty()) {
+                result = left;
+                break;
+            }
+            queue = tmpQ;
+        }
+        return result == null ? 0 : result;
     }
     
     /**
@@ -320,15 +359,64 @@ public class MediumNew {
     
     /**
      * 445. Add Two Numbers II
+     * 两个链表非负整数
+     * 每个节点是单位数字,高位在前面,从链表尾部开始相加进位
+     * 不能改变输入链表的顺序
      *
      * @param l1 ListNode
      * @param l2 ListNode
      * @return ListNode
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        // TODO: 17/2/28  
-        return null;
+        Stack<ListNode> s1 = new Stack<>();
+        Stack<ListNode> s2 = new Stack<>();
+        ListNode head = l1;
+        while (head != null) {
+            s1.add(head);
+            head = head.next;
+        }
+        head = l2;
+        while (head != null) {
+            s2.add(head);
+            head = head.next;
+        }
+        Stack<ListNode> ss = new Stack<>();
+        int carry = 0;
+        while (!s1.isEmpty() && !s2.isEmpty()) {
+            ListNode n1 = s1.pop();
+            ListNode n2 = s2.pop();
+            int tmp = n1.val + n2.val + carry;
+            int sum = tmp % 10;
+            carry = tmp / 10;
+            ss.push(new ListNode(sum));
+        }
+        carry = addRemainNode(s1, carry, ss);
+        carry = addRemainNode(s2, carry, ss);
+        
+        if (carry > 0) {
+            ss.push(new ListNode(carry));
+        }
+        
+        head = ss.pop();
+        ListNode cur = head;
+        while (!ss.isEmpty()) {
+            cur.next = ss.pop();
+            cur = cur.next;
+        }
+        return head;
     }
+    
+    private int addRemainNode(Stack<ListNode> s, int carry, Stack<ListNode> ss) {
+        while (!s.isEmpty()) {
+            ListNode n = s.pop();
+            int tmp = n.val + carry;
+            int sum = tmp % 10;
+            carry = tmp / 10;
+            ss.push(new ListNode(sum));
+        }
+        return carry;
+    }
+    
     
     /**
      * 56. Merge Intervals
@@ -438,12 +526,17 @@ public class MediumNew {
         }
     }
     
-    private class ListNode {
+    private static class ListNode {
         int val;
         ListNode next;
         
         ListNode(int x) {
             val = x;
+        }
+        
+        @Override
+        public String toString() {
+            return String.valueOf(val);
         }
     }
     

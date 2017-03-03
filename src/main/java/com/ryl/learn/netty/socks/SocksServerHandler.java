@@ -41,7 +41,7 @@ public class SocksServerHandler extends SimpleChannelUpstreamHandler {
             case CMD:
                 SocksCmdRequest req = (SocksCmdRequest) socksRequest;
                 if(req.getCmdType() == SocksMessage.CmdType.CONNECT) {
-                    ctx.getPipeline().addLast(SocksServerConnectHandler.getName(),new SocksServerConnectHandler(cf)); // TODO: 16/1/26
+                    ctx.getPipeline().addLast(SocksServerConnectHandler.getName(),new SocksServerConnectHandler(cf));
                     ctx.getPipeline().remove(this);
                 }else{
                     ctx.getChannel().close();

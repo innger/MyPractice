@@ -41,8 +41,8 @@ public class EasyNew {
         System.out.println(easyNew.countSegments("     "));
         
         System.out.println(easyNew.findRadius(new int[]{1, 2, 3, 4}, new int[]{1, 4}));
-
-//        System.out.println(easyNew.arrangeCoins(3));
+        
+        System.out.println(easyNew.arrangeCoins(3));
         System.out.println(easyNew.arrangeCoins(1804289383));
         
         System.out.println(easyNew.minMoves2(new int[]{1, 1, 2147483647}));
@@ -80,29 +80,40 @@ public class EasyNew {
         root.left = new TreeNode(4);
         root.right = new TreeNode(7);
         System.out.println(easyNew.getMinimumDifference(root));
-        
-        
     }
     
     /**
      * 437. Path Sum III
      * 二叉树,找出所有和等于给定sum的路径数
      * 路径不需要是从root到叶子节点,其中任意一段即可
-     * 
+     *
      * @param root TreeNode
-     * @param sum int
+     * @param sum  int
      * @return int
      */
     public int pathSum(TreeNode root, int sum) {
-        //// TODO: 17/3/1  
-        return 0;
+        Map<Integer, Integer> preSum = new HashMap<>();
+        preSum.put(0, 1);
+        return helper(root, 0, sum, preSum);
+    }
+    
+    private int helper(TreeNode root, int curSum, int target, Map<Integer, Integer> preSum) {
+        if (root == null) return 0;
+        
+        curSum += root.val;
+        int res = preSum.getOrDefault(curSum - target, 0);
+        preSum.put(curSum, preSum.getOrDefault(curSum, 0) + 1);
+        
+        res += helper(root.left, curSum, target, preSum) + helper(root.right, curSum, target, preSum);
+        preSum.put(curSum, preSum.get(curSum) - 1);
+        return res;
     }
     
     /**
      * 501. Find Mode in Binary Search Tree
      * 二叉搜索树,中有重复的元素,找出重复最多的元素
      * 先中序遍历成升序数组,再求重复最多元素
-     * 
+     *
      * @param root TreeNode
      * @return int[]
      */

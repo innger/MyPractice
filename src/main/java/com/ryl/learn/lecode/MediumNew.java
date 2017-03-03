@@ -103,19 +103,167 @@ public class MediumNew {
                 {7, 8, 0},
         }));
         ListNode l1 = new ListNode(1);
-//        l1.next = new ListNode(2);
-//        l1.next.next = new ListNode(4);
-//        l1.next.next.next = new ListNode(3);
+        l1.next = new ListNode(2);
+        l1.next.next = new ListNode(4);
+        l1.next.next.next = new ListNode(3);
         
         ListNode l2 = new ListNode(9);
         l2.next = new ListNode(9);
-//        l2.next.next = new ListNode(4);
+        l2.next.next = new ListNode(4);
         
         ListNode l = main.addTwoNumbers(l1, l2);
         while (l != null) {
             System.out.print(l.val + "->");
             l = l.next;
         }
+        
+        System.out.println(main.originalDigits("owoztneoer"));
+        System.out.println(main.originalDigits("fviefuro"));
+        
+    }
+    
+    /**
+     * 423. Reconstruct Original Digits from English
+     * 输入代表0-9乱序英文单词,输出升序的数字表示
+     * Input: "owoztneoer" Output: "012"
+     * Input: "fviefuro"  Output: "45"
+     * 字符和数字的对应个数规律
+     * 用map存每个字符出现的个数,再过滤,效率低下没有总结规律
+     * 
+     * @param s String 全部小写字母
+     * @return String
+     */
+    public String originalDigits(String s) {
+        Map<String, String> digitMap = new HashMap<>();
+        digitMap.put("zero", "0");
+        digitMap.put("one", "1");
+        digitMap.put("two", "2");
+        digitMap.put("three", "3");
+        digitMap.put("four", "4");
+        digitMap.put("five", "5");
+        digitMap.put("six", "6");
+        digitMap.put("seven", "7");
+        digitMap.put("eight", "8");
+        digitMap.put("nine", "9");
+        
+        Map<Character, String> map = new HashMap<>();
+        map.put('z', "zero");
+        map.put('w', "two");
+        map.put('u', "four");
+        map.put('x', "six");
+        map.put('g', "eight");
+        Map<Character, String> map2 = new HashMap<>();
+        map2.put('h', "three");
+        map2.put('f', "five");
+        map2.put('s', "seven");
+        Map<Character, String> map3 = new HashMap<>();
+        map3.put('o', "one");
+        map3.put('i', "nine");
+        
+        Map<Character, Integer> numMap = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            Integer num = numMap.get(c);
+            if (num == null) {
+                numMap.put(c, 1);
+            } else {
+                numMap.put(c, num + 1);
+            }
+        }
+        List<String> list = new ArrayList<>();
+        filterNumMap(numMap, map, digitMap, list);
+        filterNumMap(numMap, map2, digitMap, list);
+        filterNumMap(numMap, map3, digitMap, list);
+        
+        StringBuilder builder = new StringBuilder();
+        list.stream().sorted().forEach(s1 -> builder.append(s1));
+        return builder.toString();
+    }
+    
+    private void filterNumMap(Map<Character, Integer> numMap, Map<Character, String> map, Map<String, String> digitMap, List<String> list) {
+        for (Map.Entry<Character, Integer> entry : numMap.entrySet()) {
+            char ch = entry.getKey();
+            int num = entry.getValue();
+            String value = map.get(ch);
+            if (value != null) {
+                for (int i = 0; i < num; i++) {
+                    list.add(digitMap.get(value));
+                    for (char c : value.toCharArray()) {
+                        int n = numMap.get(c) - 1;
+                        numMap.put(c, n);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * 找规律解法
+     * accept my knee
+     */
+    public String originalDigits2(String s) {
+        int[] count = new int[10];
+        for (int i = 0; i < s.length(); i++){
+            char c = s.charAt(i);
+            if (c == 'z') count[0]++;
+            if (c == 'w') count[2]++;
+            if (c == 'x') count[6]++;
+            if (c == 's') count[7]++; //7-6
+            if (c == 'g') count[8]++;
+            if (c == 'u') count[4]++;
+            if (c == 'f') count[5]++; //5-4
+            if (c == 'h') count[3]++; //3-8
+            if (c == 'i') count[9]++; //9-8-5-6
+            if (c == 'o') count[1]++; //1-0-2-4
+        }
+        count[7] -= count[6];
+        count[5] -= count[4];
+        count[3] -= count[8];
+        count[9] = count[9] - count[8] - count[5] - count[6];
+        count[1] = count[1] - count[0] - count[2] - count[4];
+        StringBuilder sb = new StringBuilder();
+        //数组,连排序都省了
+        for (int i = 0; i <= 9; i++){
+            for (int j = 0; j < count[i]; j++){
+                sb.append(i);
+            }
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * 462. Minimum Moves to Equal Array Elements II
+     * 操作步骤使数组中数字全等,每步操作+1 or -1 选定的元素
+     * <p>
+     * 排序后,头尾数字只差和
+     *
+     * @param nums int[] 数组长度最长10000
+     * @return int
+     */
+    public int minMoves2(int[] nums) {
+        Arrays.sort(nums);
+        int i = 0;
+        int j = nums.length - 1;
+        int count = 0;
+        while (i < j) {
+            count += nums[j] - nums[i];
+            i++;
+            j--;
+        }
+        return count;
+    }
+    
+    /**
+     * 找出最后基准数字,操作步数=每个数字与基准数差之和
+     */
+    public int minMoves22(int[] nums) {
+        int len = nums.length;
+        Arrays.sort(nums);
+        int mid = nums[len / 2];
+        int move = 0;
+        for (int n : nums) {
+            move += Math.abs(n - mid);
+        }
+        return move;
     }
     
     /**
@@ -432,7 +580,8 @@ public class MediumNew {
         if (intervals == null) return null;
         if (intervals.size() <= 1) return intervals;
         
-        Collections.sort(intervals, (o1, o2) -> o1.start - o2.start == 0 ? o1.end - o2.end : o1.start - o2.start);
+        Collections.sort(intervals, (o1, o2) -> o1.start - o2.start == 0 ?
+                o1.end - o2.end : o1.start - o2.start);
         List<Interval> result = new ArrayList<>();
         int i = 0;
         int size = intervals.size();

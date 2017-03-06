@@ -80,7 +80,54 @@ public class EasyNew {
         root.left = new TreeNode(4);
         root.right = new TreeNode(7);
         System.out.println(easyNew.getMinimumDifference(root));
+        
+        System.out.println(easyNew.findPairs(new int[]{1, 3, 1, 5, 4}, 0));
+        System.out.println(easyNew.findPairs(new int[]{3, 1, 4, 1, 5}, 2));
+        System.out.println(easyNew.findPairs(new int[]{1, 2, 3, 4, 5}, 1));
+        System.out.println(easyNew.findPairs(new int[]{1, 1, 1, 1, 1}, 0));
     }
+    
+    /**
+     * 532. K-diff Pairs in an Array
+     * k-diff pair is defined as an integer pair (i, j),
+     * where i and j are both numbers in the array and their absolute difference is k.
+     * Input: [3, 1, 4, 1, 5], k = 2
+     * Output: 2 (1, 3) (3, 5)
+     * 先排序,two pointers方法,
+     * 
+     * @param nums int
+     * @param k    int
+     * @return int k-diff pair的个数,排重后的个数
+     */
+    public int findPairs(int[] nums, int k) {
+        if (k < 0) return 0;
+        Arrays.sort(nums);
+        int len = nums.length;
+        int i = 0;
+        int j = 1;
+        int count = 0;
+        int pre = Integer.MIN_VALUE; //判断去重
+        while (i < len && j < len) {
+            int diff = nums[j] - nums[i];
+            if (diff == k) {
+                if(pre != nums[i]) {
+                    pre = nums[i];
+                    count++;
+                }
+                i++;
+                j++;
+            } else if (diff < k) {
+                j++;
+            } else if (diff > k) {
+                i++;
+            }
+            if (i >= j) {
+                j++;
+            }
+        }
+        return count;
+    }
+    
     
     /**
      * 437. Path Sum III

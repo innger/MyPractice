@@ -6,12 +6,12 @@ import java.util.*;
  * Created on 16/5/12 下午4:04.
  */
 public class MediumCode {
-
+    
     public static void main(String[] args) {
         MediumCode code = new MediumCode();
 //        System.out.println(code.canJump(new int[]{2, 3, 1, 1, 4}));
 //        System.out.println(code.canJump(new int[]{3, 2, 1, 0, 4}));
-
+        
         int[][] matrix = new int[][]{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 50}};
         matrix = new int[][]{{1}};
         System.out.println(code.searchMatrix(matrix, 2));
@@ -28,7 +28,7 @@ public class MediumCode {
         code.printListNode(head);
         head = code.rotateRight(head, 3);
         code.printListNode(head);
-
+        
         System.out.println(code.findDuplicate(new int[]{1, 1, 2}));
         System.out.println(code.canMeasureWater(2, 6, 5));
         char[][] cmatrix = new char[][]{
@@ -50,9 +50,9 @@ public class MediumCode {
 //        System.out.println("1/214748364=" + code.fractionToDecimal(1, 214748364));
         System.out.println(Integer.MIN_VALUE + " " + Integer.MAX_VALUE);
         System.out.println("-1/-2147483648=" + code.fractionToDecimal(-1, -2147483648));
-
+        
     }
-
+    
     /**
      * 221. Maximal Square
      * Given a 2D binary matrix filled with 0's and 1's,
@@ -83,7 +83,7 @@ public class MediumCode {
         }
         return max * max;
     }
-
+    
     // u r so creative nice solution
     //use O(1) space
     public int maximalSquareO1(char[][] matrix) {
@@ -108,7 +108,7 @@ public class MediumCode {
         }
         return (max - '0') * (max - '0');
     }
-
+    
     /**
      * 148. Sort List
      * Sort a linked list in O(nlogn) time using constant space complexity.
@@ -132,7 +132,7 @@ public class MediumCode {
         p.next = null;
         return merge(sortList(head), l2);
     }
-
+    
     private ListNode merge(ListNode l1, ListNode l2) {
         ListNode ln = new ListNode(Integer.MIN_VALUE);
         ListNode c = ln;
@@ -154,7 +154,7 @@ public class MediumCode {
         }
         return ln.next;
     }
-
+    
     /**
      * 365. Water and Jug Problem
      * 使用容量为x y的壶,是否能准确量出z容量的水,水量无限
@@ -169,12 +169,12 @@ public class MediumCode {
         int total = x + y;
         return total >= z && (z == 0 || z % gcd(x, y) == 0);
     }
-
+    
     //辗转相除法求最大公约数
     private int gcd(int x, int y) {
         return y == 0 ? x : gcd(y, x % y);
     }
-
+    
     /**
      * 287. Find the Duplicate Number
      * Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive),
@@ -209,7 +209,36 @@ public class MediumCode {
         }
         return left;
     }
-
+    
+    /**
+     * 47. Permutations II
+     * 返回所有unique全排列组合
+     * 
+     * @param nums int[] duplicate numbers
+     * @return list
+     */
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> list = new ArrayList<>();
+        Arrays.sort(nums);
+        backtrackUnique(list, new ArrayList<>(), nums, new boolean[nums.length]);
+        return list;
+    }
+    
+    private void backtrackUnique(List<List<Integer>> list, List<Integer> tempList, int[] nums, boolean[] used) {
+        if(tempList.size() == nums.length) {
+            list.add(new ArrayList<>(tempList));
+        } else {
+            for(int i = 0; i < nums.length; i++) {
+                if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i-1]) continue;
+                used[i] = true;
+                tempList.add(nums[i]);
+                backtrackUnique(list, tempList, nums, used);
+                used[i] = false;
+                tempList.remove(tempList.size() - 1);
+            }
+        }
+    }
+    
     /**
      * 46. Permutations
      * Given a collection of [distinct] numbers, return all possible permutations.
@@ -246,7 +275,26 @@ public class MediumCode {
             return res;
         }
     }
-
+    
+    public List<List<Integer>> permute2(int[] nums) {
+        List<List<Integer>> list = new ArrayList<>();
+        backtrack(list, new ArrayList<>(), nums);
+        return list;
+    }
+    
+    private void backtrack(List<List<Integer>> list, List<Integer> tempList, int[] nums) {
+        if (tempList.size() == nums.length) {
+            list.add(new ArrayList<>(tempList));
+        } else {
+            for (int num : nums) {
+                if (tempList.contains(num)) continue; // element already exists, skip
+                tempList.add(num);
+                backtrack(list, tempList, nums);
+                tempList.remove(tempList.size() - 1);
+            }
+        }
+    }
+    
     /**
      * 357. Count Numbers with Unique Digits
      * Given a non-negative integer n, count all numbers with unique digits, x, where 0 ≤ x < 10n(10的n次方).
@@ -267,7 +315,7 @@ public class MediumCode {
         }
         return res;
     }
-
+    
     private int calculateK(int k) {
         if (k == 0) return 1;
         if (k == 1) return 10;
@@ -279,7 +327,7 @@ public class MediumCode {
         }
         return res;
     }
-
+    
     /**
      * 179. Largest Number
      * Given a list of non negative integers, arrange them such that they form the largest number.
@@ -314,7 +362,7 @@ public class MediumCode {
         }
         return "".equals(res) ? "0" : res;
     }
-
+    
     //交换顺序,比较两个数字大小,确定排序关系
     private int compareNum(int num1, int num2) {
         String str1 = "" + num1 + num2;
@@ -329,8 +377,8 @@ public class MediumCode {
         }
         return 0;
     }
-
-
+    
+    
     /**
      * 151. Reverse Words in a String
      * Given an input string, reverse the string word by word.
@@ -347,7 +395,7 @@ public class MediumCode {
         int len = s.length();
         int i = len - 1;
         char[] arr = new char[len];
-
+        
         while (i >= 0 && s.charAt(i) == ' ') {
             i--;
         }
@@ -372,12 +420,12 @@ public class MediumCode {
                 j++;
                 i = j;
             }
-
+            
             while (j < len && arr[j] == ' ') {
                 j++;
                 i = j;
             }
-
+            
             if (j < len && arr[j] != ' ') {
                 j++;
             }
@@ -388,7 +436,7 @@ public class MediumCode {
         System.arraycopy(arr, 0, newarr, 0, newlen);
         return new String(newarr);
     }
-
+    
     private void swapCharArray(char[] arr, int i, int j) {
         while (i < j) {
             char tmp = arr[i];
@@ -398,7 +446,7 @@ public class MediumCode {
             j--;
         }
     }
-
+    
     /**
      * 61. Rotate List
      * Given a list, rotate the list to the right by k places, where k is non-negative.
@@ -442,7 +490,7 @@ public class MediumCode {
         }
         return node1;
     }
-
+    
     /**
      * 143. Reorder List
      * Given a singly linked list L: L0→L1→…→Ln-1→Ln,
@@ -478,8 +526,8 @@ public class MediumCode {
         }
         next.next = null;
     }
-
-
+    
+    
     /**
      * 367. Valid Perfect Square
      * Given a positive integer num, write a function which returns True if num is a perfect square else False.
@@ -506,7 +554,7 @@ public class MediumCode {
         }
         return false;
     }
-
+    
     /**
      * 69. Sqrt(x)
      * Compute and return the square root of x.
@@ -538,7 +586,7 @@ public class MediumCode {
         if (mid > x / mid) return mid - 1;
         return mid;
     }
-
+    
     /**
      * 50. Pow(x, n)
      * <p>
@@ -556,7 +604,7 @@ public class MediumCode {
         if (n < 0) return 1 / dopow(x, n);
         else return dopow(x, n);
     }
-
+    
     private double dopow(double x, int n) {
         if (n == 0) return 1;
         if (n == 1) return x;
@@ -569,7 +617,7 @@ public class MediumCode {
         }
         return result;
     }
-
+    
     /**
      * 372. Super Pow
      * calculate a^b mod 1337
@@ -591,7 +639,7 @@ public class MediumCode {
         System.arraycopy(b, 0, b2, 0, len - 1);
         return (superPow(superPow(a, b2), 10)) * superPow(a, lastBit) % 1337;
     }
-
+    
     private int superPow(int a, int k) {
         if (k == 0) return 1;
         int ans = 1;
@@ -600,7 +648,7 @@ public class MediumCode {
         }
         return ans;
     }
-
+    
     /**
      * 240. Search a 2D Matrix II
      * Write an efficient algorithm that searches for a value in an m x n matrix.
@@ -637,7 +685,7 @@ public class MediumCode {
         }
         return false;
     }
-
+    
     /**
      * 74. Search a 2D Matrix
      * Write an efficient algorithm that searches for a value in an m x n matrix.
@@ -677,7 +725,7 @@ public class MediumCode {
         }
         return false;
     }
-
+    
     /**
      * 144. Binary Tree Preorder Traversal
      * Given a binary tree, return the preorder traversal of its nodes' values.
@@ -710,7 +758,7 @@ public class MediumCode {
         }
         return list;
     }
-
+    
     /**
      * 94. Binary Tree Inorder Traversal
      * Note: Recursive solution is trivial[微不足道的], could you do it iteratively?
@@ -729,10 +777,10 @@ public class MediumCode {
                 cur = cur.right;
             } else {
                 TreeNode predecessor = cur.left;
-                while(predecessor.right != null && predecessor.right != cur) {
+                while (predecessor.right != null && predecessor.right != cur) {
                     predecessor = predecessor.right;
                 }
-                if(predecessor.right == null) {
+                if (predecessor.right == null) {
                     predecessor.right = cur;
                     cur = cur.left;
                 } else {
@@ -744,7 +792,7 @@ public class MediumCode {
         }
         return list;
     }
-
+    
     /**
      * 55. Jump Game
      * Each element in the array represents your maximum jump length at that position.
@@ -769,7 +817,7 @@ public class MediumCode {
         }
         return true;
     }
-
+    
     /**
      * 313. Super Ugly Number
      * Super ugly numbers are positive numbers whose all prime factors are in the given prime list primes of size k
@@ -805,7 +853,7 @@ public class MediumCode {
         System.out.println(Arrays.toString(arr));
         return arr[n - 1];
     }
-
+    
     /**
      * 53. Maximum Subarray
      * Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
@@ -830,7 +878,7 @@ public class MediumCode {
         }
         return max;
     }
-
+    
     /**
      * 113. Path Sum II
      * Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
@@ -841,25 +889,25 @@ public class MediumCode {
      */
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
         List<List<Integer>> res = new ArrayList<List<Integer>>();
-        if(root == null) {
+        if (root == null) {
             return res;
         }
         dfs(root, sum, new ArrayList<Integer>(), res);
         return res;
     }
-
-    private void dfs(TreeNode root, int sum,List<Integer> crt, List<List<Integer>> res) {
-        if(root == null) return ;
+    
+    private void dfs(TreeNode root, int sum, List<Integer> crt, List<List<Integer>> res) {
+        if (root == null) return;
         sum -= root.val;
         crt.add(root.val);
-        if(root.left == null && root.right == null && sum == 0) {
+        if (root.left == null && root.right == null && sum == 0) {
             res.add(new ArrayList<Integer>(crt));
         }
-        dfs(root.left, sum, crt,res);
-        dfs(root.right,sum,crt,res);
+        dfs(root.left, sum, crt, res);
+        dfs(root.right, sum, crt, res);
         crt.remove(crt.size() - 1);
     }
-
+    
     /**
      * 166. Fraction to Recurring Decimal
      * 1,除法的正确性
@@ -878,7 +926,7 @@ public class MediumCode {
         //-2147483648 2147483647 越界
         long numerator = (long) numerator1;
         long denominator = (long) denominator1;
-
+        
         long intPart = numerator / denominator;
         long remainder = numerator % denominator;
         if (remainder == 0) {
@@ -892,7 +940,7 @@ public class MediumCode {
         numerator = numerator < 0 ? -numerator : numerator;
         denominator = denominator < 0 ? -denominator : denominator;
         remainder = remainder < 0 ? -remainder : remainder;
-
+        
         //结果和余数,不同的进位,可能产生相同的余数
         Map<Long, List<Long>> map = new HashMap<Long, List<Long>>();
         String decimalPart = "";
@@ -936,7 +984,7 @@ public class MediumCode {
         if (i == -1) i = 0;
         return flag + intPart + "." + decimalPart.substring(0, i) + "(" + decimalPart.substring(i) + ")";
     }
-
+    
     private void updateDecimalMap(long res, long remainder, Map<Long, List<Long>> map) {
         List<Long> set = map.get(res);
         if (set == null) {
@@ -947,8 +995,8 @@ public class MediumCode {
             set.add(remainder);
         }
     }
-
-
+    
+    
     /**
      * 306. Additive Number
      * <p>
@@ -975,7 +1023,7 @@ public class MediumCode {
         }
         return false;
     }
-
+    
     //deep first search
     private boolean DFS(String num1, String num2, String num3) {
         if (num3.length() == 0) return true;
@@ -988,8 +1036,8 @@ public class MediumCode {
         }
         return false;
     }
-
-
+    
+    
     private String addBigInteger(String num1, String num2) {
         int len1 = num1.length();
         int len2 = num2.length();
@@ -1013,7 +1061,7 @@ public class MediumCode {
         }
         return sum;
     }
-
+    
     /**
      * 319. Bulb Switcher
      * 开关灯,最后剩几盏灯亮着
@@ -1026,7 +1074,7 @@ public class MediumCode {
     public int bulbSwitch(int n) {
         return new Double(Math.sqrt(n)).intValue();
     }
-
+    
     /**
      * 77. Combinations
      * Given two integers n and k,
@@ -1046,10 +1094,10 @@ public class MediumCode {
         for (int i = 1; i <= k; i++) {
             doCombine(arr, list, 0, i, 0, result);
         }
-
+        
         return result;
     }
-
+    
     private void doCombine(int[] arr, List<Integer> list, int curLen, int combLen, int pos, List<List<Integer>> result) {
         if (curLen == combLen) {
             System.out.println(list);
@@ -1062,8 +1110,8 @@ public class MediumCode {
             }
         }
     }
-
-
+    
+    
     /**
      * 求数组的组合
      * 1 - 2^n -1 的所有二进制形式
@@ -1087,7 +1135,7 @@ public class MediumCode {
         }
         return list;
     }
-
+    
     /**
      * find the maximum value of length(word[i]) * length(word[j])
      * where the two words do not share common letters
@@ -1131,8 +1179,8 @@ public class MediumCode {
         }
         return max;
     }
-
-
+    
+    
     /**
      * 输入数组
      * [0 - n-1] 的二进制表示,根据是否是1,判断是否输出
@@ -1157,7 +1205,7 @@ public class MediumCode {
         }
         return result;
     }
-
+    
     /**
      * 将n转换成二进制表示 3 = [1,1,0]
      *
@@ -1176,7 +1224,7 @@ public class MediumCode {
         }
         return arr;
     }
-
+    
     /**
      * Given nums = [0, 1, 3] return 2.
      * 0-n find the missing number
@@ -1184,7 +1232,7 @@ public class MediumCode {
      * @param nums 输入数组
      * @return 丢失的数字
      */
-
+    
     public int missingNumber(int[] nums) {
         int len = nums.length;
         int sum = ((len + 1) * len) / 2; //0 - n求和
@@ -1194,7 +1242,7 @@ public class MediumCode {
         }
         return sum - tmp;
     }
-
+    
     private void printListNode(ListNode head) {
         while (head != null) {
             System.out.print(head.val + "->");
@@ -1202,21 +1250,21 @@ public class MediumCode {
         }
         System.out.println();
     }
-
+    
     public static class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
-
+        
         TreeNode(int x) {
             val = x;
         }
     }
-
+    
     public static class ListNode {
         int val;
         ListNode next;
-
+        
         ListNode(int x) {
             val = x;
         }

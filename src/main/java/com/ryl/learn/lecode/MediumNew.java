@@ -120,10 +120,141 @@ public class MediumNew {
         System.out.println(main.originalDigits("owoztneoer"));
         System.out.println(main.originalDigits("fviefuro"));
         
+        System.out.println(main.subsets(new int[]{1, 2, 3}));
+        
     }
     
+    /**
+     * 90. Subsets II
+     * 返回所有子数组序列,不含有重复
+     * 
+     * @param nums int[] duplicate number
+     * @return list
+     */
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> list = new ArrayList<>();
+        backtrackDup(list, new ArrayList<>(), nums, 0);
+        return list;
+    }
     
+    private void backtrackDup(List<List<Integer>> list, List<Integer> tempList, int[] nums, int start) {
+        list.add(new ArrayList<>(tempList));
+        for(int i = start; i < nums.length; i++) {
+            if(i > start && nums[i] == nums[i-1]) continue;
+            tempList.add(nums[i]);
+            backtrackDup(list, tempList, nums, i + 1);
+            tempList.remove(tempList.size() - 1);
+        }
+    }
     
+    /**
+     * 78. Subsets
+     * 求数组的所有子集合,包含空 2^n个子集合
+     * 0-2^n 二进制的表示
+     *
+     * @param nums int[] distinct numbers
+     * @return list
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        int len = (int) Math.pow(2, nums.length);
+        for (int i = 0; i < len; i++) {
+            List<Integer> position = positionOf1(i);
+            List<Integer> list = new ArrayList<>();
+            for (int p : position) {
+                list.add(nums[p]);
+            }
+            result.add(list);
+        }
+        return result;
+    }
+    
+    private List<Integer> positionOf1(int n) {
+        List<Integer> list = new ArrayList<>();
+        int i = 0;
+        while (n > 0) {
+            if ((n & 1) == 1) {
+                list.add(i);
+            }
+            n = n >> 1;
+            i++;
+        }
+        return list;
+    }
+    
+    //Backtracking解法
+    public List<List<Integer>> subsets2(int[] nums) {
+        List<List<Integer>> list = new ArrayList<>();
+        Arrays.sort(nums);
+        backtrack(list, new ArrayList<>(), nums, 0);
+        return list;
+    }
+    
+    private void backtrack(List<List<Integer>> list, List<Integer> tempList, int[] nums, int start) {
+        list.add(new ArrayList<>(tempList));
+        for (int i = start; i < nums.length; i++) {
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, i + 1);
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+    
+    /**
+     * 31. Next Permutation
+     * 找出下一个表示更大数字的全排列,
+     * 1,2,3 → 1,3,2
+     * 3,2,1 → 1,2,3 如果没有更大的,那找出最小的
+     * 1,1,5 → 1,5,1
+     *
+     * @param nums int[]
+     */
+    public void nextPermutation(int[] nums) {
+        
+    }
+    
+    /**
+     * 60. Permutation Sequence
+     * 按照顺序输出第k个全排列
+     *
+     * @param n n will be between 1 and 9 inclusive.
+     * @param k kth
+     * @return 第k个全排列
+     */
+    public String getPermutation(int n, int k) {
+        List<Integer> numbers = new ArrayList<>(); // 1 - n
+        int[] factorial = new int[n + 1]; //n! = n * (n-1) * (n-2) .. * 1
+        StringBuilder sb = new StringBuilder();
+        int sum = 1;
+        factorial[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            sum *= i;
+            factorial[i] = sum;
+        }
+        
+        for (int i = 1; i <= n; i++) {
+            numbers.add(i);
+        }
+        k--;
+        //数学推导 clever
+        for (int i = 1; i <= n; i++) {
+            int index = k / factorial[n - i];
+            sb.append(String.valueOf(numbers.get(index)));
+            numbers.remove(index);
+            k -= index * factorial[n - i];
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * 531. Lonely Pixel I
+     *
+     * @param picture char[][]
+     * @return int
+     */
+    public int findLonelyPixel(char[][] picture) {
+        // TODO: 17/3/6  
+        return 0;
+    }
     
     /**
      * 423. Reconstruct Original Digits from English
@@ -132,7 +263,7 @@ public class MediumNew {
      * Input: "fviefuro"  Output: "45"
      * 字符和数字的对应个数规律
      * 用map存每个字符出现的个数,再过滤,效率低下没有总结规律
-     * 
+     *
      * @param s String 全部小写字母
      * @return String
      */
@@ -205,7 +336,7 @@ public class MediumNew {
      */
     public String originalDigits2(String s) {
         int[] count = new int[10];
-        for (int i = 0; i < s.length(); i++){
+        for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (c == 'z') count[0]++;
             if (c == 'w') count[2]++;
@@ -225,8 +356,8 @@ public class MediumNew {
         count[1] = count[1] - count[0] - count[2] - count[4];
         StringBuilder sb = new StringBuilder();
         //数组,连排序都省了
-        for (int i = 0; i <= 9; i++){
-            for (int j = 0; j < count[i]; j++){
+        for (int i = 0; i <= 9; i++) {
+            for (int j = 0; j < count[i]; j++) {
                 sb.append(i);
             }
         }

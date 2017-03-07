@@ -121,13 +121,96 @@ public class MediumNew {
         System.out.println(main.originalDigits("fviefuro"));
         
         System.out.println(main.subsets(new int[]{1, 2, 3}));
-        
+        System.out.println(Arrays.toString(main.bits(3)));
+    
+        System.out.println(main.validUtf8(new int[]{197, 130, 1} ));
+        System.out.println(main.validUtf8(new int[]{235, 140, 4} ));
     }
+    
+    /**
+     * 393. UTF-8 Validation
+     * utf8编码规则,变长编码1-4字节
+     * 0xxxxxxx
+     * 110xxxxx 10xxxxxx
+     * 1110xxxx 10xxxxxx 10xxxxxx
+     * 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx 4字节编码,最高四位是1,第五位是0,后面每字节最高两位10
+     * 数组中每个数字,代表编码的一字节8bits
+     *
+     * @param data int[]
+     * @return true/false
+     */
+    public boolean validUtf8(int[] data) {
+        if(data == null || data.length < 1) return false;
+        for (int i = 0; i < data.length; i++) {
+            int[] bits = bits(data[i]);
+            int index = 0;
+            if (bits[index] == 0) continue;
+            if (bits[index] == 1) {
+                index++;
+                if (bits[index] == 0) return false;
+                //11
+                index++;
+                if (bits[index] == 0) {
+                    //110
+                    if (i >= data.length - 1)
+                        return false;
+                    i++;
+                    int[] bits2 = bits(data[i]);
+                    if (!(bits2[0] == 1 && bits2[1] == 0))
+                        return false;
+                } else {
+                    index++;
+                    if (bits[index] == 0) {
+                        //1110
+                        if (i >= data.length - 2)
+                            return false;
+                        i++;
+                        int[] bits2 = bits(data[i]);
+                        i++;
+                        int[] bits3 = bits(data[i]);
+                        if (!(bits2[0] == 1 && bits2[1] == 0 && bits3[0] == 1 && bits3[1] == 0))
+                            return false;
+                    } else {
+                        index++;
+                        if (bits[index] == 0) {
+                            //11110
+                            if (i >= data.length - 3) 
+                                return false;
+                            i++;
+                            int[] bits2 = bits(data[i]);
+                            i++;
+                            int[] bits3 = bits(data[i]);
+                            i++;
+                            int[] bits4 = bits(data[i]);
+                            if(!(bits2[0] == 1 && bits2[1] == 0 && bits3[0] == 1 && bits3[1] == 0
+                                && bits4[0] == 1 && bits4[1] == 0)) 
+                                return false;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    private int[] bits(int n) {
+        int[] arr = new int[8];
+        int i = arr.length - 1;
+        while (i >= 0 && n > 0) {
+            if ((n & 1) == 1) arr[i] = 1;
+            n = n >> 1;
+            i--;
+        }
+        return arr;
+    }
+    
     
     /**
      * 90. Subsets II
      * 返回所有子数组序列,不含有重复
-     * 
+     *
      * @param nums int[] duplicate number
      * @return list
      */
@@ -139,8 +222,8 @@ public class MediumNew {
     
     private void backtrackDup(List<List<Integer>> list, List<Integer> tempList, int[] nums, int start) {
         list.add(new ArrayList<>(tempList));
-        for(int i = start; i < nums.length; i++) {
-            if(i > start && nums[i] == nums[i-1]) continue;
+        for (int i = start; i < nums.length; i++) {
+            if (i > start && nums[i] == nums[i - 1]) continue;
             tempList.add(nums[i]);
             backtrackDup(list, tempList, nums, i + 1);
             tempList.remove(tempList.size() - 1);
@@ -587,7 +670,8 @@ public class MediumNew {
      * @return list list integer
      */
     public List<List<Integer>> findSubsequences(int[] nums) {
-        // TODO: 17/2/28  
+        
+        
         return null;
     }
     

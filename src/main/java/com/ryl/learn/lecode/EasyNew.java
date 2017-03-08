@@ -88,6 +88,19 @@ public class EasyNew {
     }
     
     /**
+     * 458. Poor Pigs
+     * 在规定测试时间内找出毒药,最少用多少头猪
+     * 
+     * @param buckets int 桶的个数,只有一个是毒药,其他是水
+     * @param minutesToDie int 毒药发作时间
+     * @param minutesToTest int 测试时间
+     * @return int
+     */
+    public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+        return (buckets * minutesToDie) / minutesToTest;
+    }
+    
+    /**
      * 532. K-diff Pairs in an Array
      * k-diff pair is defined as an integer pair (i, j),
      * where i and j are both numbers in the array and their absolute difference is k.

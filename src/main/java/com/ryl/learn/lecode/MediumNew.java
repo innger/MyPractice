@@ -122,10 +122,60 @@ public class MediumNew {
         
         System.out.println(main.subsets(new int[]{1, 2, 3}));
         System.out.println(Arrays.toString(main.bits(3)));
-    
-        System.out.println(main.validUtf8(new int[]{197, 130, 1} ));
-        System.out.println(main.validUtf8(new int[]{235, 140, 4} ));
+        
+        System.out.println(main.validUtf8(new int[]{197, 130, 1}));
+        System.out.println(main.validUtf8(new int[]{235, 140, 4}));
+        System.out.println(main.licenseKeyFormatting("2-4A0r7-4k", 8));
     }
+    
+    /**
+     * 482. License Key Formatting
+     * 序列号由数字/字母/-号/组成,-的位置可能是错放的 
+     * 重新格式化序列号,使每个分组长度=K,第一个分组例外,可以小于K 最少一个字符
+     * 结果字母转换成大写
+     * Input: S = "2-4A0r7-4k", K = 4 Output: "24A0-R74K"
+     * Input: S = "2-4A0r7-4k", K = 3 Output: "24-A0R-74K"
+     * @param S String
+     * @param K int 正整数
+     * @return String
+     */
+    public String licenseKeyFormatting(String S, int K) {
+        StringBuilder sb = new StringBuilder();
+        int len = 0;
+        for(char ch : S.toCharArray()) {
+            if('-' == ch) {
+                continue;
+            }
+            if(ch >= 'a' && ch <= 'z') {
+                sb.append((char)(ch - 32));
+            } else {
+                sb.append(ch);
+            }
+            len++;
+        }
+        int first = len % K;
+        StringBuilder result = new StringBuilder();
+        int index = 0;
+        while(index < first) {
+            result.append(sb.charAt(index));
+            index++;
+            if(index == first && index < len) {
+                result.append('-');
+            }
+        }
+        int k = 0;
+        while(index < len) {
+            result.append(sb.charAt(index));
+            k++;
+            index++;
+            if(index < len && k % K == 0) {
+                result.append('-');
+                k = 0;
+            }
+        }
+        return String.valueOf(result);
+    }
+    
     
     /**
      * 393. UTF-8 Validation
@@ -140,7 +190,7 @@ public class MediumNew {
      * @return true/false
      */
     public boolean validUtf8(int[] data) {
-        if(data == null || data.length < 1) return false;
+        if (data == null || data.length < 1) return false;
         for (int i = 0; i < data.length; i++) {
             int[] bits = bits(data[i]);
             int index = 0;
@@ -174,7 +224,7 @@ public class MediumNew {
                         index++;
                         if (bits[index] == 0) {
                             //11110
-                            if (i >= data.length - 3) 
+                            if (i >= data.length - 3)
                                 return false;
                             i++;
                             int[] bits2 = bits(data[i]);
@@ -182,8 +232,8 @@ public class MediumNew {
                             int[] bits3 = bits(data[i]);
                             i++;
                             int[] bits4 = bits(data[i]);
-                            if(!(bits2[0] == 1 && bits2[1] == 0 && bits3[0] == 1 && bits3[1] == 0
-                                && bits4[0] == 1 && bits4[1] == 0)) 
+                            if (!(bits2[0] == 1 && bits2[1] == 0 && bits3[0] == 1 && bits3[1] == 0
+                                    && bits4[0] == 1 && bits4[1] == 0))
                                 return false;
                         } else {
                             return false;
@@ -670,9 +720,23 @@ public class MediumNew {
      * @return list list integer
      */
     public List<List<Integer>> findSubsequences(int[] nums) {
-        
-        
-        return null;
+        Set<List<Integer>> res = new HashSet<>();
+        List<Integer> holder = new ArrayList<>();
+        findSequence(res, holder, 0, nums);
+        return new ArrayList<>(res);
+    }
+    
+    private void findSequence(Set<List<Integer>> res, List<Integer> holder, int index, int[] nums) {
+        if (holder.size() >= 2) {
+            res.add(new ArrayList<>(holder));
+        }
+        for (int i = index; i < nums.length; i++) {
+            if (holder.size() == 0 || holder.get(holder.size() - 1) <= nums[i]) {
+                holder.add(nums[i]);
+                findSequence(res, holder, i + 1, nums);
+                holder.remove(holder.size() - 1);
+            }
+        }
     }
     
     /**
@@ -879,8 +943,36 @@ public class MediumNew {
      * @return TreeNode
      */
     public TreeNode sortedListToBST(ListNode head) {
-        // TODO: 17/2/28  
-        return null;
+        if (head == null) {
+            return null;
+        }
+        int size = 0;
+        ListNode runner = head;
+        node = head;
+        while (runner != null) {
+            runner = runner.next;
+            size++;
+        }
+        return inorderHelper(0, size - 1);
+    }
+    
+    private ListNode node;
+    
+    private TreeNode inorderHelper(int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = start + (end - start) / 2;
+        
+        TreeNode left = inorderHelper(start, mid - 1);
+        TreeNode treeNode = new TreeNode(node.val);
+        treeNode.left = left;
+        node = node.next;
+        
+        TreeNode right = inorderHelper(mid + 1, end);
+        treeNode.right = right;
+        
+        return treeNode;
     }
     
     private static class TreeNode {

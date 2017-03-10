@@ -552,8 +552,9 @@ public class MediumImpl {
         if (target > nums[nums.length - 1]) return nums.length;
         int i = 0;
         int j = nums.length - 1;
+        int mid;
         while (i < j) {
-            int mid = i + (j - i) / 2;
+            mid = i + (j - i) / 2;
             if (nums[mid] < target) {
                 i = mid + 1;
             } else if (nums[mid] > target) {

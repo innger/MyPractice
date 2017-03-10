@@ -8,12 +8,9 @@ import java.util.*;
  */
 public class MediumNew {
     
-    
     public static void main(String[] args) {
         MediumNew main = new MediumNew();
         System.out.println(main.findDuplicates(new int[]{1, 2, 2, 3, 4, 3}));
-        
-        
         System.out.println(Arrays.toString(main.nextGreaterElements(new int[]{1, 2, 1})));
         
         System.out.println(main.countBattleships(new char[][]{
@@ -22,7 +19,6 @@ public class MediumNew {
                 {'.', 'X', '.'}}));
         
         System.out.println(main.numberOfArithmeticSlices(new int[]{1, 2, 3, 4}));
-        
         System.out.println(Arrays.deepToString(main.reconstructQueue(new int[][]{
                 {7, 0}, {4, 4}, {7, 1}, {5, 0}, {6, 1}, {5, 2}
         })));
@@ -80,28 +76,29 @@ public class MediumNew {
         root.left.left = new TreeNode(5);
         root.left.right = new TreeNode(3);
         root.right.right = new TreeNode(9);
+        System.out.printf("TreeNode root=" + root);
         System.out.println(main.findBottomLeftValue(root));
         
-        System.out.println(main.findDiagonalOrder(new int[][]{
+        System.out.println(Arrays.toString(main.findDiagonalOrder(new int[][]{
                 {1, 2, 3, 4, 6, 7},
                 {4, 5, 6, 7, 8, 9},
                 {7, 8, 9, 4, 3, 1}
-        }));
+        })));
         
-        System.out.println(main.findDiagonalOrder(new int[][]{
+        System.out.println(Arrays.toString(main.findDiagonalOrder(new int[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 0},
                 {5, 9, 12},
                 {6, 10, 13},
                 {7, 11, 15}
-        }));
+        })));
         
-        System.out.println(main.findDiagonalOrder(new int[][]{
+        System.out.println(Arrays.toString(main.findDiagonalOrder(new int[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 0},
-        }));
+        })));
         ListNode l1 = new ListNode(1);
         l1.next = new ListNode(2);
         l1.next.next = new ListNode(4);
@@ -126,15 +123,245 @@ public class MediumNew {
         System.out.println(main.validUtf8(new int[]{197, 130, 1}));
         System.out.println(main.validUtf8(new int[]{235, 140, 4}));
         System.out.println(main.licenseKeyFormatting("2-4A0r7-4k", 8));
+        
+        System.out.println(main.findStart(4, new int[]{1, 2, 3, 5, 6, 7, 8}, 7));
+        
+        System.out.println(Arrays.toString(main.findRightInterval(new Interval[]{
+                new Interval(1, 4), new Interval(2, 3), new Interval(3, 4)
+        })));
+        
+        System.out.println(main.findPeakElement(new int[]{1, 2, 3, 1}));
+        
+        System.out.println(main.minSubArrayLen(7, new int[]{2, 3, 1, 2, 4, 3}));
+        System.out.println(main.minSubArrayLen(4, new int[]{1, 4, 4}));
+        
+        int[] arr = new int[]{4, 5, 6, 7, 0, 1, 2};
+        for (int i = 0; i < arr.length; i++) {
+//            System.out.println("33. " + main.searchInRotatedSortedArray(arr, arr[i]));
+        }
+//        System.out.println("33. " + main.searchInRotatedSortedArray(arr, 3));
+    
+        System.out.println(main.searchInRotatedSortedArray(new int[]{1, 3}, 3));
     }
     
     /**
+     * 33. Search in Rotated Sorted Array
+     * 递增数组从某个点翻转 0 1 2 4 5 6 7 -> 4 5 6 7 0 1 2
+     * 二分查找
+     *
+     * @param nums   int[] 无重复数字
+     * @param target int
+     * @return int
+     */
+    public int searchInRotatedSortedArray(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        if (nums.length == 1) return nums[0] == target ? 0 : -1;
+        int len = nums.length;
+        int low = 0;
+        int high = len - 1;
+        int mid;
+        while (low < high) {
+            mid = low + (high - low) / 2;
+            if(nums[mid] == target) return mid;
+            //这嵌套if判断 二分查找醉了 判断mid落在前后哪个区间
+            if (nums[mid] >= nums[0]) {
+                if (target > nums[mid]) {
+                    low = mid + 1;
+                } else {
+                    if(target >= nums[0]) {
+                        high = mid - 1;
+                    } else {
+                        low = mid + 1;
+                    }
+                }
+            } else {
+                if (target < nums[mid]) {
+                    high = mid - 1;
+                } else {
+                    if(target >= nums[0]) {
+                        high = mid - 1;
+                    } else {
+                        low = mid + 1;
+                    }
+                }
+            }
+        }
+        return nums[low] == target ? low : -1;
+    }
+    
+    /**
+     * 209. Minimum Size Subarray Sum
+     * 找出长度最短的连续子数组,sum ≥ s 如果不存在,返回0
+     * [2,3,1,2,4,3] s=7, return 2 [4,3]
+     *
+     * @param s    int 正整数
+     * @param nums int[] 正整数
+     * @return int
+     */
+    public int minSubArrayLen(int s, int[] nums) {
+        int len = nums.length;
+        if (len == 0) return 0;
+        if (len == 1 && s == nums[0]) {
+            return 1;
+        }
+        int i = 0;
+        int sub = 1;
+        int sum = nums[i];
+        int min = Integer.MAX_VALUE;
+        while (i < len) {
+            if (sum == s) {
+                min = Math.min(sub, min);
+                i = i + ((sub - 1) == 0 ? 1 : sub - 1);
+                if (i >= len) break;
+                sum = nums[i];
+                sub = 1;
+            } else if (sum > s) {
+                min = Math.min(sub, min);
+                i++;
+                sub = 1;
+                if (i >= len) break;
+                sum = nums[i];
+            } else {
+                if (i + sub >= len) break;
+                sum += nums[i + sub];
+                sub++;
+            }
+        }
+        return min == Integer.MAX_VALUE ? 0 : min;
+    }
+    
+    /**
+     * 162. Find Peak Element
+     * <p>
+     * peak值比前后元素大
+     * 数组中可能存在多个peak元素,返回其中任意一个的索引即可
+     * num[-1] = num[n] = -∞ 数组两端元素是无穷小
+     * [1, 2, 3, 1] return 2(index)
+     * Sequential Search
+     *
+     * @param nums int[] num[i] ≠ num[i+1]
+     * @return int
+     */
+    public int findPeakElement(int[] nums) {
+        int len = nums.length;
+        if (len == 1) {
+            return 0;
+        }
+        if (nums[0] > nums[1]) {
+            return 0;
+        }
+        for (int i = 1; i < len - 1; i++) {
+            if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1]) {
+                return i;
+            }
+        }
+        if (nums[len - 1] > nums[len - 2]) {
+            return len - 1;
+        }
+        return -1;
+    }
+    
+    public int findPeakElement2(int[] nums) {
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] < nums[i - 1]) {
+                return i - 1;
+            }
+        }
+        return nums.length - 1;
+    }
+    
+    //Binary Search
+    public int findPeakElement3(int[] nums) {
+        int low = 0;
+        int high = nums.length - 1;
+        while (low < high) {
+            int mid1 = low + (high - low) / 2;
+            int mid2 = mid1 + 1;
+            if (nums[mid1] < nums[mid2]) {
+                low = mid2;
+            } else {
+                high = mid1;
+            }
+        }
+        return low;
+    }
+    
+    /**
+     * 436. Find Right Interval
+     * <p>
+     * 区间j在区间i的右侧,j的start>=i的end,区间j和i没有交集
+     * 对于每一个区间i,找出index最小的区间j
+     * <p>
+     * 1,每个区间的end > start
+     * 2,全部的区间start均不相等 start排序,二分查找
+     * <p>
+     * Input: [ [1,2] ] Output: [-1]
+     * Input: [ [3,4], [2,3], [1,2] ] Output: [-1, 0, 1]
+     * Input: [ [1,4], [2,3], [3,4] ] Output: [-1, 2, -1]
+     *
+     * @param intervals Interval[]
+     * @return int[]
+     */
+    public int[] findRightInterval(Interval[] intervals) {
+        int len = intervals.length;
+        int[] res = new int[len];
+        if (len == 1) {
+            res[0] = -1;
+            return res;
+        }
+        int[] startArr = new int[len];
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < len; i++) {
+            startArr[i] = intervals[i].start;
+            map.put(startArr[i], i);
+        }
+        Arrays.sort(startArr);
+        for (int i = 0; i < len; i++) {
+            int end = intervals[i].end;
+            Integer start = findStart(end, startArr, len);
+            int index = -1;
+            if (start != null) {
+                index = map.get(start);
+            }
+            res[i] = index;
+        }
+        return res;
+    }
+    
+    //在一个有序数组中,找出最小的大于等于给定值
+    private Integer findStart(int target, int[] arr, int len) {
+        int i = 0;
+        int j = len - 1;
+        int mid;
+        while (i < j) {
+            mid = i + (j - i) / 2;
+            if (arr[mid] > target) {
+                j = mid - 1;
+            } else if (arr[mid] < target) {
+                i = mid + 1;
+            } else {
+                return target;
+            }
+        }
+        while (i < len) {
+            if (arr[i] >= target) {
+                return arr[i];
+            }
+            i++;
+        }
+        return null;
+    }
+    
+    
+    /**
      * 482. License Key Formatting
-     * 序列号由数字/字母/-号/组成,-的位置可能是错放的 
+     * <p>
+     * 序列号由数字/字母/-号/组成,-的位置可能是错放的
      * 重新格式化序列号,使每个分组长度=K,第一个分组例外,可以小于K 最少一个字符
      * 结果字母转换成大写
      * Input: S = "2-4A0r7-4k", K = 4 Output: "24A0-R74K"
      * Input: S = "2-4A0r7-4k", K = 3 Output: "24-A0R-74K"
+     *
      * @param S String
      * @param K int 正整数
      * @return String
@@ -142,12 +369,12 @@ public class MediumNew {
     public String licenseKeyFormatting(String S, int K) {
         StringBuilder sb = new StringBuilder();
         int len = 0;
-        for(char ch : S.toCharArray()) {
-            if('-' == ch) {
+        for (char ch : S.toCharArray()) {
+            if ('-' == ch) {
                 continue;
             }
-            if(ch >= 'a' && ch <= 'z') {
-                sb.append((char)(ch - 32));
+            if (ch >= 'a' && ch <= 'z') {
+                sb.append((char) (ch - 32));
             } else {
                 sb.append(ch);
             }
@@ -156,19 +383,19 @@ public class MediumNew {
         int first = len % K;
         StringBuilder result = new StringBuilder();
         int index = 0;
-        while(index < first) {
+        while (index < first) {
             result.append(sb.charAt(index));
             index++;
-            if(index == first && index < len) {
+            if (index == first && index < len) {
                 result.append('-');
             }
         }
         int k = 0;
-        while(index < len) {
+        while (index < len) {
             result.append(sb.charAt(index));
             k++;
             index++;
-            if(index < len && k % K == 0) {
+            if (index < len && k % K == 0) {
                 result.append('-');
                 k = 0;
             }
@@ -982,6 +1209,13 @@ public class MediumNew {
         
         TreeNode(int x) {
             val = x;
+        }
+        
+        @Override
+        public String toString() {
+            return "TreeNode{" +
+                    "val=" + val +
+                    '}';
         }
     }
     

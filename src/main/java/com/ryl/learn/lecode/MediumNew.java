@@ -143,14 +143,10 @@ public class MediumNew {
         System.out.println(main.searchInRotatedSortedArray(new int[]{1, 3}, 3));
         
         List<String> times = new ArrayList<>();
-        times.add("12:12");
-        times.add("12:13");
-        times.add("00:12");
-        times.add("00:13");
-        //["12:12","12:13","00:12","00:13"]
+        times.add("23:59");
+        times.add("00:00");
         System.out.println(main.findMinDifference(times));
-        
-        System.out.println(main.calDiffMinutes("05:31", "10:08"));
+        System.out.println(main.findMinDifference2(times));
     }
     
     /**
@@ -167,11 +163,11 @@ public class MediumNew {
         //一共24*60种可能,转换timePoints
         int total = 24 * 60;
         boolean[] mark = new boolean[total];
-        for(String time : timePoints) {
+        for (String time : timePoints) {
             String[] t = time.split(":");
             int h = Integer.valueOf(t[0]);
             int m = Integer.valueOf(t[1]);
-            if(mark[h * 60 + m]) return 0;
+            if (mark[h * 60 + m]) return 0;
             mark[h * 60 + m] = true;
         }
         //求数组中true的相邻的最小值
@@ -179,9 +175,9 @@ public class MediumNew {
         int min = Integer.MAX_VALUE;
         int first = Integer.MAX_VALUE; //最后计算首尾时间差
         int last = Integer.MIN_VALUE;
-        for(int i = 0; i < total; i++) {
-            if(mark[i]) {
-                if(first != Integer.MAX_VALUE) {
+        for (int i = 0; i < total; i++) {
+            if (mark[i]) {
+                if (first != Integer.MAX_VALUE) {
                     min = Math.min(min, i - pre);
                 }
                 first = Math.min(first, i);
@@ -193,19 +189,27 @@ public class MediumNew {
         return min;
     }
     
-    private List<Integer> transformTime(String time) {
+    public int findMinDifference2(List<String> timePoints) {
+        Collections.sort(timePoints);
+        List<Integer> minutes = new ArrayList<>();
+        for (String time : timePoints) {
+            minutes.add(transformTime(time));
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 1; i < minutes.size(); i++) {
+            min = Math.min(min, minutes.get(i) - minutes.get(i - 1));
+        }
+        int first = minutes.get(0);
+        int last = minutes.get(minutes.size() - 1);
+        min = Math.min(min, 24 * 60 - (last - first));
+        return min;
+    }
+    
+    private int transformTime(String time) {
         String[] arr = time.split(":");
         Integer hour = Integer.valueOf(arr[0]);
         Integer minu = Integer.valueOf(arr[1]);
-        List<Integer> res = new ArrayList<>();
-        res.add(hour * 60 + minu);
-        if (hour < 12) {
-            hour += 12;
-        } else {
-            hour -= 12;
-        }
-        res.add(hour * 60 + minu);
-        return res;
+        return hour * 60 + minu;
     }
     
     

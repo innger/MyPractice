@@ -140,8 +140,93 @@ public class MediumNew {
 //            System.out.println("33. " + main.searchInRotatedSortedArray(arr, arr[i]));
         }
 //        System.out.println("33. " + main.searchInRotatedSortedArray(arr, 3));
-    
         System.out.println(main.searchInRotatedSortedArray(new int[]{1, 3}, 3));
+        
+        List<String> times = new ArrayList<>();
+        times.add("12:12");
+        times.add("12:13");
+        times.add("00:12");
+        times.add("00:13");
+        //["12:12","12:13","00:12","00:13"]
+        System.out.println(main.findMinDifference(times));
+        
+        System.out.println(main.calDiffMinutes("05:31", "10:08"));
+    }
+    
+    /**
+     * 539. Minimum Time Difference
+     * 给出一组24小时制的Hour:Minutes格式的时间戳,找出其中任意两个相差最小的分钟数
+     * Input: ["23:59","00:00"] Output: 1
+     * <p>
+     * 给定的时间都是合法的,并且在00:00 to 23:59之间
+     *
+     * @param timePoints list string 最少两个,最多不超过20000
+     * @return int
+     */
+    public int findMinDifference(List<String> timePoints) {
+        //一共24*60种可能,转换timePoints
+        int total = 24 * 60;
+        boolean[] mark = new boolean[total];
+        for(String time : timePoints) {
+            String[] t = time.split(":");
+            int h = Integer.valueOf(t[0]);
+            int m = Integer.valueOf(t[1]);
+            if(mark[h * 60 + m]) return 0;
+            mark[h * 60 + m] = true;
+        }
+        //求数组中true的相邻的最小值
+        int pre = 0;
+        int min = Integer.MAX_VALUE;
+        int first = Integer.MAX_VALUE; //最后计算首尾时间差
+        int last = Integer.MIN_VALUE;
+        for(int i = 0; i < total; i++) {
+            if(mark[i]) {
+                if(first != Integer.MAX_VALUE) {
+                    min = Math.min(min, i - pre);
+                }
+                first = Math.min(first, i);
+                last = Math.max(last, i);
+                pre = i;
+            }
+        }
+        min = Math.min(min, total - (last - first));
+        return min;
+    }
+    
+    private List<Integer> transformTime(String time) {
+        String[] arr = time.split(":");
+        Integer hour = Integer.valueOf(arr[0]);
+        Integer minu = Integer.valueOf(arr[1]);
+        List<Integer> res = new ArrayList<>();
+        res.add(hour * 60 + minu);
+        if (hour < 12) {
+            hour += 12;
+        } else {
+            hour -= 12;
+        }
+        res.add(hour * 60 + minu);
+        return res;
+    }
+    
+    
+    //60进制减法
+    private int calDiffMinutes(String s1, String s2) {
+        if (s1.equals(s2)) return 0;
+        String[] arr1 = s1.split(":");
+        String[] arr2 = s2.split(":");
+        Integer hour1 = Integer.valueOf(arr1[0]);
+        Integer minu1 = Integer.valueOf(arr1[1]);
+        Integer hour2 = Integer.valueOf(arr2[0]);
+        Integer minu2 = Integer.valueOf(arr2[1]);
+        int minu = 0;
+        if (minu2 >= minu1) {
+            minu += minu2 - minu1;
+        } else {
+            hour2--;
+            minu += (minu2 + 60) - minu1;
+        }
+        minu += (hour2 - hour1) * 60;
+        return minu;
     }
     
     /**
@@ -162,13 +247,13 @@ public class MediumNew {
         int mid;
         while (low < high) {
             mid = low + (high - low) / 2;
-            if(nums[mid] == target) return mid;
+            if (nums[mid] == target) return mid;
             //这嵌套if判断 二分查找醉了 判断mid落在前后哪个区间
             if (nums[mid] >= nums[0]) {
                 if (target > nums[mid]) {
                     low = mid + 1;
                 } else {
-                    if(target >= nums[0]) {
+                    if (target >= nums[0]) {
                         high = mid - 1;
                     } else {
                         low = mid + 1;
@@ -178,7 +263,7 @@ public class MediumNew {
                 if (target < nums[mid]) {
                     high = mid - 1;
                 } else {
-                    if(target >= nums[0]) {
+                    if (target >= nums[0]) {
                         high = mid - 1;
                     } else {
                         low = mid + 1;

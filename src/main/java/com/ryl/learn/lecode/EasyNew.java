@@ -85,19 +85,69 @@ public class EasyNew {
         System.out.println(easyNew.findPairs(new int[]{3, 1, 4, 1, 5}, 2));
         System.out.println(easyNew.findPairs(new int[]{1, 2, 3, 4, 5}, 1));
         System.out.println(easyNew.findPairs(new int[]{1, 1, 1, 1, 1}, 0));
+    
+        System.out.println(easyNew.reverseStr("abcdefg", 2));
+    }
+    
+    /**
+     * 541. Reverse String II
+     * 从头开始每隔2k个字符,翻转k个字符
+     * Input: s = "abcdefg", k = 2  Output: "bacdfeg"
+     * 字符串只包含小写英文字母
+     * 字符串长度和k在[1, 10000]之间
+     *
+     * @param s String
+     * @param k int
+     * @return String
+     */
+    public String reverseStr(String s, int k) {
+        if (s == null || s.length() == 0) return s;
+        StringBuilder sb = new StringBuilder();
+        int len = s.length();
+        int i = Math.min(k - 1, len - 1);
+        int pre = 0;
+        while (true) {
+            int tmp = i;
+            int n = 0;
+            while (tmp >= pre && n < k) {
+                sb.append(s.charAt(tmp));
+                tmp--;
+                n++;
+            }
+            tmp = i + 1;
+            n = 0;
+            while (tmp < len - 1 && n < k) {
+                sb.append(s.charAt(tmp));
+                n++;
+                tmp++;
+            }
+            if(tmp >= len) {
+                break;
+            }
+            pre = tmp;
+            i = Math.min(tmp + k - 1, len - 1);
+        }
+        return sb.toString();
     }
     
     /**
      * 458. Poor Pigs
      * 在规定测试时间内找出毒药,最少用多少头猪
-     * 
-     * @param buckets int 桶的个数,只有一个是毒药,其他是水
-     * @param minutesToDie int 毒药发作时间
+     *
+     * @param buckets       int 桶的个数,只有一个是毒药,其他是水
+     * @param minutesToDie  int 毒药发作时间
      * @param minutesToTest int 测试时间
      * @return int
      */
     public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
-        return (buckets * minutesToDie) / minutesToTest;
+        buckets--;
+        int base = minutesToTest / minutesToDie + 1;
+        int count = 0;
+        while (buckets > 0) {
+            buckets /= base;
+            count++;
+        }
+        return count;
     }
     
     /**
@@ -107,7 +157,7 @@ public class EasyNew {
      * Input: [3, 1, 4, 1, 5], k = 2
      * Output: 2 (1, 3) (3, 5)
      * 先排序,two pointers方法,
-     * 
+     *
      * @param nums int
      * @param k    int
      * @return int k-diff pair的个数,排重后的个数
@@ -123,7 +173,7 @@ public class EasyNew {
         while (i < len && j < len) {
             int diff = nums[j] - nums[i];
             if (diff == k) {
-                if(pre != nums[i]) {
+                if (pre != nums[i]) {
                     pre = nums[i];
                     count++;
                 }

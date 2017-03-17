@@ -147,6 +147,64 @@ public class MediumNew {
         times.add("00:00");
         System.out.println(main.findMinDifference(times));
         System.out.println(main.findMinDifference2(times));
+        
+        System.out.println(main.checkSubarraySum(new int[]{23, 2, 6, 4, 7}, 6));
+    
+        System.out.println(main.generateParenthesis(3));
+    }
+    
+    /**
+     * 22. Generate Parentheses(括号)
+     * 给出n对括号,输出所有合法的括号组合
+     *
+     * @param n int
+     * @return list string
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> list = new ArrayList<>();
+        backtrack(list, "", 0, 0, n);
+        return list;
+    }
+    
+    private void backtrack(List<String> list, String str, int open, int close, int max) {
+        if (str.length() == 2 * max) {
+            list.add(str);
+            return;
+        }
+        if (open < max)
+            backtrack(list, str + "(", open + 1, close, max);
+        if (close < open)
+            backtrack(list, str + ")", open, close + 1, max);
+    }
+    
+    /**
+     * 523. Continuous Subarray Sum
+     * 是否存在连续子数组(最小长度2)和是k的倍数
+     * Input: [23, 2, 4, 6, 7],  k=6 Output: True (2+4) / 6
+     * Input: [23, 2, 6, 4, 7],  k=6 Output: True (23 + 2 + 6 + 4 + 7) / 6 ; (2 + 6 + 4) / 6
+     *
+     * @param nums int[] 非负整数,长度不超过10000,数组内全部和不会超过32位有符号整数
+     * @param k    int
+     * @return true/false
+     */
+    public boolean checkSubarraySum(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>() {
+            {
+                put(0, -1);
+            }
+        };
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (k != 0) sum %= k;
+            Integer pre = map.get(sum);
+            if (pre != null) {
+                if (i - pre > 1) return true;
+            } else {
+                map.put(sum, i);
+            }
+        }
+        return false;
     }
     
     /**
@@ -352,7 +410,7 @@ public class MediumNew {
     
     public int findPeakElement2(int[] nums) {
         for (int i = 1; i < nums.length; i++) {
-            if (nums[i] < nums[i - 1]) {
+            if (nums[i - 1] > nums[i]) {
                 return i - 1;
             }
         }

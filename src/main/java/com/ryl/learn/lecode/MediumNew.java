@@ -153,6 +153,8 @@ public class MediumNew {
         System.out.println(main.generateParenthesis(3));
     }
     
+    
+    
     /**
      * 22. Generate Parentheses(括号)
      * 给出n对括号,输出所有合法的括号组合

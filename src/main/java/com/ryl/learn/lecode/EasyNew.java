@@ -85,8 +85,48 @@ public class EasyNew {
         System.out.println(easyNew.findPairs(new int[]{3, 1, 4, 1, 5}, 2));
         System.out.println(easyNew.findPairs(new int[]{1, 2, 3, 4, 5}, 1));
         System.out.println(easyNew.findPairs(new int[]{1, 1, 1, 1, 1}, 0));
-    
+        
         System.out.println(easyNew.reverseStr("abcdefg", 2));
+        
+        root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+
+        root.right = new TreeNode(3);
+        
+        System.out.println(easyNew.diameterOfBinaryTree(root));
+    }
+    
+    /**
+     * 543. Diameter of Binary Tree
+     * 求二叉树直径,任意两个节点之间的路径长度,不限于经过根节点
+     * 叶子节点之间的最长距离
+     *
+     * @param root TreeNode
+     * @return int
+     */
+    public int diameterOfBinaryTree(TreeNode root) {
+        //每个节点左右子树的高度和
+        return diameterOfBinaryTree(root, 0);
+    }
+    
+    private int diameterOfBinaryTree(TreeNode root, int max) {
+        if (root == null) return max;
+        int left = subTreeDepth(root.left);
+        int right = subTreeDepth(root.right);
+        max = Math.max(max, left + right);
+        return Math.max(diameterOfBinaryTree(root.left, max),
+                diameterOfBinaryTree(root.right, max));
+    }
+    
+    private int subTreeDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = subTreeDepth(root.left);
+        int right = subTreeDepth(root.right);
+        return 1 + Math.max(left, right);
     }
     
     /**
@@ -121,7 +161,7 @@ public class EasyNew {
                 n++;
                 tmp++;
             }
-            if(tmp >= len) {
+            if (tmp >= len) {
                 break;
             }
             pre = tmp;

@@ -166,7 +166,7 @@ public class MediumNew {
      * 嵌套出现
      * s = "3[a2[c]]", return "accaccacc".
      * s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
-     *
+     * Depth-first search Stack
      * @param s String
      * @return string
      */

@@ -156,7 +156,78 @@ public class MediumNew {
         System.out.println(main.decodeString("2[abc]3[cd]ef"));
         System.out.println(main.decodeString("100[leetcode]"));
         System.out.println(main.decodeString("sd2[f2[e]g]i"));
+        System.out.println(main.lexicalOrder3(10));
     }
+    
+    /**
+     * 386. Lexicographical Numbers Add to List
+     * 输出1-n的字母顺序排序
+     * n=13, output : [1,10,11,12,13,2,3,4,5,6,7,8,9]
+     * best solution!
+     *
+     * @param n int
+     * @return list Integer
+     */
+    public List<Integer> lexicalOrder(int n) {
+        List<Integer> list = new ArrayList<>();
+        int cur = 1;
+        for (int i = 1; i <= n; i++) {
+            list.add(cur);
+            if (cur * 10 <= n) {
+                cur *= 10;
+            } else if (cur % 10 != 9 && cur + 1 <= n) {
+                cur++;
+            } else {
+                while ((cur / 10) % 10 == 9) {
+                    cur /= 10;
+                }
+                cur = cur / 10 + 1;
+            }
+        }
+        return list;
+    }
+    
+    public List<Integer> lexicalOrder3(int n) {
+        List<Integer> result = new ArrayList<>();
+        int cur = 1;
+        for (int i = 0; i < n; i++) {
+            result.add(cur);
+            if (cur * 10 <= n) {
+                cur *= 10;
+            } else {
+                if (cur >= n) {
+                    cur /= 10;
+                }
+                cur++;
+                while (cur % 10 == 0) {
+                    cur /= 10;
+                }
+            }
+        }
+        return result;
+    }
+    
+    
+    public List<Integer> lexicalOrder2(int n) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 1; i <= 9; i++) {
+            dfs(i, n, list);
+        }
+        return list;
+    }
+    
+    private void dfs(int cur, int n, List<Integer> res) {
+        if (cur <= n) {
+            res.add(cur);
+            for (int i = 0; i < 10; i++) {
+                if (10 * cur + i > n) {
+                    return;
+                }
+                dfs(10 * cur + i, n, res);
+            }
+        }
+    }
+    
     
     /**
      * 394. Decode String
@@ -167,6 +238,7 @@ public class MediumNew {
      * s = "3[a2[c]]", return "accaccacc".
      * s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
      * Depth-first search Stack
+     *
      * @param s String
      * @return string
      */
@@ -194,7 +266,7 @@ public class MediumNew {
                     }
                 } else {
                     //num == 0,将之前的string添加到result中
-                    while(!stack.isEmpty()) {
+                    while (!stack.isEmpty()) {
                         res.append(stack.pop());
                     }
                     for (int c = 0; c < cnt; c++) {
@@ -206,17 +278,17 @@ public class MediumNew {
                 stack.push("[");
                 num++;
                 i++;
-            } else if (ch >= '0' && ch <= '9'){
+            } else if (ch >= '0' && ch <= '9') {
                 StringBuilder sub = new StringBuilder();
                 while (ch >= '0' && ch <= '9') {
                     sub.append(ch);
                     i++;
-                    if(i == s.length()) {
+                    if (i == s.length()) {
                         break;
                     }
                     ch = s.charAt(i);
                 }
-                if(sub.length() > 0) {
+                if (sub.length() > 0) {
                     stack.push(sub.toString());
                 }
             } else if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
@@ -224,12 +296,12 @@ public class MediumNew {
                 while (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
                     sub.append(ch);
                     i++;
-                    if(i == s.length()) {
+                    if (i == s.length()) {
                         break;
                     }
                     ch = s.charAt(i);
                 }
-                if(sub.length() > 0) {
+                if (sub.length() > 0) {
                     stack.push(String.valueOf(sub));
                 }
             }

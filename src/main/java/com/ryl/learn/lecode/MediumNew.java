@@ -149,11 +149,96 @@ public class MediumNew {
         System.out.println(main.findMinDifference2(times));
         
         System.out.println(main.checkSubarraySum(new int[]{23, 2, 6, 4, 7}, 6));
-    
+        
         System.out.println(main.generateParenthesis(3));
+        
+        System.out.println(main.decodeString("3[a2[cd]]"));
+        System.out.println(main.decodeString("2[abc]3[cd]ef"));
+        System.out.println(main.decodeString("100[leetcode]"));
+        System.out.println(main.decodeString("sd2[f2[e]g]i"));
     }
     
-    
+    /**
+     * 394. Decode String
+     * 编码规则 k[encoded_string] k是重复次数
+     * 输入的encoded_string都是字符,只有k是数字
+     * 3a or 2[4] 不会出现
+     * 嵌套出现
+     * s = "3[a2[c]]", return "accaccacc".
+     * s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
+     *
+     * @param s String
+     * @return string
+     */
+    public String decodeString(String s) {
+        StringBuilder res = new StringBuilder();
+        Stack<String> stack = new Stack<>();
+        int num = 0;
+        int i = 0;
+        while (i < s.length()) {
+            char ch = s.charAt(i);
+            if (ch == ']') {
+                String sub = "";
+                while (!stack.isEmpty()) {
+                    String c = stack.pop();
+                    if ("[".equals(c)) {
+                        num--;
+                        break;
+                    }
+                    sub = c + sub;
+                }
+                int cnt = Integer.valueOf(stack.pop());
+                if (num > 0) {
+                    for (int c = 0; c < cnt; c++) {
+                        stack.push(sub);
+                    }
+                } else {
+                    //num == 0,将之前的string添加到result中
+                    while(!stack.isEmpty()) {
+                        res.append(stack.pop());
+                    }
+                    for (int c = 0; c < cnt; c++) {
+                        res.append(sub);
+                    }
+                }
+                i++;
+            } else if (ch == '[') {
+                stack.push("[");
+                num++;
+                i++;
+            } else if (ch >= '0' && ch <= '9'){
+                StringBuilder sub = new StringBuilder();
+                while (ch >= '0' && ch <= '9') {
+                    sub.append(ch);
+                    i++;
+                    if(i == s.length()) {
+                        break;
+                    }
+                    ch = s.charAt(i);
+                }
+                if(sub.length() > 0) {
+                    stack.push(sub.toString());
+                }
+            } else if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
+                StringBuilder sub = new StringBuilder();
+                while (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
+                    sub.append(ch);
+                    i++;
+                    if(i == s.length()) {
+                        break;
+                    }
+                    ch = s.charAt(i);
+                }
+                if(sub.length() > 0) {
+                    stack.push(String.valueOf(sub));
+                }
+            }
+        }
+        while (!stack.isEmpty()) {
+            res.append(stack.pop());
+        }
+        return String.valueOf(res);
+    }
     
     /**
      * 22. Generate Parentheses(括号)

@@ -131,6 +131,7 @@ public class TestClient {
             will.put("sessionid", "19jfrqyajzm9dvccc68ebkdh01vthz4i");
             will.put("deviceid", "aaaa");
             will.put("autodiv", "ANDA0203000");
+            logger.info("will message={}", JSON.toJSONString(will));
             options.setWill("user", JSON.toJSONBytes(will), 1, false);
             //设置回调
             client.setCallback(new MqttCallback() {
@@ -156,7 +157,6 @@ public class TestClient {
                 }
             });
             logger.info("{} connect to server {}", clientID, host);
-            logger.info("will message={}", JSON.toJSONString(will));
             client.connect(options);
         } catch (Exception e) {
             e.printStackTrace();

@@ -4,6 +4,8 @@ import java.util.*;
 
 /**
  * MediumNew Code
+ * 理解+记忆 * 反复
+ * 基础类的算法 不是过目不忘的,只做一遍过去跟没做其实一样,要反复
  * Created on 17/2/27 10:54.
  */
 public class MediumNew {

@@ -17,6 +17,61 @@ public class MediumMain {
         
         int ugly = main.nthUglyNumber(7);
         System.out.println(ugly);
+        
+        
+        System.out.println(main.find132pattern(new int[]{8, 9, 10, 7, 9}));
+    }
+    
+    /**
+     * 456. 132 Pattern
+     * 132模式的子序列 ai, aj, ak such that i < j < k and ai < ak < aj.
+     * 不要求连续 [凸型子序列]
+     * <p>
+     * Stack
+     *
+     * @param nums int[] 数组长度不超过15,000
+     * @return true/false
+     */
+    public boolean find132pattern(int[] nums) {
+        int s3 = Integer.MIN_VALUE;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] < s3) return true;
+            else {
+                while (!stack.isEmpty() && nums[i] > stack.peek()) {
+                    s3 = stack.pop();
+                }
+            }
+            stack.push(nums[i]);
+        }
+        return false;
+    }
+    
+    //普通解法 TimeLimited
+    public boolean find132pattern2(int[] nums) {
+        //time limited
+        if (nums == null || nums.length < 3) {
+            return false;
+        }
+        int len = nums.length;
+        int i = 0;
+        while (i < len) {
+            int target = nums[i];
+            Integer max = null;
+            for (int j = i + 1; j < len; j++) {
+                if (nums[j] > target) {
+                    if (max == null) {
+                        max = nums[j];
+                    } else if (max < nums[j]) {
+                        max = nums[j];
+                    } else if (max > nums[j]) {
+                        return true;
+                    }
+                }
+            }
+            i++;
+        }
+        return false;
     }
     
     /**

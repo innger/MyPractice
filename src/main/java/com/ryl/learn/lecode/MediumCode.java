@@ -50,11 +50,39 @@ public class MediumCode {
 //        System.out.println("1/214748364=" + code.fractionToDecimal(1, 214748364));
         System.out.println(Integer.MIN_VALUE + " " + Integer.MAX_VALUE);
         System.out.println("-1/-2147483648=" + code.fractionToDecimal(-1, -2147483648));
+    
+    
+        System.out.println(code.complexNumberMultiply("1+1i", "1+1i"));
+        System.out.println(code.complexNumberMultiply("1+-1i", "1+-1i"));
+    }
+    
+    /**
+     * 537. Complex Number Multiplication
+     * 复数的乘法
+     * Input: "1+1i", "1+1i"  Output: "0+2i"
+     * Input: "1+-1i", "1+-1i"  Output: "0+-2i"
+     * 
+     * @param a String 输入不包含多余的空格
+     * @param b String 输入格式a+bi
+     * @return String
+     */
+    public String complexNumberMultiply(String a, String b) {
+        String[] arra = a.split("\\+");
+        String[] arrb = b.split("\\+");
+        int a1 = Integer.valueOf(arra[0]);
+        int a2 = Integer.valueOf(arra[1].replace("i",""));
         
+        int b1 = Integer.valueOf(arrb[0]);
+        int b2 = Integer.valueOf(arrb[1].replace("i", ""));
+        
+        int n1 = a1 * b1 + (0 - a2 * b2);
+        int n2 = a1 * b2 + a2 * b1;
+        return n1 + "+" + n2 + "i";
     }
     
     /**
      * 221. Maximal Square
+     * 
      * Given a 2D binary matrix filled with 0's and 1's,
      * find the largest square containing only 1's and return its area.
      * 找到最大面积的正方形 DP

@@ -61,27 +61,99 @@ public class MediumCode {
                 new int[]{0, 0, 1},
                 new int[]{-1, 1, 1}
         ));
-    
+        
         System.out.println(code.fourSumCount(
                 new int[]{1, 2},
                 new int[]{-2, -1},
-                new int[]{-1,2},
+                new int[]{-1, 2},
                 new int[]{0, 2,}
         ));
+        
+        System.out.println(code.lengthLongestPath("dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"));
     }
     
     /**
-     * 424. Longest Repeating Character Replacement
-     * 替换s中任意字符,最多替换k次,求替换后重复字符的最长长度
-     * s = "ABAB", k = 2 output:4
-     * s = "AABABBA", k = 1 output:4 中间的A替换成B,有最长的重复子序列BBBB
+     * 388. Longest Absolute File Path
+     * 给出文件路径字符串,求最长文件路径长度,如果文件不存在则返回0
+     * 文件包含.号,文件夹不包含.号
+     * 要求时间复杂度O(n)
+     * 从后往前遍历,找到文件,以此往前遍历到根目录
      * 
-     * @param s String 全部大写字符串
+     * @param input String
+     * @return int
+     */
+    public int lengthLongestPath(String input) {
+        String[] arr = input.split("\\n");
+        int max = 0;
+        List<Dir> list = new ArrayList<>();
+        for (String name : arr) {
+            boolean type = name.indexOf('.') < 0;
+            int tab = 0;
+            while (name.charAt(tab) == '\t') {
+                tab++;
+            }
+            list.add(new Dir(type, tab, name.length() - tab));
+        }
+        
+        for (int i = arr.length - 1; i >= 0; i--) {
+            String name = arr[i];
+            if (name.indexOf('.') >= 0) {
+                int tab = 0;
+                while(name.charAt(tab) == '\t') {
+                    tab++;
+                }
+                int len = name.length() - tab;
+                if(tab == 0) {
+                    max = Math.max(max, len);
+                    continue;
+                }
+                tab--;
+                int j = i - 1;
+                while(tab >= 0 && j >=0) {
+                    Dir dir = list.get(j);
+                    if(dir.type && dir.tab == tab) {
+                        len += 1 + dir.len;
+                        tab--;
+                    }
+                    j--;
+                }
+                max = Math.max(len, max);
+            }
+        }
+        return max;
+    }
+    
+    class Dir {
+        private boolean type; //true 目录, false 文件
+        private int tab; 
+        private int len;
+    
+        public Dir(boolean type, int tab, int len) {
+            this.type = type;
+            this.tab = tab;
+            this.len = len;
+        }
+    } 
+    
+    
+    /**
+     * 424. Longest Repeating Character Replacement
+     * <p>
+     * 替换s中任意字符,最多替换k次,求替换后重复子序列的最长长度
+     * s = "ABAB", k = 2 output:4
+     * s = "AABABBA", k = 1 output:4 中间的A替换成B,有最长的重复子序列 AAAA
+     *
+     * @param s String 全部大写英文字符
      * @param k int
      * @return int
      */
     public int characterReplacement(String s, int k) {
-        
+        int len = s.length();
+        if (k >= len) {
+            return len;
+        }
+        //// TODO: 17/3/29  
+        return 0;
         
     }
     
@@ -91,7 +163,7 @@ public class MediumCode {
      * 数组长度相同N 0 ≤ N ≤ 500
      * binary search, hash table
      * 两两结合,二重循环
-     * 
+     *
      * @param A int[]
      * @param B int[]
      * @param C int[]
@@ -105,27 +177,35 @@ public class MediumCode {
         fillMap(A, B, map1);
         fillMap(C, D, map2);
         
-        for(Map.Entry<Integer,Integer> entry : map1.entrySet()) {
+        //该循环可省略,直接在第二次map遍历求解
+        for (Map.Entry<Integer, Integer> entry : map1.entrySet()) {
             int target = 0 - entry.getKey();
-            if(map2.get(target) != null) {
-                count += map2.get(target) * entry.getValue();
-            }
+            //还引入了乘法运算
+            count += map2.getOrDefault(target, 0) * entry.getValue();
         }
         
         return count;
     }
     
     private void fillMap(int[] arr1, int[] arr2, Map<Integer, Integer> map) {
-        for(int a : arr1) {
-            for(int b : arr2) {
+        for (int a : arr1) {
+            for (int b : arr2) {
                 int tmp = a + b;
-                if(map.get(tmp) != null) {
-                    map.put(tmp, map.get(tmp) + 1);
-                } else {
-                    map.put(tmp, 1);
-                }
+                map.put(tmp, map.getOrDefault(tmp, 0) + 1);
             }
         }
+    }
+    
+    public int fourSumCount2(int[] A, int[] B, int[] C, int[] D) {
+        Map<Integer, Integer> map = new HashMap<>();
+        fillMap(A, B, map);
+        int count = 0;
+        for (int c : C) {
+            for (int d : D) {
+                count += map.getOrDefault(-(c + d), 0);
+            }
+        }
+        return count;
     }
     
     /**

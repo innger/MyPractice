@@ -64,16 +64,35 @@ public class MainTest {
         
         String res = "";
         long s = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 10; i++) {
             res += "abc";
         }
         System.out.println(System.currentTimeMillis() - s);
         s = System.currentTimeMillis();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 100; i++) {
             sb.append("acd");
         }
         System.out.println(System.currentTimeMillis() - s);
+        
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i = 0; i < 10000;i++) {
+            map.put(new Random().nextInt(10000),i);
+        }
+        start = System.currentTimeMillis();
+        Integer num;
+        for(int i = 0; i < 100000; i++) {
+            num = map.getOrDefault(i, 0);
+        }
+        System.out.println("costs1 : " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+        for(int i = 0; i < 100000; i++) {
+            num = map.get(i);
+            if(num == null) {
+                num = 0;
+            }
+        }
+        System.out.println("costs2 : " + (System.currentTimeMillis() - start));
     }
     
     /**

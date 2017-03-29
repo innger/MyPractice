@@ -37,23 +37,95 @@ public class MediumCode {
                 {'1', '1', '1', '1', '1'},
                 {'1', '0', '1', '1', '1'}};
         System.out.println(code.maximalSquareO1(cmatrix));
-
-//        System.out.println("1/3=" + code.fractionToDecimal(1, 3));
-//        System.out.println("1/5=" + code.fractionToDecimal(1, 5));
-//        System.out.println("1/99=" + code.fractionToDecimal(1, 99));
-//        System.out.println("1/17=" + code.fractionToDecimal(1, 17));
-//        System.out.println("1/6=" + code.fractionToDecimal(1, 6));
-//        System.out.println("1/90=" + code.fractionToDecimal(1, 90));
-//        System.out.println("22/7=" + code.fractionToDecimal(22, 7));
-//        System.out.println("-50/8=" + code.fractionToDecimal(-50, 8));
-//        System.out.println("7/-12=" + code.fractionToDecimal(7, -12));
-//        System.out.println("1/214748364=" + code.fractionToDecimal(1, 214748364));
+        
+        System.out.println("1/3=" + code.fractionToDecimal(1, 3));
+        System.out.println("1/5=" + code.fractionToDecimal(1, 5));
+        System.out.println("1/99=" + code.fractionToDecimal(1, 99));
+        System.out.println("1/17=" + code.fractionToDecimal(1, 17));
+        System.out.println("1/6=" + code.fractionToDecimal(1, 6));
+        System.out.println("1/90=" + code.fractionToDecimal(1, 90));
+        System.out.println("22/7=" + code.fractionToDecimal(22, 7));
+        System.out.println("-50/8=" + code.fractionToDecimal(-50, 8));
+        System.out.println("7/-12=" + code.fractionToDecimal(7, -12));
+        System.out.println("1/214748364=" + code.fractionToDecimal(1, 214748364));
         System.out.println(Integer.MIN_VALUE + " " + Integer.MAX_VALUE);
         System.out.println("-1/-2147483648=" + code.fractionToDecimal(-1, -2147483648));
-    
-    
+        
+        
         System.out.println(code.complexNumberMultiply("1+1i", "1+1i"));
         System.out.println(code.complexNumberMultiply("1+-1i", "1+-1i"));
+        
+        System.out.println(code.fourSumCount(
+                new int[]{0, 1, -1},
+                new int[]{-1, 1, 0},
+                new int[]{0, 0, 1},
+                new int[]{-1, 1, 1}
+        ));
+    
+        System.out.println(code.fourSumCount(
+                new int[]{1, 2},
+                new int[]{-2, -1},
+                new int[]{-1,2},
+                new int[]{0, 2,}
+        ));
+    }
+    
+    /**
+     * 424. Longest Repeating Character Replacement
+     * 替换s中任意字符,最多替换k次,求替换后重复字符的最长长度
+     * s = "ABAB", k = 2 output:4
+     * s = "AABABBA", k = 1 output:4 中间的A替换成B,有最长的重复子序列BBBB
+     * 
+     * @param s String 全部大写字符串
+     * @param k int
+     * @return int
+     */
+    public int characterReplacement(String s, int k) {
+        
+        
+    }
+    
+    /**
+     * 454. 4Sum II
+     * 四个数组,求满足A[i]+B[j]+c[k]+D[l]=0的(i, j, k, l)个数
+     * 数组长度相同N 0 ≤ N ≤ 500
+     * binary search, hash table
+     * 两两结合,二重循环
+     * 
+     * @param A int[]
+     * @param B int[]
+     * @param C int[]
+     * @param D int[]
+     * @return int
+     */
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        int count = 0;
+        Map<Integer, Integer> map1 = new HashMap<>();
+        Map<Integer, Integer> map2 = new HashMap<>();
+        fillMap(A, B, map1);
+        fillMap(C, D, map2);
+        
+        for(Map.Entry<Integer,Integer> entry : map1.entrySet()) {
+            int target = 0 - entry.getKey();
+            if(map2.get(target) != null) {
+                count += map2.get(target) * entry.getValue();
+            }
+        }
+        
+        return count;
+    }
+    
+    private void fillMap(int[] arr1, int[] arr2, Map<Integer, Integer> map) {
+        for(int a : arr1) {
+            for(int b : arr2) {
+                int tmp = a + b;
+                if(map.get(tmp) != null) {
+                    map.put(tmp, map.get(tmp) + 1);
+                } else {
+                    map.put(tmp, 1);
+                }
+            }
+        }
     }
     
     /**
@@ -61,7 +133,7 @@ public class MediumCode {
      * 复数的乘法
      * Input: "1+1i", "1+1i"  Output: "0+2i"
      * Input: "1+-1i", "1+-1i"  Output: "0+-2i"
-     * 
+     *
      * @param a String 输入不包含多余的空格
      * @param b String 输入格式a+bi
      * @return String
@@ -70,7 +142,7 @@ public class MediumCode {
         String[] arra = a.split("\\+");
         String[] arrb = b.split("\\+");
         int a1 = Integer.valueOf(arra[0]);
-        int a2 = Integer.valueOf(arra[1].replace("i",""));
+        int a2 = Integer.valueOf(arra[1].replace("i", ""));
         
         int b1 = Integer.valueOf(arrb[0]);
         int b2 = Integer.valueOf(arrb[1].replace("i", ""));
@@ -82,7 +154,7 @@ public class MediumCode {
     
     /**
      * 221. Maximal Square
-     * 
+     * <p>
      * Given a 2D binary matrix filled with 0's and 1's,
      * find the largest square containing only 1's and return its area.
      * 找到最大面积的正方形 DP
@@ -241,7 +313,7 @@ public class MediumCode {
     /**
      * 47. Permutations II
      * 返回所有unique全排列组合
-     * 
+     *
      * @param nums int[] duplicate numbers
      * @return list
      */
@@ -253,11 +325,11 @@ public class MediumCode {
     }
     
     private void backtrackUnique(List<List<Integer>> list, List<Integer> tempList, int[] nums, boolean[] used) {
-        if(tempList.size() == nums.length) {
+        if (tempList.size() == nums.length) {
             list.add(new ArrayList<>(tempList));
         } else {
-            for(int i = 0; i < nums.length; i++) {
-                if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i-1]) continue;
+            for (int i = 0; i < nums.length; i++) {
+                if (used[i] || i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) continue;
                 used[i] = true;
                 tempList.add(nums[i]);
                 backtrackUnique(list, tempList, nums, used);

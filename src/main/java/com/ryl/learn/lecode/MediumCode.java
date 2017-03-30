@@ -52,8 +52,9 @@ public class MediumCode {
         System.out.println("-1/-2147483648=" + code.fractionToDecimal(-1, -2147483648));
         
         
-        System.out.println(code.complexNumberMultiply("1+1i", "1+1i"));
-        System.out.println(code.complexNumberMultiply("1+-1i", "1+-1i"));
+        System.out.println(code.complexNumberMultiply2("1+1i", "1+1i"));
+        System.out.println(code.complexNumberMultiply2("1+-1i", "1+-1i"));
+        
         
         System.out.println(code.fourSumCount(
                 new int[]{0, 1, -1},
@@ -70,6 +71,81 @@ public class MediumCode {
         ));
         
         System.out.println(code.lengthLongestPath("dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"));
+        
+        System.out.println(code.characterReplacement("ABAB", 1));
+        
+        
+    }
+    
+    
+    /**
+     * 424. Longest Repeating Character Replacement
+     * <p>
+     * 替换s中任意字符,最多替换k次,求替换后重复子序列的最长长度
+     * s = "ABAB", k = 2 output:4
+     * s = "AABABBA", k = 1 output:4 中间的A替换成B,有最长的重复子序列 AAAA
+     *
+     * @param s String 全部大写英文字符
+     * @param k int
+     * @return int
+     */
+    public int characterReplacement(String s, int k) {
+        // TODO: 17/3/29  
+        return 0;
+    }
+    
+    //将字符串转换成 ch:len
+    public int transformString(String s, int k) {
+        int len = s.length();
+        if (k >= len) {
+            return len;
+        }
+        List<SubSeq> list = new ArrayList<>();
+        int i = 0;
+        char cur = s.charAt(i);
+        i++;
+        while (i < len) {
+            char next = s.charAt(i);
+            int tmp = 1;
+            while (cur == next && i < len) {
+                i++;
+                if (i >= len) {
+                    tmp++;
+                    break;
+                }
+                next = s.charAt(i);
+                tmp++;
+            }
+            list.add(new SubSeq(cur, tmp));
+            if (i >= len) break;
+            cur = next;
+            i++;
+            if (i >= len) {
+                list.add(new SubSeq(cur, 1));
+            }
+        }
+        for (SubSeq seq : list) {
+            System.out.println(seq);
+        }
+        return 0;
+    }
+    
+    class SubSeq {
+        char ch;
+        int len;
+        
+        public SubSeq(char ch, int len) {
+            this.ch = ch;
+            this.len = len;
+        }
+        
+        @Override
+        public String toString() {
+            return "SubSeq{" +
+                    "ch=" + ch +
+                    ", len=" + len +
+                    '}';
+        }
     }
     
     /**
@@ -78,10 +154,11 @@ public class MediumCode {
      * 文件包含.号,文件夹不包含.号
      * 要求时间复杂度O(n)
      * 从后往前遍历,找到文件,以此往前遍历到根目录
-     * 
+     *
      * @param input String
      * @return int
      */
+    
     public int lengthLongestPath(String input) {
         String[] arr = input.split("\\n");
         int max = 0;
@@ -99,19 +176,19 @@ public class MediumCode {
             String name = arr[i];
             if (name.indexOf('.') >= 0) {
                 int tab = 0;
-                while(name.charAt(tab) == '\t') {
+                while (name.charAt(tab) == '\t') {
                     tab++;
                 }
                 int len = name.length() - tab;
-                if(tab == 0) {
+                if (tab == 0) {
                     max = Math.max(max, len);
                     continue;
                 }
                 tab--;
                 int j = i - 1;
-                while(tab >= 0 && j >=0) {
+                while (tab >= 0 && j >= 0) {
                     Dir dir = list.get(j);
-                    if(dir.type && dir.tab == tab) {
+                    if (dir.type && dir.tab == tab) {
                         len += 1 + dir.len;
                         tab--;
                     }
@@ -125,36 +202,14 @@ public class MediumCode {
     
     class Dir {
         private boolean type; //true 目录, false 文件
-        private int tab; 
+        private int tab;
         private int len;
-    
+        
         public Dir(boolean type, int tab, int len) {
             this.type = type;
             this.tab = tab;
             this.len = len;
         }
-    } 
-    
-    
-    /**
-     * 424. Longest Repeating Character Replacement
-     * <p>
-     * 替换s中任意字符,最多替换k次,求替换后重复子序列的最长长度
-     * s = "ABAB", k = 2 output:4
-     * s = "AABABBA", k = 1 output:4 中间的A替换成B,有最长的重复子序列 AAAA
-     *
-     * @param s String 全部大写英文字符
-     * @param k int
-     * @return int
-     */
-    public int characterReplacement(String s, int k) {
-        int len = s.length();
-        if (k >= len) {
-            return len;
-        }
-        //// TODO: 17/3/29  
-        return 0;
-        
     }
     
     /**
@@ -230,6 +285,18 @@ public class MediumCode {
         int n1 = a1 * b1 + (0 - a2 * b2);
         int n2 = a1 * b2 + a2 * b1;
         return n1 + "+" + n2 + "i";
+    }
+    
+    private String complexNumberMultiply2(String a, String b) {
+        String[] x = a.split("\\+|i"); //正则
+        String[] y = b.split("\\+|i");
+        int a_real = Integer.valueOf(x[0]);
+        int a_img = Integer.valueOf(x[1]);
+        
+        int b_real = Integer.valueOf(y[0]);
+        int b_img = Integer.valueOf(y[1]);
+        
+        return (a_real * b_real - a_img * b_img) + "+" + (a_real * b_img + a_img * b_real) + "i";
     }
     
     /**

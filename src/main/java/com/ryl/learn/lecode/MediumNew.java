@@ -128,7 +128,7 @@ public class MediumNew {
         
         System.out.println(main.findStart(4, new int[]{1, 2, 3, 5, 6, 7, 8}, 7));
         
-        System.out.println(Arrays.toString(main.findRightInterval(new Interval[]{
+        System.out.println("findRightInterval " + Arrays.toString(main.findRightInterval2(new Interval[]{
                 new Interval(1, 4), new Interval(2, 3), new Interval(3, 4)
         })));
         
@@ -660,6 +660,45 @@ public class MediumNew {
         return null;
     }
     
+    //start end 分别排序,依次遍历查找
+    public int[] findRightInterval2(Interval[] intervals) {
+        int len = intervals.length;
+        //start 不重复,当key
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < len; i++) {
+            map.put(intervals[i].start, i);
+        }
+        Interval[] endIntervals = Arrays.copyOf(intervals, len);
+        Arrays.sort(endIntervals, (i1, i2) -> i1.end - i2.end);
+        Arrays.sort(intervals, (i1, i2) -> i1.start - i2.start);
+        int[] res = new int[len];
+        int end = 0;
+        int start = 0;
+        while (end < len) {
+            while (start < len && endIntervals[end].end > intervals[start].start) {
+                start++;
+            }
+            res[map.get(endIntervals[end].start)] = start == len ? -1 : map.get(intervals[start].start);
+            end++;
+        }
+        return res;
+    }
+    
+    //tree map
+    public int[] findRightInterval3(Interval[] intervals) {
+        int len = intervals.length;
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        for (int i = 0; i < len; i++) {
+            map.put(intervals[i].start, i);
+        }
+        int[] res = new int[len];
+        for (int i = 0; i < len; i++) {
+            //ceilingEntry 现成函数
+            Map.Entry<Integer, Integer> entry = map.ceilingEntry(intervals[i].end);
+            res[i] = entry == null ? -1 : entry.getValue();
+        }
+        return res;
+    }
     
     /**
      * 482. License Key Formatting

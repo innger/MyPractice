@@ -189,27 +189,6 @@ public class MediumNew {
         return list;
     }
     
-    public List<Integer> lexicalOrder3(int n) {
-        List<Integer> result = new ArrayList<>();
-        int cur = 1;
-        for (int i = 0; i < n; i++) {
-            result.add(cur);
-            if (cur * 10 <= n) {
-                cur *= 10;
-            } else {
-                if (cur >= n) {
-                    cur /= 10;
-                }
-                cur++;
-                while (cur % 10 == 0) {
-                    cur /= 10;
-                }
-            }
-        }
-        return result;
-    }
-    
-    
     public List<Integer> lexicalOrder2(int n) {
         List<Integer> list = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
@@ -230,9 +209,29 @@ public class MediumNew {
         }
     }
     
+    public List<Integer> lexicalOrder3(int n) {
+        List<Integer> result = new ArrayList<>();
+        int cur = 1;
+        for (int i = 0; i < n; i++) {
+            result.add(cur);
+            if (cur * 10 <= n) {
+                cur *= 10;
+            } else {
+                if (cur >= n) {
+                    cur /= 10;
+                }
+                cur++;
+                while (cur % 10 == 0) {
+                    cur /= 10;
+                }
+            }
+        }
+        return result;
+    }
     
     /**
      * 394. Decode String
+     * <p>
      * 编码规则 k[encoded_string] k是重复次数
      * 输入的encoded_string都是字符,只有k是数字
      * 3a or 2[4] 不会出现
@@ -1213,6 +1212,7 @@ public class MediumNew {
     
     /**
      * 515. Find Largest Value in Each Tree Row
+     * <p>
      * 找出二叉树每一行的最大值
      * 按层打印二叉树,找出每层的最大值
      *

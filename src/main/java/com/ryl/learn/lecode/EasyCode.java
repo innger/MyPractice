@@ -376,6 +376,36 @@ public class EasyCode {
         }
     }
     
+    //快慢指针找到中间元素,翻转后半段链表,然后从头尾依次比较
+    public boolean isPalindrome2(ListNode head) {
+        if (head == null || head.next == null) return true;
+        ListNode slow = head, fast = slow, pre = null;
+        int count = 1;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            count++;
+        }
+        pre = slow;
+        slow = slow.next;
+        //链表后半段翻转
+        while(slow != null) {
+            ListNode next = slow.next;
+            slow.next = pre;
+            pre = slow;
+            slow = next;
+        }
+        slow = head;
+        fast = pre;
+        while(count > 0) {
+            if(slow.val != fast.val) return false;
+            slow = slow.next;
+            fast = fast.next;
+            count--;
+        }
+        return true;
+    }
+    
     /**
      * 输出每个移动区间内最小值 [堆排序-最小堆]
      * 构建m大小的最小堆
@@ -496,6 +526,7 @@ public class EasyCode {
         int resi = 0;
         int i = 0;
         int j = m - 1;
+        //使用TreeMap排序
         TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>(); //按照key排序
         while (j < arr.length) {
             if (i == 0) {
@@ -735,9 +766,7 @@ public class EasyCode {
      * @return root
      */
     public TreeNode invertTree(TreeNode root) {
-        if (root == null) {
-            return root;
-        }
+        if (root == null) return null;
         doInvertTree(root);
         return root;
     }
@@ -759,6 +788,35 @@ public class EasyCode {
         doInvertTree(node.left);
         doInvertTree(node.right);
     }
+    
+    public TreeNode invertTree2(TreeNode root) {
+        if(root == null) return null;
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+        root.left = invertTree2(right);
+        root.right = invertTree2(left);
+        return root;
+    }
+    
+    public TreeNode invertTree3(TreeNode root) {
+        if(root == null) return null;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while(!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            TreeNode left = node.left;
+            node.left = node.right;
+            node.right = left;
+            if(node.left != null) {
+                stack.push(node.left);
+            }
+            if(node.right != null) {
+                stack.push(node.right);
+            }
+        }
+        return root;
+    }
+    
     
     /**
      * 349. Intersection of Two Arrays

@@ -129,7 +129,7 @@ public class TestClient {
             will.put("diu", "fdajkfdklafdndjfdjkl2r49djfaj4kjj");
             will.put("uid", 4179619); //1699077
             will.put("sessionid", "19jfrqyajzm9dvccc68ebkdh01vthz4i");
-            will.put("deviceid", "aaaa");
+            will.put("deviceid", "aa aa");
             will.put("autodiv", "ANDA0203000");
             logger.info("will message={}", JSON.toJSONString(will));
             options.setWill("user", JSON.toJSONBytes(will), 1, false);
@@ -164,14 +164,11 @@ public class TestClient {
     }
     
     private void connect() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    client.connect(options);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        new Thread(() -> {
+            try {
+                client.connect(options);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
         

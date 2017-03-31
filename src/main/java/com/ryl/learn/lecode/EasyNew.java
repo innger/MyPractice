@@ -92,10 +92,44 @@ public class EasyNew {
         root.left = new TreeNode(2);
         root.left.left = new TreeNode(4);
         root.left.right = new TreeNode(5);
-
+        
         root.right = new TreeNode(3);
         
         System.out.println(easyNew.diameterOfBinaryTree(root));
+        
+        easyNew.rotate(new int[]{1, 2, 3, 4, 5, 6, 7}, 6);
+        easyNew.rotate(new int[]{1, 2}, 3);
+    }
+    
+    /**
+     * 189. Rotate Array
+     * 将数组右侧元素,依次旋转到头部,移动k步
+     * input : [1,2,3,4,5,6,7] 3 output : [5,6,7,1,2,3,4]
+     *
+     * @param nums int[]
+     * @param k    int
+     */
+    public void rotate(int[] nums, int k) {
+        //整体翻转,再对前后两部分翻转
+        int len = nums.length;
+        if (k <= 0) return;
+        if (k > len) {
+            k = k % len;
+        }
+        reverseArray(nums, 0, len - 1);
+        reverseArray(nums, 0, k - 1);
+        reverseArray(nums, k, len - 1);
+        System.out.println(Arrays.toString(nums));
+    }
+    
+    private void reverseArray(int[] nums, int i, int j) {
+        while (i < j) {
+            int t = nums[i];
+            nums[i] = nums[j];
+            nums[j] = t;
+            i++;
+            j--;
+        }
     }
     
     /**

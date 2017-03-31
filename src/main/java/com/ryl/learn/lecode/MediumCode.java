@@ -71,12 +71,54 @@ public class MediumCode {
         ));
         
         System.out.println(code.lengthLongestPath("dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"));
+
+
+//        System.out.println(code.findMaximumXOR(new int[]{3, 10, 5, 25, 2, 8}));
         
-        System.out.println(code.characterReplacement("ABAB", 1));
-        
-        
+        System.out.println(code.characterReplacement("ABBACCBAAA", 1));
     }
     
+    /**
+     * 421. Maximum XOR of Two Numbers in an Array
+     * 找出数组中两两异或,结果的最大值
+     * bit trie
+     *
+     * @param nums int[] 0 ≤ ai < 2^31
+     * @return int
+     */
+    public int findMaximumXOR(int[] nums) {
+        Map<Integer, List<String>> map = new HashMap<>();
+        int maxlen = 0;
+        for (int n : nums) {
+            String bits = Integer.toBinaryString(n);
+            int len = bits.length();
+            maxlen = Math.max(len, maxlen);
+            List<String> list = map.get(len);
+            if (list == null) {
+                list = new ArrayList<>();
+                map.put(len, list);
+            }
+            list.add(bits);
+        }
+        List<String> list = map.get(maxlen);
+        for (String bits : list) {
+            int len = maxlen - 1;
+            int i = 0;
+            while (len > 0) {
+                List<String> nextList = map.get(len);
+                if (nextList == null) {
+                    len--;
+                    continue;
+                } else {
+                    for (String str : nextList) {
+                        
+                    }
+                }
+            }
+            
+        }
+        return 0;
+    }
     
     /**
      * 424. Longest Repeating Character Replacement
@@ -90,8 +132,19 @@ public class MediumCode {
      * @return int
      */
     public int characterReplacement(String s, int k) {
-        // TODO: 17/3/29  
-        return 0;
+        //// TODO: 17/3/31  
+        int len = s.length();
+        int[] count = new int[26]; //26个大写字母
+        int start = 0, maxCount = 0, maxLength = 0;
+        for (int end = 0; end < len; end++) {
+            maxCount = Math.max(maxCount, ++count[s.charAt(end) - 'A']);
+            while (end - start + 1 - maxCount > k) {
+                count[s.charAt(start) - 'A']--;
+                start++;
+            }
+            maxLength = Math.max(maxLength, end - start + 1);
+        }
+        return maxLength;
     }
     
     //将字符串转换成 ch:len

@@ -51,7 +51,6 @@ public class MediumCode {
         System.out.println(Integer.MIN_VALUE + " " + Integer.MAX_VALUE);
         System.out.println("-1/-2147483648=" + code.fractionToDecimal(-1, -2147483648));
         
-        
         System.out.println(code.complexNumberMultiply2("1+1i", "1+1i"));
         System.out.println(code.complexNumberMultiply2("1+-1i", "1+-1i"));
         
@@ -71,12 +70,162 @@ public class MediumCode {
         ));
         
         System.out.println(code.lengthLongestPath("dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"));
-
-
-//        System.out.println(code.findMaximumXOR(new int[]{3, 10, 5, 25, 2, 8}));
         
         System.out.println(code.characterReplacement("ABBACCBAAA", 1));
+        
+        
+        System.out.println(code.findMaximumXOR(new int[]{3, 10, 5, 25, 2, 8}));
+        
+        long start = System.currentTimeMillis();
+        System.out.println(code.longestPalindrome("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        System.out.println(System.currentTimeMillis() - start);
+        start = System.currentTimeMillis();
+        System.out.println(code.longestPalindrome3("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        System.out.println(System.currentTimeMillis() - start);
+        
+        System.out.println(code.longestPalindrome4("abbadad"));
     }
+    
+    /**
+     * 377. Combination Sum IV
+     * 给定一个正整数数组,从数组中选取元素的组合 和等于 target值
+     * 求所有组合的个数
+     * nums = [1, 2, 3] target=4
+     * (1, 1, 1, 1)
+     * (1, 1, 2)
+     * (1, 2, 1)
+     * (1, 3)
+     * (2, 1, 1)
+     * (2, 2)
+     * (3, 1)
+     * output : 7
+     *
+     * @param nums   int[] 正整数,没有重复元素
+     * @param target int
+     * @return int
+     */
+    public int combinationSum4(int[] nums, int target) {
+        return 0;
+    }
+    
+    /**
+     * 516. Longest Palindromic Subsequence
+     * 求字符串中最长回文字符串长度,Subseq不连续
+     *
+     * @param s String length <= 1000
+     * @return int
+     */
+    public int longestPalindromeSubseq(String s) {
+        return 0;
+    }
+    
+    /**
+     * 5. Longest Palindromic Substring
+     * 求子字符串中最长的回文 substring连续
+     *
+     * @param s String length <= 1000
+     * @return String
+     */
+    public String longestPalindrome(String s) {
+        if (s.length() == 1) {
+            return s;
+        }
+        String longest = s.substring(0, 1);
+        for (int i = 0; i < s.length(); i++) {
+            //从某一个字符向两边扩展找最长的回文
+            //奇数情况
+            String tmp = getPalindrome(s, i, i);
+            if (tmp.length() > longest.length()) {
+                longest = tmp;
+            }
+            //偶数情况
+            tmp = getPalindrome(s, i, i + 1);
+            if (tmp.length() > longest.length()) {
+                longest = tmp;
+            }
+        }
+        return longest;
+    }
+    
+    private String getPalindrome(String s, int begin, int end) {
+        while (begin >= 0 && end <= s.length() - 1 && s.charAt(begin) == s.charAt(end)) {
+            begin--;
+            end++;
+        }
+        return s.substring(begin + 1, end);
+    }
+    
+    public String longestPalindrome2(String s) {
+        int len = s.length();
+        //每次以i为中心
+        int start = 0;
+        int end = 0;
+        int max = 0;
+        for (int i = 0; i < len; i++) {
+            //奇数 j是长度
+            int j, c = 0;
+            for (j = 0; (i - j >= 0) && (i + j < len); j++) {
+                if (s.charAt(i + j) != s.charAt(i - j)) {
+                    break;
+                }
+                c = j * 2 + 1;
+            }
+            if (c > max) {
+                max = c;
+                start = i - j + 1;
+                end = i - j + 1 + c;
+            }
+            //偶数
+            for (j = 0; (i - j >= 0 && i + j + 1 < len); j++) {
+                if (s.charAt(i - j) != s.charAt(i + j + 1)) {
+                    break;
+                }
+                c = j * 2 + 2;
+            }
+            if (c > max) {
+                max = c;
+                start = i - j + 1;
+                end = i - j + 1 + c;
+            }
+        }
+        return s.substring(start, end);
+    }
+    
+    //巧妙避开区分奇偶
+    //奇数,中心是一个元素
+    //偶数,中心是两个相等元素
+    public String longestPalindrome3(String s) {
+        int len = s.length();
+        int start = 0;
+        int maxLen = 1;
+        int i = 0;
+        while (i < len) {
+            //提前结束条件
+            if (len - i <= maxLen / 2) break;
+            int j = i, k = i;
+            //不论中心是几个元素,奇数个相等或者偶数个相等都符合要求
+            //全等的子字符串都是回文
+            while (k < len - 1 && s.charAt(k + 1) == s.charAt(k)) ++k; //向后找重复字符
+            i = k + 1;
+            while (k < len - 1 && j > 0 && s.charAt(k + 1) == s.charAt(j - 1)) {
+                k++;
+                j--;
+            }
+            int tmpLen = k - j + 1;
+            if (tmpLen > maxLen) {
+                start = j;
+                maxLen = tmpLen;
+            }
+        }
+        return s.substring(start, start + maxLen);
+    }
+    
+    //Manacher算法
+    public String longestPalindrome4(String s) {
+        // TODO: 17/4/1  
+        return null;
+    }
+    
     
     /**
      * 421. Maximum XOR of Two Numbers in an Array
@@ -87,37 +236,24 @@ public class MediumCode {
      * @return int
      */
     public int findMaximumXOR(int[] nums) {
-        Map<Integer, List<String>> map = new HashMap<>();
-        int maxlen = 0;
-        for (int n : nums) {
-            String bits = Integer.toBinaryString(n);
-            int len = bits.length();
-            maxlen = Math.max(len, maxlen);
-            List<String> list = map.get(len);
-            if (list == null) {
-                list = new ArrayList<>();
-                map.put(len, list);
+        int max = 0;
+        int mask = 0;
+        for (int i = 31; i >= 0; i--) {
+            mask = mask | (1 << i);
+            Set<Integer> set = new HashSet<>();
+            for (int num : nums) {
+                set.add(num & mask);
             }
-            list.add(bits);
-        }
-        List<String> list = map.get(maxlen);
-        for (String bits : list) {
-            int len = maxlen - 1;
-            int i = 0;
-            while (len > 0) {
-                List<String> nextList = map.get(len);
-                if (nextList == null) {
-                    len--;
-                    continue;
-                } else {
-                    for (String str : nextList) {
-                        
-                    }
+            int tmp = max | (1 << i);
+            //if a^b=c, then a^c=b, b^c=a
+            for (int prefix : set) {
+                if (set.contains(tmp ^ prefix)) {
+                    max = tmp;
+                    break;
                 }
             }
-            
         }
-        return 0;
+        return max;
     }
     
     /**

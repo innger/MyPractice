@@ -847,41 +847,6 @@ public class MediumMain {
     }
     
     /**
-     * 最长回文
-     *
-     * @param s string
-     * @return string
-     */
-    public String longestPalindrome(String s) {
-        if (s == null || s.isEmpty()) {
-            return null;
-        }
-        if (s.length() == 1) {
-            return s;
-        }
-        String longest = s.substring(0, 1);
-        for (int i = 0; i < s.length(); i++) {
-            String tmp = getPalindrome(s, i, i);
-            if (tmp.length() > longest.length()) {
-                longest = tmp;
-            }
-            tmp = getPalindrome(s, i, i + 1);
-            if (tmp.length() > longest.length()) {
-                longest = tmp;
-            }
-        }
-        return longest;
-    }
-    
-    private String getPalindrome(String s, int begin, int end) {
-        while (begin >= 0 && end <= s.length() - 1 && s.charAt(begin) == s.charAt(end)) {
-            begin--;
-            end++;
-        }
-        return s.substring(begin + 1, end);
-    }
-    
-    /**
      * 模拟大正整数相乘
      *
      * @param num1 bigInteger

@@ -159,6 +159,48 @@ public class MediumNew {
         System.out.println(main.decodeString("100[leetcode]"));
         System.out.println(main.decodeString("sd2[f2[e]g]i"));
         System.out.println(main.lexicalOrder3(10));
+    
+        System.out.println(main.canPartition(new int[]{1, 5, 11, 5, 2}));
+        System.out.println(main.canPartition(new int[]{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}));
+        System.out.println(main.canPartition(new int[]{18, 40, 62, 33, 83, 64, 10, 92, 67, 31, 42, 51, 10, 97, 41, 7, 82, 71, 80, 81, 41, 38, 88, 25, 38, 89, 24, 89, 90, 12, 97, 21, 22, 85, 11, 59, 83, 6, 51, 47, 32, 82, 83, 100, 29, 78, 36, 32, 1, 31, 36, 19, 35, 3, 36, 21, 24, 93, 42, 33, 10, 26, 2, 39, 36, 62, 85, 24, 41, 5, 66, 53, 7, 1, 59, 53, 40, 59, 41, 95, 7, 67, 20, 29, 80, 59, 49, 49, 51, 90, 13, 52, 6, 90, 5, 6, 31, 81, 95, 26}));
+    
+    }
+    
+    /**
+     * 416. Partition Equal Subset Sum
+     * 是否可以分成两个subSet 两个子数组和相等
+     * input: [1, 5, 11, 5]
+     * output: true [1, 5, 5] [11]
+     * <p>
+     * input: [1, 2, 3, 5]
+     * output: false
+     * 数组和为偶数,并且找出subSet和等于sum/2
+     * 是否存在子数组和为sum/2,不是连续子数组
+     *
+     * @param nums int[] 正整数数组
+     * @return true/false
+     */
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int n : nums) {
+            sum += n;
+        }
+        return (sum & 1) == 0 && isEqualSum(nums, sum >> 1); //sum/2
+    }
+    
+    /**
+     * dp动态规划,判断数组中是否存在子数组和等于给定的sum
+     */
+    private boolean isEqualSum(int[] nums, int sum) {
+        boolean[] dp = new boolean[sum + 1]; //存所有子数组和的可能值
+        dp[0] = true;
+        for (int n : nums) {
+            for (int i = sum; i >= n; i--) {
+                //i >= n 最小到n,当前遍历值
+                dp[i] = dp[i] || dp[i - n];
+            }
+        }
+        return dp[sum];
     }
     
     /**
@@ -1579,44 +1621,6 @@ public class MediumNew {
             return String.valueOf(val);
         }
     }
-    
-    /**
-     * 416. Partition Equal Subset Sum
-     * 是否可以分成两个subSet 两个子数组和相等
-     * input: [1, 5, 11, 5]
-     * output: true [1, 5, 5] [11]
-     * <p>
-     * input: [1, 2, 3, 5]
-     * output: false
-     * 数组和为偶数,并且找出subSet和等于sum/2
-     * 是否存在子数组和为sum/2,不是连续子数组
-     *
-     * @param nums int[] 正整数数组
-     * @return true/false
-     */
-    public boolean canPartition(int[] nums) {
-        int sum = 0;
-        for (int n : nums) {
-            sum += n;
-        }
-        System.out.println("sum = " + sum);
-        return (sum & 1) != 1 && isEqualSum(nums, sum >> 1);
-    }
-    
-    /**
-     * 动态规划,判断数组中是否存在子数组和等于给定的sum
-     */
-    private boolean isEqualSum(int[] nums, int sum) {
-        boolean[] dp = new boolean[sum + 1];
-        dp[0] = true;
-        for (int n : nums) {
-            for (int i = sum; i >= n; i--) {
-                dp[i] = dp[i] || dp[i - n];
-            }
-        }
-        return dp[sum];
-    }
-    
     
     /**
      * 494. Target Sum

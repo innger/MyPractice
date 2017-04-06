@@ -41,6 +41,106 @@ public class EasyCode {
         System.out.println(code.checkPerfectNumber3(99999993));
         System.out.println(code.checkPerfectNumber3(32582657));
         System.out.println(code.checkPerfectNumber3(28));
+        
+        System.out.println(code.findLUSlength(new String[]{
+                "a","b","c","d","e","f","a","b","c","d","e","f"
+        }));
+        
+        System.out.println(code.isSubsequence(new HashSet<String>() {{
+            add("abbcc");
+        }}, "abbc"));
+    }
+    
+    /**
+     * 522. Longest Uncommon Subsequence II
+     * 数组长度在[2,50]之间,每个字符串长度不超过10
+     *
+     * @param strs String[]
+     * @return int
+     */
+    public int findLUSlength(String[] strs) {
+        TreeMap<Integer, List<String>> map = new TreeMap<>((Comparator<Integer>) (o1, o2) -> o2 - o1);
+        for (String str : strs) {
+            int len = str.length();
+            List<String> list = map.get(len);
+            if (list == null) {
+                list = new ArrayList<>();
+                map.put(len, list);
+            }
+            list.add(str);
+        }
+        Set<String> set = new HashSet<>();
+        for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
+            if (entry.getValue().size() == 1) {
+                String v = entry.getValue().get(0);
+                boolean b = isSubsequence(set, v);
+                if (!b) return v.length();
+                continue;
+            }
+            //list有多个
+            Map<String, Integer> tmpMap = new HashMap<>();
+            for (String str : entry.getValue()) {
+                Integer i = tmpMap.get(str);
+                if(i == null) {
+                    tmpMap.put(str, 1);
+                } else {
+                    tmpMap.put(str, i + 1);
+                }
+            }
+            for (Map.Entry<String, Integer> tmpEntry : tmpMap.entrySet()) {
+                if(tmpEntry.getValue() == 1) {
+                    String str = tmpEntry.getKey();
+                    boolean b = isSubsequence(set, str);
+                    if (!b) return str.length();
+                }
+                
+            }
+            set.addAll(tmpMap.keySet());
+        }
+        return -1;
+    }
+    
+    private boolean isSubsequence(Set<String> set, String str) {
+        if (set.isEmpty()) return false;
+        //判断str是否是set中某个的子序列
+        int len = str.length();
+        for (String ss : set) {
+            int index = 0;
+            int i = 0;
+            while (i < len) {
+                char ch = str.charAt(i);
+                int tmp = ss.indexOf(ch, index);
+                if (tmp < index) {
+                    break;
+                }
+                index = tmp + 1;
+                i++;
+            }
+            if (i == len) return true;
+        }
+        return false;
+    }
+    
+    /**
+     * 521. Longest Uncommon Subsequence I
+     * subsequence 子序列,字符串不一定连续,保持原有顺序,字符串自身和空字符串是合法子序列
+     * 如果不存在返回-1
+     * Input: "aba", "cdc" Output: 3
+     * 求两个字符串最长非公共子序列长度
+     *
+     * @param a String 长度不会超过100
+     * @param b String 只包含a-z
+     * @return int
+     */
+    public int findLUSlength(String a, String b) {
+        if (a == null || b == null || a.equals(b)) {
+            return -1;
+        }
+        int alen = a.length();
+        int blen = b.length();
+        if (alen != blen) return Math.max(alen, blen);
+        //字符串长度相等
+        return alen;
     }
     
     /**
@@ -389,7 +489,7 @@ public class EasyCode {
         pre = slow;
         slow = slow.next;
         //链表后半段翻转
-        while(slow != null) {
+        while (slow != null) {
             ListNode next = slow.next;
             slow.next = pre;
             pre = slow;
@@ -397,8 +497,8 @@ public class EasyCode {
         }
         slow = head;
         fast = pre;
-        while(count > 0) {
-            if(slow.val != fast.val) return false;
+        while (count > 0) {
+            if (slow.val != fast.val) return false;
             slow = slow.next;
             fast = fast.next;
             count--;
@@ -790,7 +890,7 @@ public class EasyCode {
     }
     
     public TreeNode invertTree2(TreeNode root) {
-        if(root == null) return null;
+        if (root == null) return null;
         TreeNode left = root.left;
         TreeNode right = root.right;
         root.left = invertTree2(right);
@@ -799,18 +899,18 @@ public class EasyCode {
     }
     
     public TreeNode invertTree3(TreeNode root) {
-        if(root == null) return null;
+        if (root == null) return null;
         Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
-        while(!stack.isEmpty()) {
+        while (!stack.isEmpty()) {
             TreeNode node = stack.pop();
             TreeNode left = node.left;
             node.left = node.right;
             node.right = left;
-            if(node.left != null) {
+            if (node.left != null) {
                 stack.push(node.left);
             }
-            if(node.right != null) {
+            if (node.right != null) {
                 stack.push(node.right);
             }
         }

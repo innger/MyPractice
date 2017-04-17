@@ -99,6 +99,76 @@ public class EasyNew {
         
         easyNew.rotate(new int[]{1, 2, 3, 4, 5, 6, 7}, 6);
         easyNew.rotate(new int[]{1, 2}, 3);
+        
+        System.out.println(easyNew.reverseWords("Let's take LeetCode contest"));
+    
+        System.out.println(easyNew.checkRecord("ALLPPPLLLPPLPLPLL"));
+        System.out.println(easyNew.checkRecord("LL"));
+    }
+    
+    /**
+     * 551. Student Attendance Record I
+     * 字符串s仅包含三个字符,分表代表学生的出勤情况
+     * 'A' : Absent.
+     * 'L' : Late.
+     * 'P' : Present.
+     * 如果一个学生出勤没有超过一次的Absent,或者超过连续两次的Late,则可以获得奖励
+     *
+     * @param s String
+     * @return true/false
+     */
+    public boolean checkRecord(String s) {
+        int a = 0;
+        int[] l = new int[]{-2, -2};
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            switch (ch) {
+                case 'A':
+                    a++;
+                    if(a == 2) return false;
+                    break;
+                case 'L':
+                    //连续三个
+                    if(l[0] + 1 == l[1] && l[1] + 1 == i) {
+                        return false;
+                    } else if (l[0] + 1 == i) {
+                        l[1] = i;
+                    } else {
+                        l[0] = i;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * 557. Reverse Words in a String III
+     * 翻转字符串句子中的单词
+     * Input: "Let's take LeetCode contest"
+     * Output: "s'teL ekat edoCteeL tsetnoc"
+     *
+     * @param s String
+     * @return String
+     */
+    public String reverseWords(String s) {
+        StringBuilder sb = new StringBuilder();
+        int len = s.length();
+        int i = 0;
+        int j = i;
+        while (j < len) {
+            while (j < len && s.charAt(j) != ' ') {
+                j++;
+            }
+            for (int tmp = j - 1; tmp >= i; tmp--) {
+                sb.append(s.charAt(tmp));
+            }
+            if (j >= len) break;
+            sb.append(s.charAt(j));
+            i = j + 1;
+            j = i;
+        }
+        return sb.toString();
     }
     
     /**

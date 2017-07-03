@@ -66,7 +66,7 @@ public class TestClient {
         String[] tids = new String[]{"C81F662B8ADDC81F662B8BBB"};
         for (String tid : tids) {
             logger.info("tid={}", tid);
-            TestClient client = new TestClient(tid, hostDaily);
+            TestClient client = new TestClient(tid, hostLocal);
             client.init();
         }
 //        socketConnect();
@@ -127,9 +127,9 @@ public class TestClient {
             will.put("dip", 17020);
             will.put("dic", "C04020001234");
             will.put("diu", "fdajkfdklafdndjfdjkl2r49djfaj4kjj");
-            will.put("uid", 4179619); //1699077
+            will.put("uid", 1699077);
             will.put("sessionid", "19jfrqyajzm9dvccc68ebkdh01vthz4i");
-            will.put("deviceid", "aa aa");
+            will.put("deviceid", "aaaa");
             will.put("autodiv", "ANDA0203000");
             logger.info("will message={}", JSON.toJSONString(will));
             options.setWill("user", JSON.toJSONBytes(will), 1, false);

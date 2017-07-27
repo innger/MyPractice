@@ -1,8 +1,14 @@
 package com.ryl.learn.mqtt;
 
 import com.alibaba.fastjson.JSON;
+import com.autonavi.aos.cmg.common.dto.LocationReportInfo;
+import com.autonavi.aos.cmg.common.enums.ChannelEnum;
 import com.google.common.collect.Maps;
+import io.netty.util.CharsetUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
@@ -11,8 +17,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -50,26 +57,24 @@ public class TestClient {
     
     public static void main(String[] args) throws InterruptedException {
         logger.info("begin");
-        /*int pool = 100;
+        int pool = 100;
         ExecutorService service = Executors.newFixedThreadPool(pool);
         for (int i = 0; i < 1; i++) {
             service.execute(() -> {
-                //VgpUYx8bX4kDADo+ouGrO+Nf
-                //Vbl3qJ+gJx0DAG417p8TpRRC
                 String clientID = StringUtils.remove(UUID.randomUUID().toString(),"-");
                 clientID = "VgpUYx8bX4kDADo+ouGrO+Nf";
-                TestClient client01 = new TestClient(clientID, hostPub);
+                TestClient client01 = new TestClient(clientID, hostDaily);
                 client01.init();
+                client01.sendMessage();
             });
-        }*/
-        //"C81F662B8ADDC81F662B8AAA" "VqliqZ8RCeIDAGoFiWoeic+Z" "VR47gRd8UGUDAAW8KIIQn8T812","VR47gRd8UGUDAAW8KIIQn8T813", "Vjxy6OdR7KIDANJzIuKS2tX1"
-        String[] tids = new String[]{"C81F662B8ADDC81F662B8BBB"};
-        for (String tid : tids) {
-            logger.info("tid={}", tid);
-            TestClient client = new TestClient(tid, hostLocal);
-            client.init();
         }
-//        socketConnect();
+//        String[] tids = new String[]{"C81F662B8ADDC81F662B8BBB"};
+//        for (String tid : tids) {
+//            logger.info("tid={}", tid);
+//            TestClient client = new TestClient(tid, hostDaily);
+//            client.init();
+//            client.sendMessage();
+//        }
     }
     
     private static void socketConnect() {
@@ -115,7 +120,7 @@ public class TestClient {
             //设置连接的用户名
             options.setUserName(username);
             //设置连接的密码  E4fMLkiLJeHdBhlK3AFxTLoZSc1bBjtG
-            password = DigestUtils.md5Hex(username + "@" + "xDgLf9ARoS1HN1QEvnWAdstAD8HKy1jR"); 
+            password = DigestUtils.md5Hex(username + "@" + "xDgLf9ARoS1HN1QEvnWAdstAD8HKy1jR");
             options.setPassword(password.toCharArray());
             // 设置超时时间 单位为秒
             options.setConnectionTimeout(10);
@@ -128,7 +133,7 @@ public class TestClient {
             will.put("dic", "C04020001234");
             will.put("diu", "fdajkfdklafdndjfdjkl2r49djfaj4kjj");
             will.put("uid", 1699077);
-            will.put("sessionid", "19jfrqyajzm9dvccc68ebkdh01vthz4i");
+            will.put("sessionid", "ju9vbwuyqqkt92eeoghk3jl0n1a100d5");
             will.put("deviceid", "aaaa");
             will.put("autodiv", "ANDA0203000");
             logger.info("will message={}", JSON.toJSONString(will));
@@ -176,29 +181,32 @@ public class TestClient {
     
     public void sendMessage() {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                //登录
-                LoginMessage login = new LoginMessage();
-                login.setMessageId(System.currentTimeMillis());
-                login.setDate(new Date());
-                login.setUserId(clientID);
-                login.setToken(CommonConst.SEED);
-                
-                MqttMessage message = new MqttMessage();
-                message.setQos(1);
-                message.setRetained(true);
-                message.setPayload(login.writeToByteArr());
-                
-                try {
-                    String topic = CommonConst.TOPIC_LOCATION;
-                    client.getTopic(topic).publish(message);
-                    logger.info("{} send message topic={} {}", clientID, topic, login.toString());
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                }
+        scheduler.scheduleAtFixedRate((Runnable) () -> {
+            
+            LocationReportInfo location = new LocationReportInfo();
+            location.setChannel(ChannelEnum.AMAP_AUTO.getChannelName());
+            location.setLon(RandomUtils.nextDouble(0, 200));
+            location.setLat(RandomUtils.nextDouble(0, 200));
+            location.setMemberStamp(RandomStringUtils.randomAlphanumeric(32).toUpperCase());
+            location.setTeamStamp(RandomStringUtils.randomAlphanumeric(32).toUpperCase());
+            location.setTeamId("597841ba35858e5a3798b569");
+            location.setUid("15907");
+            
+            
+            MqttMessage message = new MqttMessage();
+            message.setQos(1);
+            message.setRetained(true);
+            String str = JSON.toJSONString(location);
+            message.setPayload(str.getBytes(CharsetUtil.UTF_8));
+            
+            try {
+                String topic = CommonConst.TOPIC_LOCATION;
+                client.getTopic(topic).publish(message);
+                logger.info("{} send message topic={} message={}", clientID, topic, str);
+            } catch (MqttException e) {
+                e.printStackTrace();
             }
-        }, 60 * 1000, 10 * 60 * 1000, TimeUnit.MILLISECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
         
     }
     

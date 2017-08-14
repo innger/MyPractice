@@ -25,26 +25,36 @@ public class CarCsvUtils {
     
     public static void main(String[] args) throws Exception {
         
-        shenzhouExcel();
+//        getFeeDetail("9002");
+//        shenzhouExcel();
+        shouqiExcel();
         
     }
+    
+    /**
+     * 财务每月数据导出
+     select a.*, b.fee_detail from (
+        select * from car_order where gmt_create >= '2017-07-01 00:00:00' and gmt_create <= '2017-07-31 23:59:59' 
+        and cp_code = 9002 and status in (106,112) and amap_ride_type <> 'gd_taxi') a 
+        left join car_order_bill b on (a.amap_order_id = b.amap_order_id)
+     */
     
     
     private static void shenzhouExcel() throws Exception {
         String cpCode = "9003";
-        File fileOut = new File("/Users/alibaba/logs/car_shenzhou_6.xlsx");
+        File fileOut = new File("/Users/alibaba/logs/car_shenzhou_201707.xlsx");
         
         Workbook wbOut = new XSSFWorkbook();
         Sheet sheetOut = wbOut.createSheet("sheet1");
         
-        File excel = new File("/Users/alibaba/Downloads/2017-07-03-11-17-20_EXPORT_XLSX_840992_765_0.xlsx");
+        File excel = new File("/Users/alibaba/Downloads/2017-08-10-11-13-48_EXPORT_XLSX_905978_496_0.xlsx");
         FileInputStream fis = new FileInputStream(excel);
         Workbook wb = WorkbookFactory.create(fis);
         Sheet sheet = wb.getSheetAt(0);
         Row row = sheet.getRow(1);
         int rowNum = sheet.getPhysicalNumberOfRows();
         int colNum = row.getPhysicalNumberOfCells();
-        String[] feeDetailCols = new String[]{"停车费", "时长费", "抹零", "路桥费", "违约金", "清洁费", "里程费", "出城费", "起租价", "远途费"};
+        String[] feeDetailCols = new String[]{"停车费", "时长费", "抹零", "路桥费", "违约金", "清洁费", "里程费", "出城费", "起租价", "远途费", "其他费用"};
         
         int outRowNum = 0;
         Row rowOut = sheetOut.createRow(outRowNum);
@@ -101,12 +111,12 @@ public class CarCsvUtils {
     
     private static void shouqiExcel() throws Exception {
         String cpCode = "9002";
-        File fileOut = new File("/Users/alibaba/logs/car_shouqi_6.xlsx");
+        File fileOut = new File("/Users/alibaba/logs/car_shouqi_7.xlsx");
         
         Workbook wbOut = new XSSFWorkbook();
         Sheet sheetOut = wbOut.createSheet("sheet1");
         
-        File excel = new File("/Users/alibaba/Downloads/2017-07-03-11-17-20_EXPORT_XLSX_840992_765_0.xlsx");
+        File excel = new File("/Users/alibaba/Downloads/2017-08-14-19-04-08_EXPORT_XLSX_912874_791_0.xlsx");
         FileInputStream fis = new FileInputStream(excel);
         Workbook wb = WorkbookFactory.create(fis);
         Sheet sheet = wb.getSheetAt(0);
@@ -114,7 +124,7 @@ public class CarCsvUtils {
         int rowNum = sheet.getPhysicalNumberOfRows();
         int colNum = row.getPhysicalNumberOfCells();
         String[] shouqi = new String[]{"基础价格", "高峰时长费", "抹零", "夜间里程费", "空驶费", "超里程费用", "高速服务费", "超时长费用"};
-        
+        shouqi = new String[]{"基础价格", "高峰时长费", "停车费", "抹零", "夜间里程费", "空驶费", "超里程费用", "高速服务费", "超时长费用", "夜间时长费用"};
         int outRowNum = 0;
         Row rowOut = sheetOut.createRow(outRowNum);
         for (int i = 1; i <= colNum; i++) {
@@ -172,7 +182,7 @@ public class CarCsvUtils {
     }
     
     private static void getFeeDetail(String cpCode) throws Exception {
-        File excel = new File("/Users/alibaba/Downloads/2017-07-03-11-17-20_EXPORT_XLSX_840992_765_0.xlsx");
+        File excel = new File("/Users/alibaba/Downloads/2017-08-14-19-04-08_EXPORT_XLSX_912874_791_0.xlsx");
         FileInputStream fis = new FileInputStream(excel);
         Workbook wb = WorkbookFactory.create(fis);
         Sheet sheet = wb.getSheetAt(0);

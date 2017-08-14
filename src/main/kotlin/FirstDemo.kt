@@ -1,5 +1,7 @@
 package com.ryl.learn.kotlin
 
+import kotlin.coroutines.experimental.buildSequence
+
 /**
  * Created on 17/5/19 18:19.
  */
@@ -29,6 +31,7 @@ fun String.spaceToCamel() : String {
 }
 
 
+
 fun main(args: Array<String>) {
     println("Hello World")
     val a: Int = 1
@@ -56,5 +59,18 @@ fun main(args: Array<String>) {
     println(Customer(23, "zhangsan").toString())
     
     println("my name is zhangsan".spaceToCamel())
+
+//    val seq = buildSequence {
+//        println("Yielding 1")
+//        yield(1)
+//        println("Yielding 2")
+//        yield(2)
+//        println("Yielding a range")
+//        yieldAll(3 .. 5)
+//    }
+//    
+//    for(i in seq) {
+//        println("Generated $i")
+//    }
     
 }

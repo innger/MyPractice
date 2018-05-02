@@ -65,7 +65,7 @@ public class TestClient {
                 clientID = "VgpUYx8bX4kDADo+ouGrO+Nf";
                 TestClient client01 = new TestClient(clientID, hostDaily);
                 client01.init();
-                client01.sendMessage();
+//                client01.sendMessage();
             });
         }
 //        String[] tids = new String[]{"C81F662B8ADDC81F662B8BBB"};
@@ -132,7 +132,7 @@ public class TestClient {
             will.put("dip", 17020);
             will.put("dic", "C04020001234");
             will.put("diu", "fdajkfdklafdndjfdjkl2r49djfaj4kjj");
-            will.put("uid", 1699077);
+            will.put("uid", 1722848);
             will.put("sessionid", "ju9vbwuyqqkt92eeoghk3jl0n1a100d5");
             will.put("deviceid", "aaaa");
             will.put("autodiv", "ANDA0203000");

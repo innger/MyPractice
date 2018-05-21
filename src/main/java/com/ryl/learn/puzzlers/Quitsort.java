@@ -1,5 +1,7 @@
 package com.ryl.learn.puzzlers;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 
 public class Quitsort {
@@ -39,6 +41,12 @@ public class Quitsort {
         System.out.println(c);
         return true;
     }
+    
+    @Test
+    public void qsortTest() {
+        int[] arr = new int[]{7, 2, 3, 5, 9, 10};
+        qsort1(arr, 0, 5);
+    }
 
     public static void qsort1(int[] a, int p, int r) {
         if (p >= r)
@@ -47,10 +55,12 @@ public class Quitsort {
         int j = p;
         for (int i = p + 1; i <= r; i++) {
             if (a[i] < x) {
-                swap(a, ++j, i);
+                j++;
+                swap(a, j, i);
             }
         }
         swap(a, p, j);
+        System.out.println(Arrays.toString(a));
         qsort1(a, p, j - 1);
         qsort1(a, j + 1, r);
     }
@@ -104,8 +114,8 @@ public class Quitsort {
         if (num2 == 0)
             return num1;
         int sum = num1 ^ num2;
-        int carray = (num1 & num2) << 1;
-        return addWithout(sum, carray);
+        int carry = (num1 & num2) << 1;
+        return addWithout(sum, carry);
     }
 
     static int add1_n1(int n) {

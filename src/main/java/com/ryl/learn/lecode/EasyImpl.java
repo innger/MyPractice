@@ -1,5 +1,8 @@
 package com.ryl.learn.lecode;
 
+import com.google.common.collect.Lists;
+import org.junit.Test;
+
 import java.util.*;
 
 /**
@@ -1186,6 +1189,50 @@ public class EasyImpl {
 		}
 		return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
 	}
+	
+	@Test
+    public void hasPathSumTest() {
+	    TreeNode root = new TreeNode(5);
+	    TreeNode left = new TreeNode(1);
+	    TreeNode rihgt = new TreeNode(3);
+	    root.left = left;
+	    root.right = rihgt;
+	    
+	    left.left = new TreeNode(1);
+	    rihgt.left = new TreeNode(3);
+	    rihgt.right = new TreeNode(4);
+        
+        System.out.println(hasPathSum2(root, 7));
+        System.out.println(hasPathSum(root, 7));
+    }
+	
+	public boolean hasPathSum2(TreeNode root, int sum) {
+	    List<Integer> sumList = calTreeSum(root);
+        System.out.println(sumList);
+        return sumList.contains(sum);
+    }
+    
+    public List<Integer> calTreeSum(TreeNode root) {
+	    List<Integer> list = Lists.newArrayList();
+	    if (root.left == null && root.right == null) {
+	        list.add(root.val);
+        }
+        if (root.left != null) {
+	        for(int num : calTreeSum(root.left)) {
+	            num += root.val;
+	            list.add(num);
+            }
+        }
+        
+        if (root.right != null) {
+	        for(int num : calTreeSum(root.right)) {
+	            num += root.val;
+	            list.add(num);
+            }
+        }
+        return list;
+    }
+	
 	
 	/**
 	 * 111. Minimum Depth of Binary Tree

@@ -76,6 +76,7 @@ public class Codec {
         // Your Codec object will be instantiated and called as such:
         String url = "https://leetcode.com/problems/design-tinyurl";
         Codec codec = new Codec();
+        System.out.println(codec.encode(url));
         String res = codec.decode(codec.encode(url));
         System.out.println(res);
     }

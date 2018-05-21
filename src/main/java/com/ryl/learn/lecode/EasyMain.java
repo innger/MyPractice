@@ -1,5 +1,9 @@
 package com.ryl.learn.lecode;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.junit.Test;
+
 import java.util.*;
 
 /**
@@ -1017,6 +1021,35 @@ public class EasyMain {
         System.out.println(tList);
         for (int i = 0; i < s.length(); i++) {
             if (sList.get(i) != tList.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+    @Test
+    public void isIsomorphicTest() {
+        Lists.newArrayList(
+                isIsomorphic("egg", "add"),
+                isIsomorphic("foo", "bar"),
+                isIsomorphic("paper", "title"),
+                isIsomorphic("ab", "aa"),
+                isIsomorphic("yy", "xx")).forEach(System.out::println);
+    }
+    
+    public boolean isIsomorphic2(String s, String t) {
+        Map<Character, Character> stMap = Maps.newHashMap();
+        Map<Character, Character> tsMap = Maps.newHashMap();
+        for (int i = 0; i < s.length(); i++) {
+            char schar = s.charAt(i);
+            char tchar = t.charAt(i);
+            
+            if (stMap.get(schar) == null && tsMap.get(tchar) == null) {
+                stMap.put(schar, tchar);
+                tsMap.put(tchar, schar);
+            } else if (stMap.get(schar) == null || stMap.get(schar) != tchar || 
+                    tsMap.get(tchar) == null || tsMap.get(tchar) != schar) {
                 return false;
             }
         }

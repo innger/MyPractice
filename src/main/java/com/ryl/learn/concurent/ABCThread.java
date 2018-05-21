@@ -17,7 +17,7 @@ public class ABCThread {
         
     }
     
-    private static volatile Integer COUNTER = 1;
+    private static Integer COUNTER = 1;
     private static final Object LOCK = new Object();
     
     private static class Worker implements Runnable {
@@ -32,6 +32,10 @@ public class ABCThread {
     
         @Override
         public void run() {
+            run2();
+        }
+        
+        public void run1() {
             while(true) {
                 synchronized (LOCK) {
                     if(Objects.equals(COUNTER, num)) {
@@ -53,6 +57,30 @@ public class ABCThread {
                 }
             }
         }
+        
+        public void run2() {
+            while (true) {
+                synchronized (LOCK) {
+                    while(!Objects.equals(COUNTER, num)) {
+                        try {
+                            LOCK.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    System.out.println(name);
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    COUNTER++;
+                    COUNTER = COUNTER > 3 ? 1 : COUNTER;
+                    LOCK.notifyAll();
+                }
+            }
+        }
+        
     }
     
 }

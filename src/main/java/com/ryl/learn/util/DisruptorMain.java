@@ -1,14 +1,18 @@
 package com.ryl.learn.util;
 
-import com.lmax.disruptor.BlockingWaitStrategy;
-import com.lmax.disruptor.EventFactory;
-import com.lmax.disruptor.EventHandler;
-import com.lmax.disruptor.RingBuffer;
+import com.alibaba.fastjson.JSON;
+import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.junit.Test;
+import org.springframework.beans.BeanUtils;
 
+import java.io.IOException;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 /**
@@ -46,7 +50,7 @@ public class DisruptorMain {
         int bufferSize = 16;
         
         //创建disruptor，采用单生产者模式
-        Disruptor<Element> disruptor = new Disruptor(factory, bufferSize, threadFactory, ProducerType.SINGLE, strategy);
+        Disruptor<Element> disruptor = new Disruptor<>(factory, bufferSize, threadFactory, ProducerType.SINGLE, strategy);
         
         //设置EventHandler
         disruptor.handleEventsWith(handler);
@@ -55,6 +59,13 @@ public class DisruptorMain {
         disruptor.start();
         
         RingBuffer<Element> ringBuffer = disruptor.getRingBuffer();
+        
+        ringBuffer.publishEvent(new EventTranslator<Element>() {
+            @Override
+            public void translateTo(Element element, long l) {
+                
+            }
+        });
         
         for (int l = 0; true; l++) {
             // 获取下一个可用位置的下标
@@ -83,5 +94,70 @@ public class DisruptorMain {
         
         System.out.println(new Node(1, "one"));
         
+    }
+    
+    
+    final class ValueEvent {
+        
+        public ValueEvent() {
+        }
+        
+        private long value;
+        
+        public long getValue()
+        {
+            return value;
+        }
+        
+        public void setValue(final long value)
+        {
+            this.value = value;
+        }
+    }
+    
+    @Test
+    public void disruptorTest() {
+    
+        final EventFactory<ValueEvent> EVENT_FACTORY = ValueEvent::new;
+        final ThreadFactory THREAD_FACTORY = r -> new Thread(r, "simpleThread");
+        
+        Disruptor<ValueEvent> disruptor =
+                new Disruptor<>(EVENT_FACTORY, 32, THREAD_FACTORY, ProducerType.SINGLE, new SleepingWaitStrategy());
+        disruptor.handleEventsWith((EventHandler<ValueEvent>) (valueEvent, l, b) -> 
+                System.out.println(String.format("handle1 %s %d", JSON.toJSONString(valueEvent), l)))
+            .handleEventsWith((EventHandler<ValueEvent>) (event, l, b) -> 
+                    System.out.println(String.format("handler2 %d %d", event.getValue(), l)))
+        ;
+        RingBuffer<ValueEvent> ringBuffer = disruptor.start();
+        
+        ExecutorService service = Executors.newFixedThreadPool(20);
+    
+        for (int i = 0; i < 20; i++) {
+            service.submit((Runnable) () -> {
+                while(true) {
+                    long seq = ringBuffer.next();
+                    ValueEvent value = ringBuffer.get(seq);
+                    processValue(value);
+                    ringBuffer.publish(seq);
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void processValue(ValueEvent event) {
+        ValueEvent valueEvent = new ValueEvent();
+        valueEvent.setValue(new Random().nextLong());
+        BeanUtils.copyProperties(valueEvent, event);
     }
 }

@@ -20,8 +20,6 @@ public class EasyCode {
         
         int[] arr = new int[]{1, 2, 10, 4, 4, 6, 1, 7, 8, 2, 10, 102, 32, 1, 3, 43};
         System.out.println("input " + Arrays.toString(arr));
-        int[] res = code.getMinArray(arr, 4);
-        System.out.println("output " + Arrays.toString(res));
         int[] res1 = code.getMinArrayII(arr, 4);
         System.out.println("output " + Arrays.toString(res1));
         
@@ -598,69 +596,6 @@ public class EasyCode {
     void minHeapMake(int[] arr, int n) {
         for (int i = n / 2 - 1; i >= 0; i--) {
             minHeapFixDown(arr, i, n);
-        }
-    }
-    
-    /**
-     * m区间长度,窗口沿着数组移动,输出每次窗口中最小值组成的数组
-     *
-     * @param arr int[]
-     * @param m   区间长度
-     * @return int[] 最小值组成的数组
-     */
-    public int[] getMinArray(int[] arr, int m) {
-        if (arr == null || arr.length == 0) {
-            return new int[0];
-        }
-        if (m >= arr.length) {
-            //窗口不移动,及arr中的最小值
-            int min = Integer.MAX_VALUE;
-            for (int num : arr) {
-                if (min > num) {
-                    min = num;
-                }
-            }
-            return new int[]{min};
-        }
-        int[] res = new int[arr.length - m + 1];
-        int resi = 0;
-        int i = 0;
-        int j = m - 1;
-        //使用TreeMap排序
-        TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>(); //按照key排序
-        while (j < arr.length) {
-            if (i == 0) {
-                for (int n = i; n <= j; n++) {
-                    fillTreeMap(map, arr[n]);
-                }
-                res[resi] = map.firstKey();
-            } else {
-                removeTreeMap(map, arr[i - 1]);
-                fillTreeMap(map, arr[j]);
-                res[resi] = map.firstKey();
-            }
-            i++;
-            j++;
-            resi++;
-        }
-        return res;
-    }
-    
-    private void fillTreeMap(Map<Integer, Integer> map, int n) {
-        Integer count = map.get(n);
-        if (count == null) {
-            map.put(n, 1);
-        } else {
-            map.put(n, count + 1);
-        }
-    }
-    
-    private void removeTreeMap(Map<Integer, Integer> map, int n) {
-        Integer count = map.get(n);
-        if (count <= 1) {
-            map.remove(n);
-        } else {
-            map.put(n, count - 1);
         }
     }
     

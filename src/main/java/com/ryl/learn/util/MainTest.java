@@ -305,4 +305,10 @@ public class MainTest {
 //        System.out.println(JSON.parseObject(bytes, JSONObject.class).toString());
         System.out.println(new String(connectBean.getWillMessage(), Charsets.UTF_8));
     }
+    
+    @Test
+    public void testCal() {
+        System.out.println(28*17.3);
+        System.out.println(33*15.5);
+    }
 }

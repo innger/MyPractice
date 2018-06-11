@@ -1,5 +1,7 @@
 package com.ryl.learn.lecode;
 
+import org.junit.Test;
+
 import java.util.*;
 
 /**
@@ -33,10 +35,7 @@ public class EasyNew {
                 {0, 0}, {1, 0}, {2, 0}
         }));
         
-        System.out.println(easyNew.repeatedSubstringPattern("abab"));
-        System.out.println(easyNew.repeatedSubstringPattern("aba"));
-        System.out.println(easyNew.repeatedSubstringPattern("abcabcabcabc"));
-        System.out.println(easyNew.repeatedSubstringPattern("bb"));
+        
         
         System.out.println(easyNew.countSegments("     "));
         
@@ -45,10 +44,7 @@ public class EasyNew {
         System.out.println(easyNew.arrangeCoins(3));
         System.out.println(easyNew.arrangeCoins(1804289383));
         
-        System.out.println(easyNew.minMoves2(new int[]{1, 1, 2147483647}));
-        System.out.println(easyNew.minMoves2(new int[]{1, 2, 3}));
-        System.out.println(easyNew.minMoves2(new int[]{-100, 0, 100}));
-        System.out.println(easyNew.minMoves2(new int[]{0, 0, 100}));
+        
         
         System.out.println(Arrays.toString(easyNew.findWords(new String[]{"Hello", "Alaska", "Dad", "Peace"})));
         System.out.println(Arrays.toString(easyNew.findWords(new String[]{"asdfghjklASDFGHJKL", "qwertyuiopQWERTYUIOP", "zxcvbnmZXCVBNM"})));
@@ -104,6 +100,227 @@ public class EasyNew {
     
         System.out.println(easyNew.checkRecord("ALLPPPLLLPPLPLPLL"));
         System.out.println(easyNew.checkRecord("LL"));
+    }
+    
+    @Test
+    public void numMagicSquaresInsideTest() {
+        System.out.println(numMagicSquaresInside(new int[][] {
+                {4, 3, 8, 4},
+                {9, 5, 1, 9},
+                {2, 7, 6, 2}
+        }));
+    }
+    
+    /**
+     * 840. 矩阵中的幻方
+     * 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等
+     * 
+     * 
+     * @param grid int[][]
+     * @return 多少个 3 × 3 的 “幻方” 子矩阵
+     */
+    public int numMagicSquaresInside(int[][] grid) {
+        return 0;
+    }
+    
+    private boolean isMagicSquare(int[][] grid, int i, int j) {
+        return false;
+    }
+    
+    @Test
+    public void findLengthOfLCISTest() {
+        System.out.println(findLengthOfLCIS(new int[]{1, 3, 5, 4, 7}));
+        System.out.println(findLengthOfLCIS(new int[]{2, 2, 2, 2, 2}));
+        System.out.println(findLengthOfLCIS(new int[]{1, 3, 5, 4, 2, 3, 4, 5}));
+    }
+    
+    /**
+     * 674. 最长连续递增序列
+     * 找到最长且连续的的递增序列
+     * 输入: [1,3,5,4,7] 输出: 3
+     * 
+     * @param nums int[] 未经排序的整数数组
+     * @return int 
+     */
+    public int findLengthOfLCIS(int[] nums) {
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return 1;
+        }
+        int max = 0;
+        int i = 0;
+        while (i < nums.length) {
+            int n = nums[i];
+            int j = i + 1;
+            while (j < nums.length && nums[j] > n) {
+                n = nums[j];
+                j++;
+            }
+            max = Math.max(max, j - i);
+            i = j;
+        }
+        return max;
+    }
+    
+    @Test
+    public void isToeplitzMatrixTest() {
+        System.out.println(isToeplitzMatrix(new int[][] {
+                {1, 2, 3, 4},
+                {5, 1, 2, 3},
+                {9, 5, 1, 2},
+        }));
+        System.out.println(isToeplitzMatrix(new int[][] {
+                {1, 2},
+                {2, 2}
+        }));
+        
+        System.out.println(isToeplitzMatrix(new int[][] {
+                {11, 74, 0, 93},
+                {40, 11, 74, 7}
+        }));
+    }
+    
+    /**
+     * 766. 托普利茨矩阵
+     * 
+     * 如果一个矩阵的每一方向由左上到右下的对角线上具有相同元素，那么这个矩阵是托普利茨矩阵。
+     * @param matrix 二维矩阵
+     * @return
+     */
+    public boolean isToeplitzMatrix(int[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        for(int i = 0; i < row; i++) {
+            int j = 0;
+            int ii = i;
+            int n = matrix[ii][j];
+            while (ii < row && j < col) {
+                if (matrix[ii][j] != n) {
+                    return false;
+                }
+                ii++;
+                j++;
+            }
+        }
+        for(int j = 0; j < col; j++) {
+            int i = 0;
+            int jj = j;
+            int n = matrix[i][jj];
+            while(jj < col && i < row) {
+                if (n != matrix[i][jj]) {
+                    return false;
+                }
+                i++;
+                jj++;
+            }
+        }
+        return true;
+    }
+    
+    @Test
+    public void matrixReshapeTest() {
+        int[][] res = matrixReshape(new int[][] {
+                {1}, {2}, {3}, {4}
+        }, 2, 2);
+        for(int i = 0; i < res.length; i++) {
+            System.out.println(Arrays.toString(res[i]));
+        }
+    }
+    
+    /**
+     * 566. 重塑矩阵
+     * 
+     * @param nums [[1,2], [3,4]]
+     * @param r 1
+     * @param c 4 
+     * @return [[1,2,3,4]]
+     */
+    public int[][] matrixReshape(int[][] nums, int r, int c) {
+        int row = nums.length;
+        int col = nums[0].length;
+        if (row * col != r * c) {
+            return nums;
+        }
+        int index = 0;
+        int[][] res = new int[r][c];
+        for(int i = 0; i < r; i++) {
+            res[i] = new int[c];
+            for(int j = 0; j < c; j++) {
+                res[i][j] = nums[index / col][index % col]; 
+                index++;        
+            }
+        }
+        return res;
+    }
+    
+    
+    @Test
+    public void arrayPairSumTest() {
+        System.out.println(arrayPairSum(new int[] {1, 4, 3, 2}));
+    }
+    
+    /**
+     * 561. 数组拆分 I
+     *  (a1, b1), (a2, b2), ..., (an, bn) ，使得从1 到 n 的 min(ai, bi) 总和最大
+     * 
+     * @param nums [1,4,3,2]
+     * @return int 4   (1,2) + (3,4) = 1 + 3 = 4         
+     */
+    public int arrayPairSum(int[] nums) {
+        Arrays.sort(nums);
+        int sum = 0;
+        for(int i = 0; i < nums.length; i+=2) {
+            sum += nums[i];
+        }
+        return sum;
+    }
+    
+    
+    @Test
+    public void maxDistToClosestTest() {
+        System.out.println(maxDistToClosest(new int[]{1, 0, 0, 0, 1, 0, 1}));
+        System.out.println(maxDistToClosest(new int[]{1, 0, 0, 0}));
+    }
+    
+    /**
+     * 849. 到最近的人的最大距离
+     * 
+     * 
+     * @param seats [1,0,0,0,1,0,1]
+     * @return int
+     */
+    public int maxDistToClosest(int[] seats) {
+        if (seats.length == 1) {
+            return 0;
+        }
+        if (seats.length == 2) {
+            return 1;
+        }
+        int start = 0;
+        while (seats[start] == 0) {
+            start++;
+        }
+        int end = seats.length - 1;
+        while(seats[end] == 0) {
+            end--;
+        }
+        int max = Math.max(start, (seats.length - 1 - end));
+        if (start >= end) {
+            return max;
+        }
+        int i = start + 1;
+        while (i < end) {
+            int j = i;
+            while(j < end && seats[j] == 0) {
+                j++;
+            }
+            int dist = j - i;
+            max = Math.max(max, (dist & 1) == 0 ? dist >> 1 : (dist + 1) >> 1);
+            i = j + 1;
+        }
+        return max;
     }
     
     /**
@@ -701,6 +918,14 @@ public class EasyNew {
         return result.toArray(array);
     }
     
+    @Test
+    public void minMovesTest() {
+        System.out.println(minMoves2(new int[]{1, 1, 2147483647}));
+        System.out.println(minMoves2(new int[]{1, 2, 3}));
+        System.out.println(minMoves2(new int[]{-100, 0, 100}));
+        System.out.println(minMoves2(new int[]{0, 0, 100}));
+    }
+    
     /**
      * 453. Minimum Moves to Equal Array Elements
      * 移动数组元素,使数组中元素都相等
@@ -857,6 +1082,14 @@ public class EasyNew {
         s = s.trim();
         if (s.length() == 0) return 0;
         return s.split("\\s+").length;
+    }
+    
+    @Test
+    public void repeatedSubstringPatternTest() {
+        System.out.println(repeatedSubstringPattern("abab"));
+        System.out.println(repeatedSubstringPattern("aba"));
+        System.out.println(repeatedSubstringPattern("abcabcabcabc"));
+        System.out.println(repeatedSubstringPattern("bb"));
     }
     
     /**

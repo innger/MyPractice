@@ -46,6 +46,8 @@ public class Quitsort {
     public void qsortTest() {
         int[] arr = new int[]{7, 2, 3, 5, 9, 10};
         qsort1(arr, 0, 5);
+        System.out.println("===============");
+        qsort1(new int[]{5, 4, 3, 2, 9, 10}, 0, 5);
     }
 
     public static void qsort1(int[] a, int p, int r) {

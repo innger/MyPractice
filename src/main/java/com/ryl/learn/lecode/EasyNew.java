@@ -103,12 +103,61 @@ public class EasyNew {
     }
     
     @Test
+    public void pivotIndexTest() {
+        System.out.println(pivotIndex(new int[]{1, 7, 3, 6, 5, 6}));
+        System.out.println(pivotIndex(new int[]{-1, -1, -1, -1, -1, 0}));
+        System.out.println(pivotIndex(new int[]{-1, -1, -1, 0, -1, -1}));
+        System.out.println(pivotIndex(new int[]{-1, -1, -1, 0, 1, 1}));
+        System.out.println(pivotIndex(new int[]{-1, -1, -1, -1, -1, -1}));
+    }
+    
+    /**
+     * 724. 寻找数组的中心索引
+     * 数组中心索引的左侧所有元素相加的和等于右侧所有元素相加的和
+     * 如果数组有多个中心索引，那么我们应该返回最靠近左边的那一个
+     * 
+     * @param nums 整数类型的数组
+     * @return 中心索引
+     */
+    public int pivotIndex(int[] nums) {
+        if (nums == null || nums.length <= 2) {
+            return  -1;
+        }
+        
+        int left = 0;
+        int index = 0;
+        int right = 0;
+        for (int i = 1; i < nums.length; i++) {
+            right += nums[i];
+        }
+        while (index < nums.length) {
+            if (left == right) {
+                return index;
+            }
+            left += nums[index];
+            index++;
+            if (index >= nums.length) {
+                break;
+            }
+            right -= nums[index];
+        }
+        return -1;
+    }
+    
+    
+    @Test
     public void numMagicSquaresInsideTest() {
         System.out.println(numMagicSquaresInside(new int[][] {
                 {4, 3, 8, 4},
                 {9, 5, 1, 9},
                 {2, 7, 6, 2}
         }));
+    
+        System.out.println(isMagicSquare(new int[][] {
+                {4, 3, 8},
+                {9, 5, 1},
+                {2, 7, 6}
+        }, 0, 0));
     }
     
     /**
@@ -120,11 +169,52 @@ public class EasyNew {
      * @return 多少个 3 × 3 的 “幻方” 子矩阵
      */
     public int numMagicSquaresInside(int[][] grid) {
-        return 0;
+        int count = 0;
+        for (int i = 0; i < grid.length - 2; i++) {
+            for (int j = 0; j < grid[0].length - 2; j++) {
+                if (isMagicSquare(grid, i, j)) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
     
-    private boolean isMagicSquare(int[][] grid, int i, int j) {
-        return false;
+    private boolean isMagicSquare(int[][] grid, int rowStart, int colStart) {
+        int row = grid.length;
+        int col = grid[0].length;
+        int rowEnd = rowStart + 2;
+        int colEnd = colStart + 2;
+        
+        if (rowEnd >= row) {
+            return false;
+        }
+        if (colEnd >= col) {
+            return false;
+        }
+        int sum = 0;
+        for (int i = rowStart; i <= rowEnd; i++) {
+            int ss = 0;
+            for (int j = colStart; j <= colEnd; j++) {
+                int num = grid[i][j];
+                if (num < 1 || num > 9) {
+                    return false;
+                }
+                ss += num;
+            }
+            if (sum == 0) {
+                sum = ss;
+            } else if (sum != ss) {
+                return false;
+            }
+        }
+        int ss1 = 0;
+        int ss2 = 0;
+        for (int i = 0; i < 3; i++) {
+            ss1 += grid[rowStart + i][colStart + i];
+            ss2 += grid[rowStart + i][colEnd - i];
+        }
+        return sum == ss1 && sum == ss2;
     }
     
     @Test

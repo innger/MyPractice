@@ -36,14 +36,12 @@ public class EasyNew {
         }));
         
         
-        
         System.out.println(easyNew.countSegments("     "));
         
         System.out.println(easyNew.findRadius(new int[]{1, 2, 3, 4}, new int[]{1, 4}));
         
         System.out.println(easyNew.arrangeCoins(3));
         System.out.println(easyNew.arrangeCoins(1804289383));
-        
         
         
         System.out.println(Arrays.toString(easyNew.findWords(new String[]{"Hello", "Alaska", "Dad", "Peace"})));
@@ -97,47 +95,172 @@ public class EasyNew {
         easyNew.rotate(new int[]{1, 2}, 3);
         
         
-    
         System.out.println(easyNew.checkRecord("ALLPPPLLLPPLPLPLL"));
         System.out.println(easyNew.checkRecord("LL"));
     }
     
     @Test
-    public void canPlaceFlowersTest() {
+    public void maximumProductTest() {
+        System.out.println(maximumProduct(new int[] {1, 2, 3}));
+        System.out.println(maximumProduct(new int[] {1, 2, 3, 4}));
+    }
+    
+    /**
+     * 628. 三个数的最大乘积
+     * 给定一个整型数组，在数组中找出由三个数组成的最大乘积，并输出这个乘积。
+     * 
+     * @param nums 
+     * @return
+     */
+    public int maximumProduct(int[] nums) {
+        return 0;
+    }
+    
+    @Test
+    public void largeGroupPositionsTest() {
+        List<List<Integer>> list = largeGroupPositions("abbxxxxzyy");
+        list.forEach(
+                System.out::println
+        );
         
+    }
+    
+    /**
+     * 830. 较大分组的位置
+     * 在一个由小写字母构成的字符串 S 中，包含由一些连续的相同字符所构成的分组
+     * 所有包含大于或等于三个连续字符的分组为较大分组。找到每一个较大分组的起始和终止位置。
+     * 
+     * @param S 字符串
+     * @return 分组
+     */
+    public List<List<Integer>> largeGroupPositions(String S) {
+        //todo
+        return null;
+    }
+    
+    @Test
+    public void findMaxAverageTest() {
+        System.out.println(findMaxAverage(new int[] {1,12,-5,-6,50,3}, 4));
+        System.out.println(findMaxAverage(new int[] {4, 2, 1, 3, 3}, 2));
+    }
+    
+    /**
+     * 643. 子数组最大平均数 I
+     * 给定 n 个整数，找出平均数最大且长度为 k 的连续子数组，并输出该最大平均数
+     * 
+     * @param nums  整数数组
+     * @param k     长度 
+     * @return 最大平均数
+     */
+    public double findMaxAverage(int[] nums, int k) {
+        int sum = 0;
+        int i = 0;
+        while (i < k) {
+            sum += nums[i];
+            i++;
+        }
+        double average = (double) sum / k;
+        
+        for (; i < nums.length; i++) {
+            sum = sum - nums[i - k] + nums[i];
+            double temp = (double) sum / k;
+            if (temp > average) {
+                average = temp;
+            }
+        }
+        return average;
+    }
+    
+    @Test
+    public void findUnsortedSubarrayTest() {
+        System.out.println(findUnsortedSubarray(new int[] {2, 6, 4, 8, 10, 9, 15}));
+        System.out.println(findUnsortedSubarray(new int[] {1, 2, 3, 4}));
+        System.out.println(findUnsortedSubarray(new int[] {1, 3, 2, 4, 5}));
+    }
+    
+    /**
+     * 581. 最短无序连续子数组
+     * 给定一个整数数组，你需要寻找一个连续的子数组，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序
+     *
+     * @param nums 数组
+     * @return 最短数组长度
+     */
+    public int findUnsortedSubarray(int[] nums) {
+        if (nums.length <= 1) {
+            return 0;
+        }
+        int[] copy = new int[nums.length];
+        System.arraycopy(nums, 0, copy, 0, nums.length);
+        Arrays.sort(copy);
+        int i = 0;
+        while (i < nums.length && nums[i] == copy[i]) {
+            i++;
+        }
+        int j = nums.length - 1;
+        while (j > 0 && j > i && nums[j] == copy[j]) {
+            j--;
+        }
+        return j - i + 1;
+    }
+    
+    @Test
+    public void canPlaceFlowersTest() {
+        System.out.println(canPlaceFlowers(new int[]{1, 0, 0, 0, 1}, 1));
+        System.out.println(canPlaceFlowers(new int[]{1, 0, 0, 1, 0}, 1));
+        System.out.println(canPlaceFlowers(new int[]{1, 0, 0, 0, 0, 1}, 2));
     }
     
     /**
      * 605. 种花问题
      * flowerbed = [1,0,0,0,1], n = 1 True
      * flowerbed = [1,0,0,0,1], n = 2 False
-     * 
-     * @param flowerbed 花卉素组 
-     * @param n 种入的n朵花
+     * 求出最多可插入多少朵花，与n比较
+     *
+     * @param flowerbed 花卉素组
+     * @param n         种入的n朵花
      * @return true/false
      */
     public boolean canPlaceFlowers(int[] flowerbed, int n) {
         if (n == 0) {
             return true;
         }
+        int cnt = 0;
+        for (int i = 0; i < flowerbed.length; i++) {
+            if (flowerbed[i] == 0) {
+                boolean flag = true;
+                if (i > 0) {
+                    flag = flowerbed[i - 1] == 0;
+                }
+                if (i < flowerbed.length - 1) {
+                    flag = flag && flowerbed[i + 1] == 0;
+                }
+                if (flag) {
+                    flowerbed[i] = 1;
+                    cnt++;
+                }
+                if (cnt >= n) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
     
     @Test
     public void checkPossibilityTest() {
-        System.out.println(checkPossibility(new int[] {4, 2, 3}));
-        System.out.println(checkPossibility(new int[] {4, 2, 1}));
-        System.out.println(checkPossibility(new int[] {3, 4, 2, 3}));
-        System.out.println(checkPossibility(new int[] {-1, 4, 2, 3}));
+        System.out.println(checkPossibility(new int[]{4, 2, 3}));
+        System.out.println(checkPossibility(new int[]{4, 2, 1}));
+        System.out.println(checkPossibility(new int[]{3, 4, 2, 3}));
+        System.out.println(checkPossibility(new int[]{-1, 4, 2, 3}));
         
     }
     
     /**
      * 665. 非递减数列
-     * 
+     * <p>
      * 判断在最多改变 1 个元素的情况下，该数组能否变成一个非递减数列
      * 对于数组中所有的 i (1 <= i < n)，满足 array[i] <= array[i + 1]
-     * 
+     *
      * @param nums int[]
      * @return true/false
      */
@@ -150,7 +273,7 @@ public class EasyNew {
         for (int i = 1; i < nums.length; i++) {
             if (nums[i - 1] > nums[i]) {
                 cnt++;
-            } 
+            }
             if (cnt > 1) {
                 return false;
             }
@@ -158,11 +281,11 @@ public class EasyNew {
                 //一次递减，看能不能包住
                 int tmp = Math.min(nums[i - 1], i - 2 >= 0 ? nums[i - 2] : nums[i]);
                 if (tmp <= nums[i]) {
-                    nums[i -1] = tmp;
+                    nums[i - 1] = tmp;
                     continue;
                 }
-                tmp = Math.max(nums[i -1], i + 1 < nums.length ? nums[i + 1]: nums[i]);
-                if (tmp >= nums[i -1]) {
+                tmp = Math.max(nums[i - 1], i + 1 < nums.length ? nums[i + 1] : nums[i]);
+                if (tmp >= nums[i - 1]) {
                     nums[i] = tmp;
                     continue;
                 }
@@ -185,13 +308,13 @@ public class EasyNew {
      * 724. 寻找数组的中心索引
      * 数组中心索引的左侧所有元素相加的和等于右侧所有元素相加的和
      * 如果数组有多个中心索引，那么我们应该返回最靠近左边的那一个
-     * 
+     *
      * @param nums 整数类型的数组
      * @return 中心索引
      */
     public int pivotIndex(int[] nums) {
         if (nums == null || nums.length <= 2) {
-            return  -1;
+            return -1;
         }
         
         int left = 0;
@@ -217,13 +340,13 @@ public class EasyNew {
     
     @Test
     public void numMagicSquaresInsideTest() {
-        System.out.println(numMagicSquaresInside(new int[][] {
+        System.out.println(numMagicSquaresInside(new int[][]{
                 {4, 3, 8, 4},
                 {9, 5, 1, 9},
                 {2, 7, 6, 2}
         }));
-    
-        System.out.println(isMagicSquare(new int[][] {
+        
+        System.out.println(isMagicSquare(new int[][]{
                 {4, 3, 8},
                 {9, 5, 1},
                 {2, 7, 6}
@@ -233,8 +356,7 @@ public class EasyNew {
     /**
      * 840. 矩阵中的幻方
      * 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等
-     * 
-     * 
+     *
      * @param grid int[][]
      * @return 多少个 3 × 3 的 “幻方” 子矩阵
      */
@@ -298,9 +420,9 @@ public class EasyNew {
      * 674. 最长连续递增序列
      * 找到最长且连续的的递增序列
      * 输入: [1,3,5,4,7] 输出: 3
-     * 
+     *
      * @param nums int[] 未经排序的整数数组
-     * @return int 
+     * @return int
      */
     public int findLengthOfLCIS(int[] nums) {
         if (nums == null || nums.length < 1) {
@@ -326,17 +448,17 @@ public class EasyNew {
     
     @Test
     public void isToeplitzMatrixTest() {
-        System.out.println(isToeplitzMatrix(new int[][] {
+        System.out.println(isToeplitzMatrix(new int[][]{
                 {1, 2, 3, 4},
                 {5, 1, 2, 3},
                 {9, 5, 1, 2},
         }));
-        System.out.println(isToeplitzMatrix(new int[][] {
+        System.out.println(isToeplitzMatrix(new int[][]{
                 {1, 2},
                 {2, 2}
         }));
         
-        System.out.println(isToeplitzMatrix(new int[][] {
+        System.out.println(isToeplitzMatrix(new int[][]{
                 {11, 74, 0, 93},
                 {40, 11, 74, 7}
         }));
@@ -344,15 +466,16 @@ public class EasyNew {
     
     /**
      * 766. 托普利茨矩阵
-     * 
+     * <p>
      * 如果一个矩阵的每一方向由左上到右下的对角线上具有相同元素，那么这个矩阵是托普利茨矩阵。
+     *
      * @param matrix 二维矩阵
      * @return
      */
     public boolean isToeplitzMatrix(int[][] matrix) {
         int row = matrix.length;
         int col = matrix[0].length;
-        for(int i = 0; i < row; i++) {
+        for (int i = 0; i < row; i++) {
             int j = 0;
             int ii = i;
             int n = matrix[ii][j];
@@ -364,11 +487,11 @@ public class EasyNew {
                 j++;
             }
         }
-        for(int j = 0; j < col; j++) {
+        for (int j = 0; j < col; j++) {
             int i = 0;
             int jj = j;
             int n = matrix[i][jj];
-            while(jj < col && i < row) {
+            while (jj < col && i < row) {
                 if (n != matrix[i][jj]) {
                     return false;
                 }
@@ -381,21 +504,21 @@ public class EasyNew {
     
     @Test
     public void matrixReshapeTest() {
-        int[][] res = matrixReshape(new int[][] {
+        int[][] res = matrixReshape(new int[][]{
                 {1}, {2}, {3}, {4}
         }, 2, 2);
-        for(int i = 0; i < res.length; i++) {
+        for (int i = 0; i < res.length; i++) {
             System.out.println(Arrays.toString(res[i]));
         }
     }
     
     /**
      * 566. 重塑矩阵
-     * 
+     *
      * @param nums [[1,2], [3,4]]
-     * @param r 1
-     * @param c 4 
-     * @return [[1,2,3,4]]
+     * @param r    1
+     * @param c    4
+     * @return [[1, 2, 3, 4]]
      */
     public int[][] matrixReshape(int[][] nums, int r, int c) {
         int row = nums.length;
@@ -405,11 +528,11 @@ public class EasyNew {
         }
         int index = 0;
         int[][] res = new int[r][c];
-        for(int i = 0; i < r; i++) {
+        for (int i = 0; i < r; i++) {
             res[i] = new int[c];
-            for(int j = 0; j < c; j++) {
-                res[i][j] = nums[index / col][index % col]; 
-                index++;        
+            for (int j = 0; j < c; j++) {
+                res[i][j] = nums[index / col][index % col];
+                index++;
             }
         }
         return res;
@@ -418,20 +541,20 @@ public class EasyNew {
     
     @Test
     public void arrayPairSumTest() {
-        System.out.println(arrayPairSum(new int[] {1, 4, 3, 2}));
+        System.out.println(arrayPairSum(new int[]{1, 4, 3, 2}));
     }
     
     /**
      * 561. 数组拆分 I
-     *  (a1, b1), (a2, b2), ..., (an, bn) ，使得从1 到 n 的 min(ai, bi) 总和最大
-     * 
+     * (a1, b1), (a2, b2), ..., (an, bn) ，使得从1 到 n 的 min(ai, bi) 总和最大
+     *
      * @param nums [1,4,3,2]
-     * @return int 4   (1,2) + (3,4) = 1 + 3 = 4         
+     * @return int 4   (1,2) + (3,4) = 1 + 3 = 4
      */
     public int arrayPairSum(int[] nums) {
         Arrays.sort(nums);
         int sum = 0;
-        for(int i = 0; i < nums.length; i+=2) {
+        for (int i = 0; i < nums.length; i += 2) {
             sum += nums[i];
         }
         return sum;
@@ -446,8 +569,7 @@ public class EasyNew {
     
     /**
      * 849. 到最近的人的最大距离
-     * 
-     * 
+     *
      * @param seats [1,0,0,0,1,0,1]
      * @return int
      */
@@ -463,7 +585,7 @@ public class EasyNew {
             start++;
         }
         int end = seats.length - 1;
-        while(seats[end] == 0) {
+        while (seats[end] == 0) {
             end--;
         }
         int max = Math.max(start, (seats.length - 1 - end));
@@ -473,7 +595,7 @@ public class EasyNew {
         int i = start + 1;
         while (i < end) {
             int j = i;
-            while(j < end && seats[j] == 0) {
+            while (j < end && seats[j] == 0) {
                 j++;
             }
             int dist = j - i;
@@ -502,11 +624,11 @@ public class EasyNew {
             switch (ch) {
                 case 'A':
                     a++;
-                    if(a == 2) return false;
+                    if (a == 2) return false;
                     break;
                 case 'L':
                     //连续三个
-                    if(l[0] + 1 == l[1] && l[1] + 1 == i) {
+                    if (l[0] + 1 == l[1] && l[1] + 1 == i) {
                         return false;
                     } else if (l[0] + 1 == i) {
                         l[1] = i;

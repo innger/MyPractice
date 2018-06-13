@@ -103,6 +103,27 @@ public class EasyNew {
     }
     
     @Test
+    public void canPlaceFlowersTest() {
+        
+    }
+    
+    /**
+     * 605. 种花问题
+     * flowerbed = [1,0,0,0,1], n = 1 True
+     * flowerbed = [1,0,0,0,1], n = 2 False
+     * 
+     * @param flowerbed 花卉素组 
+     * @param n 种入的n朵花
+     * @return true/false
+     */
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        if (n == 0) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Test
     public void checkPossibilityTest() {
         System.out.println(checkPossibility(new int[] {4, 2, 3}));
         System.out.println(checkPossibility(new int[] {4, 2, 1}));

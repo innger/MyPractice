@@ -1,6 +1,9 @@
 package com.ryl.learn.lecode;
 
+import jodd.madvoc.meta.In;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+import scala.Char;
 
 import java.util.*;
 
@@ -103,17 +106,30 @@ public class EasyNew {
     public void maximumProductTest() {
         System.out.println(maximumProduct(new int[] {1, 2, 3}));
         System.out.println(maximumProduct(new int[] {1, 2, 3, 4}));
+        System.out.println(maximumProduct(new int[] {-12, -10, -5, 0, 5, 7, 10}));
     }
     
     /**
      * 628. 三个数的最大乘积
      * 给定一个整型数组，在数组中找出由三个数组成的最大乘积，并输出这个乘积。
      * 
-     * @param nums 
-     * @return
+     * @param nums 数组
+     * @return 最大乘积
      */
     public int maximumProduct(int[] nums) {
-        return 0;
+        Arrays.sort(nums);
+        int len = nums.length;
+        
+        if (nums[len - 1] <= 0 || nums[0] >= 0) {
+            return nums[len - 1] * nums[len - 2] * nums[len - 3];
+        }
+        
+        //有正有负
+        int max = nums[len - 1] * nums[len - 2] * nums[len - 3];
+        if (nums[1] < 0) {
+            max = Math.max(max, nums[0] * nums[1] * nums[len - 1]);
+        }
+        return max;
     }
     
     @Test
@@ -129,13 +145,71 @@ public class EasyNew {
      * 830. 较大分组的位置
      * 在一个由小写字母构成的字符串 S 中，包含由一些连续的相同字符所构成的分组
      * 所有包含大于或等于三个连续字符的分组为较大分组。找到每一个较大分组的起始和终止位置。
+     * 最终结果按照字典顺序输出。
      * 
      * @param S 字符串
      * @return 分组
      */
     public List<List<Integer>> largeGroupPositions(String S) {
-        //todo
-        return null;
+        if (S == null || S.length() == 0) {
+            return null;
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        if (S.length() <= 1) {
+            List<Integer> sub = new ArrayList<>();
+            sub.add(0);
+            result.add(sub);
+            return result;
+        }
+        
+        class Node implements Comparable<Node> {
+            char ch;
+            int i;
+            int j;
+    
+            public Node(char ch) {
+                this.ch = ch;
+            }
+    
+            public Node(char ch, int i, int j) {
+                this.ch = ch;
+                this.i = i;
+                this.j = j;
+            }
+    
+            @Override
+            public int compareTo(@NotNull Node o) {
+                return this.ch - o.ch;
+            }
+    
+            @Override
+            public String toString() {
+                return "Node{" +
+                        "ch=" + ch +
+                        ", i=" + i +
+                        ", j=" + j +
+                        '}';
+            }
+        }
+        
+        List<Node> list = new ArrayList<>();
+        
+        int i = 0;
+        while (i < S.length()) {
+            char ch = S.charAt(0);
+            int j = 1;
+            
+            list.add(new Node(S.charAt(i)));
+        }
+        Collections.sort(list);
+        list.forEach(
+               node -> {
+                   List<Integer> sub = new ArrayList<>();
+                   sub.add(node.i);sub.add(node.j);
+                   result.add(sub);
+               }
+        );
+        return result;
     }
     
     @Test

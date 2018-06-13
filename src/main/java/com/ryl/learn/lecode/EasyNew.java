@@ -96,10 +96,59 @@ public class EasyNew {
         easyNew.rotate(new int[]{1, 2, 3, 4, 5, 6, 7}, 6);
         easyNew.rotate(new int[]{1, 2}, 3);
         
-        System.out.println(easyNew.reverseWords("Let's take LeetCode contest"));
+        
     
         System.out.println(easyNew.checkRecord("ALLPPPLLLPPLPLPLL"));
         System.out.println(easyNew.checkRecord("LL"));
+    }
+    
+    @Test
+    public void checkPossibilityTest() {
+        System.out.println(checkPossibility(new int[] {4, 2, 3}));
+        System.out.println(checkPossibility(new int[] {4, 2, 1}));
+        System.out.println(checkPossibility(new int[] {3, 4, 2, 3}));
+        System.out.println(checkPossibility(new int[] {-1, 4, 2, 3}));
+        
+    }
+    
+    /**
+     * 665. 非递减数列
+     * 
+     * 判断在最多改变 1 个元素的情况下，该数组能否变成一个非递减数列
+     * 对于数组中所有的 i (1 <= i < n)，满足 array[i] <= array[i + 1]
+     * 
+     * @param nums int[]
+     * @return true/false
+     */
+    public boolean checkPossibility(int[] nums) {
+        if (nums.length == 1) {
+            return true;
+        }
+        
+        int cnt = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i - 1] > nums[i]) {
+                cnt++;
+            } 
+            if (cnt > 1) {
+                return false;
+            }
+            if (cnt == 1) {
+                //一次递减，看能不能包住
+                int tmp = Math.min(nums[i - 1], i - 2 >= 0 ? nums[i - 2] : nums[i]);
+                if (tmp <= nums[i]) {
+                    nums[i -1] = tmp;
+                    continue;
+                }
+                tmp = Math.max(nums[i -1], i + 1 < nums.length ? nums[i + 1]: nums[i]);
+                if (tmp >= nums[i -1]) {
+                    nums[i] = tmp;
+                    continue;
+                }
+                return false;
+            }
+        }
+        return true;
     }
     
     @Test
@@ -447,6 +496,11 @@ public class EasyNew {
             }
         }
         return true;
+    }
+    
+    @Test
+    public void reverseWordsTest() {
+        System.out.println(reverseWords("Let's take LeetCode contest"));
     }
     
     /**

@@ -31,6 +31,8 @@ import static com.sun.btrace.BTraceUtils.print;
 import static com.sun.btrace.BTraceUtils.println;
 
 /**
+ * https://github.com/btraceio/btrace
+ *
  * This script traces method entry into every method of
  * every class in javax.swing package! Think before using
  * this script -- this will slow down your app significantly!!

@@ -1,13 +1,9 @@
 package com.ryl.learn.mqtt;
 
 import com.alibaba.fastjson.JSON;
-import com.autonavi.aos.cmg.common.dto.LocationReportInfo;
-import com.autonavi.aos.cmg.common.enums.ChannelEnum;
 import com.google.common.collect.Maps;
 import io.netty.util.CharsetUtil;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -25,58 +21,57 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * mqtt client示例代码
- * Created on 16/2/22.
+ * mqtt client示例代码 Created on 16/2/22.
  */
 public class TestClient {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(TestClient.class);
-    
+
     private static String hostLocal = "tcp://127.0.0.1:1883";
     private static String hostDaily = "tcp://100.69.214.64:1883";
-    private static String hostPub = "tcp://cmg.amap.com:80"; //140.205.61.30
-    private static String hostPre = "tcp://140.205.173.46:80";
-    
+    private static String hostPub   = "tcp://cmg.amap.com:80"; //140.205.61.30
+    private static String hostPre   = "tcp://140.205.173.46:80";
+
     private String username = "clientuser";
     private String password = "clientuser";
-    
-    private MqttClient client;
+
+    private MqttClient         client;
     private MqttConnectOptions options;
-    
+
     private ScheduledExecutorService scheduler;
-    private String clientID;
-    private String host;
-    
+    private String                   clientID;
+    private String                   host;
+
     public TestClient(String clientID, String host) {
         this.clientID = clientID;
         this.host = host;
     }
-    
+
     public TestClient() {
     }
-    
+
     public static void main(String[] args) throws InterruptedException {
         logger.info("begin");
         int pool = 100;
         ExecutorService service = Executors.newFixedThreadPool(pool);
         for (int i = 0; i < 1; i++) {
             service.execute(() -> {
-                String clientID = StringUtils.remove(UUID.randomUUID().toString(),"-");
+                String clientID = StringUtils.remove(UUID.randomUUID().toString(), "-");
                 clientID = "VgpUYx8bX4kDADo+ouGrO+Nf";
                 TestClient client01 = new TestClient(clientID, hostDaily);
                 client01.init();
-//                client01.sendMessage();
+                //                client01.sendMessage();
             });
         }
-//        String[] tids = new String[]{"C81F662B8ADDC81F662B8BBB"};
-//        for (String tid : tids) {
-//            logger.info("tid={}", tid);
-//            TestClient client = new TestClient(tid, hostDaily);
-//            client.init();
-//            client.sendMessage();
-//        }
+        //        String[] tids = new String[]{"C81F662B8ADDC81F662B8BBB"};
+        //        for (String tid : tids) {
+        //            logger.info("tid={}", tid);
+        //            TestClient client = new TestClient(tid, hostDaily);
+        //            client.init();
+        //            client.sendMessage();
+        //        }
     }
-    
+
     private static void socketConnect() {
         try {
             Socket socket = new Socket("127.0.0.1", 1883);
@@ -84,7 +79,7 @@ public class TestClient {
             while (true) {
                 byte[] bytes = new byte[1024];
                 int n = is.read(bytes);
-                if (n == -1) break;
+                if (n == -1) { break; }
                 System.out.println(new String(bytes));
             }
             System.out.println("end");
@@ -92,7 +87,7 @@ public class TestClient {
             e.printStackTrace();
         }
     }
-    
+
     private void startReconnect() {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Runnable() {
@@ -108,7 +103,7 @@ public class TestClient {
             }
         }, 0 * 1000, 10 * 1000, TimeUnit.MILLISECONDS);
     }
-    
+
     private void init() {
         try {
             //host为主机名，test为clientid即连接MQTT的客户端ID，一般以客户端唯一标识符表示，MemoryPersistence设置clientid的保存形式，默认为以内存保存
@@ -140,24 +135,24 @@ public class TestClient {
             options.setWill("user", JSON.toJSONBytes(will), 1, false);
             //设置回调
             client.setCallback(new MqttCallback() {
-                
+
                 public void connectionLost(Throwable cause) {
                     //连接丢失后，一般在这里面进行重连
                     logger.info("{} connectionLost reconnect...", clientID);
                     startReconnect();
                 }
-                
+
                 public void deliveryComplete(IMqttDeliveryToken token) {
                     //publish后会执行到这里
                     logger.info("{} deliveryComplete {}", clientID, token.isComplete());
                 }
-                
+
                 public void messageArrived(String topicName, MqttMessage message)
                         throws Exception {
                     //subscribe后得到的消息会执行到这里面
-//                    String str = new String(message.getPayload(), CharsetUtil.UTF_8);
-//                    LoginMessage login = new LoginMessage();
-//                    login.readFromByteArr(message.getPayload());
+                    //                    String str = new String(message.getPayload(), CharsetUtil.UTF_8);
+                    //                    LoginMessage login = new LoginMessage();
+                    //                    login.readFromByteArr(message.getPayload());
                     logger.info("{} messageArrived topic={} message={}", clientID, topicName, message);
                 }
             });
@@ -167,7 +162,7 @@ public class TestClient {
             e.printStackTrace();
         }
     }
-    
+
     private void connect() {
         new Thread(() -> {
             try {
@@ -176,29 +171,28 @@ public class TestClient {
                 e.printStackTrace();
             }
         }).start();
-        
+
     }
-    
+
     public void sendMessage() {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate((Runnable) () -> {
-            
-            LocationReportInfo location = new LocationReportInfo();
-            location.setChannel(ChannelEnum.AMAP_AUTO.getChannelName());
-            location.setLon(RandomUtils.nextDouble(0, 200));
-            location.setLat(RandomUtils.nextDouble(0, 200));
-            location.setMemberStamp(RandomStringUtils.randomAlphanumeric(32).toUpperCase());
-            location.setTeamStamp(RandomStringUtils.randomAlphanumeric(32).toUpperCase());
-            location.setTeamId("597841ba35858e5a3798b569");
-            location.setUid("15907");
-            
-            
+
+            //LocationReportInfo location = new LocationReportInfo();
+            //location.setChannel(ChannelEnum.AMAP_AUTO.getChannelName());
+            //location.setLon(RandomUtils.nextDouble(0, 200));
+            //location.setLat(RandomUtils.nextDouble(0, 200));
+            //location.setMemberStamp(RandomStringUtils.randomAlphanumeric(32).toUpperCase());
+            //location.setTeamStamp(RandomStringUtils.randomAlphanumeric(32).toUpperCase());
+            //location.setTeamId("597841ba35858e5a3798b569");
+            //location.setUid("15907");
+
             MqttMessage message = new MqttMessage();
             message.setQos(1);
             message.setRetained(true);
-            String str = JSON.toJSONString(location);
+            String str = JSON.toJSONString(null);
             message.setPayload(str.getBytes(CharsetUtil.UTF_8));
-            
+
             try {
                 String topic = CommonConst.TOPIC_LOCATION;
                 client.getTopic(topic).publish(message);
@@ -207,7 +201,7 @@ public class TestClient {
                 e.printStackTrace();
             }
         }, 0, 1, TimeUnit.SECONDS);
-        
+
     }
-    
+
 }

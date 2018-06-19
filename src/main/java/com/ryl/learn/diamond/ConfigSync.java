@@ -32,7 +32,7 @@ public class ConfigSync {
 
     private void publishConfig(String content) {
 //        boolean res = Diamond.publishSingle(dataId, group, content);
-        boolean res = Diamond.publishSingle(dataId, group, appname, content);
+        boolean res = Diamond.publishSingle(dataId, group, content);
         logger.info("publishConfig content={} res={}", content, res);
     }
 
